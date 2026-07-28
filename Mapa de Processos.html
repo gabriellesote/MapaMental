@@ -135,6 +135,7 @@ textarea.inp{height:auto;min-height:86px;padding:11px 12px;line-height:1.55;resi
     <nav>
       <button class="tab" data-act="goDim">Dimensões</button>
       <button class="tab" data-act="goSet">Setores</button>
+      <button class="tab" data-act="goProc">Processos</button>
     </nav>
     <div class="spacer"></div>
     <div class="hbtns">
@@ -188,6 +189,9 @@ const ui = {
   dadosModal: false,
   openSetores: {},  // { setorId: true } — cards de setor expandidos
   editCampo: null,  // { setorId, campo } — edição inline de um atributo do setor
+  openProcs: {},    // { respId: true } — cards de processo expandidos
+  editProc: null,   // { respId, campo } — edição inline de um campo do processo
+  filtroProc: '',
   editQ: null,      // perguntaId em edição
   editResp: null    // { qid, i } — resposta em edição
 };
@@ -225,6 +229,47 @@ const getTopico = id => dados.topicos.find(t=>t.id===id);
 /* Relacionamento AUTOMÁTICO: o setor é ligado a um tópico no formulário do tópico;
    daí derivam-se os tópicos do setor e, pelo dimId de cada um, as dimensões. */
 const topicosDoSetor = id => dados.topicos.filter(t=>(t.setores||[]).includes(id));
+
+/* Cada resposta É um processo. A lista abaixo é derivada — nunca digitada —
+   e os campos preenchidos pelo usuário ficam em dados.processos, por respId. */
+function listaProcessos(){
+  const out = [];
+  dados.topicos.forEach(t=>{
+    const dim = dados.dimensoes.find(d=>d.id===t.dimId);
+    (t.perguntas||[]).forEach(p=>{
+      (p.respostas||[]).forEach(r=>{
+        out.push({
+          respId: r.id, topico: t, pergunta: p, resposta: r, dim,
+          setorId: r.setorId,
+          extra: dados.processos.find(x=>x.respId===r.id) || null
+        });
+      });
+    });
+  });
+  return out;
+}
+/* Cria o registro de extras sob demanda, para não inchar o JSON com cards vazios. */
+function extraProc(respId){
+  let e = dados.processos.find(x=>x.respId===respId);
+  if (!e){ e = { respId, titulo:'', narrativa:'', sist:[], main:[], tools:[] }; dados.processos.push(e); }
+  return e;
+}
+const tituloProc = pr => (pr.extra && pr.extra.titulo) || pr.pergunta.texto;
+
+/* Descarta registros sem nenhum conteúdo e os órfãos (resposta já excluída). */
+function limpaProcVazios(){
+  const vivos = new Set(listaProcessos().map(p=>p.respId));
+  dados.processos = dados.processos.filter(e=>
+    vivos.has(e.respId) &&
+    ((e.titulo||'').trim() || (e.narrativa||'').trim() ||
+     (e.sist||[]).length || (e.main||[]).length || (e.tools||[]).length)
+  );
+}
+
+/* Opções de sistemas/mainframe/ferramentas: a união do que os setores declaram. */
+function opcoesRecurso(campo){
+  return [...new Set(dados.setores.flatMap(s=>s[campo]||[]))].sort((a,b)=>a.localeCompare(b,'pt-BR'));
+}
 
 /* "Relacionado" vale nos dois sentidos: espelha o vínculo no outro setor. */
 function sincronizaRel(id, rel){
@@ -297,8 +342,17 @@ function pushBackup(){
   } catch(e){ /* cota cheia: backups são opcionais */ }
 }
 
+/* Rede de segurança: nenhuma resposta pode ficar sem id, senão o card de
+   processo correspondente perde a âncora e a narrativa fica órfã. */
+function garanteIdsResposta(){
+  dados.topicos.forEach(t=>(t.perguntas||[]).forEach(p=>(p.respostas||[]).forEach(r=>{
+    if (!r.id) r.id = uid('r');
+  })));
+}
+
 /** Chamado após QUALQUER alteração. Grava localStorage na hora e agenda o disco. */
 function persist(msg){
+  garanteIdsResposta();
   saveLocal();
   fileSynced = false;
   if (fileHandle && filePerm === 'granted'){
@@ -397,6 +451,8 @@ function importJson(){
 }
 
 /* ------------------------------------------------------------- carregamento */
+let migrou = false;   // normalize gerou ids que ainda não existem no arquivo
+
 function normalize(d){
   d = d || {};
   return {
@@ -418,9 +474,15 @@ function normalize(d){
       norm: t.norm || '', setores: t.setores || [], desc: t.desc || '',
       perguntas: (t.perguntas||[]).map(p=>({
         id: p.id || uid('p'), texto: p.texto || '',
-        respostas: (p.respostas||[]).map(r=>({ setorId:r.setorId, texto:r.texto||'' }))
+        // cada resposta ganha id próprio: é a âncora estável do card de processo
+        respostas: (p.respostas||[]).map(r=>{
+          if (!r.id) migrou = true;
+          return { id: r.id || uid('r'), setorId:r.setorId, texto:r.texto||'' };
+        })
       }))
-    }))
+    })),
+    // extras do processo, gravados por respId só quando algo é preenchido
+    processos: Array.isArray(d.processos) ? d.processos : []
   };
 }
 
@@ -459,11 +521,15 @@ async function boot(){
     return;
   }
   cand.sort((a,b)=>(Date.parse(b.atualizadoEm||0)||0)-(Date.parse(a.atualizadoEm||0)||0));
+  migrou = false;
   dados = normalize(cand[0]);
   fileSynced = !!doArquivo && doArquivo === cand[0];
 
-  try { localStorage.setItem(LS_DADOS, JSON.stringify(dados)); } catch(e){}
   applyTheme(); renderAll();
+  // grava de volta os ids de resposta recém-criados, para que os cards de
+  // processo continuem ancorados na próxima abertura
+  if (migrou) persist();
+  else { try { localStorage.setItem(LS_DADOS, JSON.stringify(dados)); } catch(e){} }
 }
 
 function applyTheme(){
@@ -475,7 +541,9 @@ function renderAll(){ renderHeader(); renderMain(); renderModais(); renderStatus
 
 function renderHeader(){
   document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
-  const sel = ui.page === 'setores' ? '[data-act="goSet"]' : '[data-act="goDim"]';
+  const sel = ui.page === 'setores'  ? '[data-act="goSet"]'
+            : ui.page === 'processos'? '[data-act="goProc"]'
+            : '[data-act="goDim"]';
   $(sel).classList.add('on');
   $('#temaLabel').textContent = dados.tema === 'dark' ? 'Escuro' : 'Claro';
 }
@@ -491,9 +559,10 @@ function renderStatus(){
 
 function renderMain(){
   const m = $('#main');
-  if (ui.page === 'setores')      m.innerHTML = viewSetores();
-  else if (ui.openDimId)          m.innerHTML = viewDimensao();
-  else                            m.innerHTML = viewDimGrid();
+  if (ui.page === 'setores')        m.innerHTML = viewSetores();
+  else if (ui.page === 'processos') m.innerHTML = viewProcessos();
+  else if (ui.openDimId)            m.innerHTML = viewDimensao();
+  else                              m.innerHTML = viewDimGrid();
 }
 
 function viewDimGrid(){
@@ -646,6 +715,145 @@ function viewSetores(){
       <button class="primary" data-act="novoSetor">+ Novo setor</button>
     </div>
     <div class="grid wide">${cards || '<div class="empty">Nenhum setor cadastrado.</div>'}</div>`;
+}
+
+/* ------------------------------------------------------------- processos */
+const RECURSOS = [
+  { k:'sist',  icone:'💻', label:'Sistemas'    },
+  { k:'main',  icone:'🖥', label:'Mainframe'   },
+  { k:'tools', icone:'🛠', label:'Ferramentas' }
+];
+
+function secProc(pr, icone, label, corpo, acao){
+  const pen = acao
+    ? `<button class="pen" data-act="${acao}" data-id="${esc(pr.respId)}" title="Editar" style="opacity:1">&#9998;</button>`
+    : '<span class="autoSelo" title="Vem da resposta de origem">automático</span>';
+  return `<div class="sec">
+    <div class="secHead"><span class="kicker" style="font-size:10.5px">${icone} ${label}</span>${pen}</div>
+    ${corpo}
+  </div>`;
+}
+
+function cardProcesso(pr, i){
+  const aberto = !!ui.openProcs[pr.respId];
+  const c  = setorTile(pr.setorId);
+  const dc = pr.dim ? dimTile(pr.dim.id) : {bg:'var(--surface-2)',fg:'var(--text-3)'};
+  const ex = pr.extra || {};
+  const ed = ui.editProc && ui.editProc.respId === pr.respId ? ui.editProc.campo : null;
+  const temNarrativa = !!(ex.narrativa||'').trim();
+
+  const corpo = !aberto ? '' : `<div class="secs">
+    ${secProc(pr,'🏷','Título do processo',
+      ed==='titulo'
+        ? `<div class="ansrow"><input class="inp" id="edProc" value="${esc(tituloProc(pr))}" style="flex:1;min-width:180px;height:34px">
+             <button class="primary" data-act="salvaProc" data-id="${esc(pr.respId)}" style="height:34px;padding:0 16px;font-size:12px">Salvar</button>
+             <button class="mini" data-act="cancelaProc">Cancelar</button></div>`
+        : `<div style="font-size:13.5px;font-weight:600">${esc(tituloProc(pr))}</div>
+           ${ex.titulo ? '<div style="font-size:11.5px;color:var(--text-3);margin-top:3px">Título personalizado — o original é a pergunta abaixo.</div>' : ''}`,
+      'editProcTitulo')}
+
+    ${secProc(pr,'🏢','Setor responsável',
+      `<div class="tags"><button class="tag" data-act="irSetorDeProc" data-id="${esc(pr.setorId)}" style="background:${c.bg};color:${c.fg};border:none">${esc(setorNome(pr.setorId))}</button></div>`)}
+
+    ${secProc(pr,'✅','Dimensão', pr.dim
+      ? `<div class="tags"><button class="tag" data-act="irDim" data-id="${esc(pr.dim.id)}" style="background:${dc.bg};color:${dc.fg};border:none">${esc(pr.dim.id)} — ${esc(pr.dim.nome)}</button></div>`
+      : vazioTxt('Tópico sem dimensão.'))}
+
+    ${secProc(pr,'📊','Tópico relacionado',
+      `<div class="tags"><button class="gitem" data-act="irTopico" data-id="${esc(pr.topico.id)}" style="cursor:pointer">${esc(pr.topico.nome)}</button></div>`)}
+
+    ${secProc(pr,'❓','Pergunta de origem',
+      `<div style="font-size:13px;line-height:1.55;color:var(--text-2)">${esc(pr.pergunta.texto)}</div>`)}
+
+    ${secProc(pr,'💬','Resposta de origem',
+      `<div style="font-size:13px;line-height:1.55;color:var(--text-2);background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:10px 12px">${esc(pr.resposta.texto)}</div>`)}
+
+    ${secProc(pr,'📝','Narrativa do processo',
+      ed==='narrativa'
+        ? `<div style="display:flex;flex-direction:column;gap:8px">
+             <textarea class="inp" id="edProc" placeholder="Descreva como o processo acontece: etapas, responsáveis, entradas e saídas…" style="min-height:150px;font-size:13px">${esc(ex.narrativa||'')}</textarea>
+             <div class="ansrow">
+               <button class="primary" data-act="salvaProc" data-id="${esc(pr.respId)}" style="height:32px;padding:0 16px;font-size:12px">Salvar</button>
+               <button class="mini" data-act="cancelaProc">Cancelar</button>
+             </div>
+           </div>`
+        : (temNarrativa
+            ? `<div style="font-size:13px;line-height:1.65;color:var(--text-2);white-space:pre-wrap">${esc(ex.narrativa)}</div>`
+            : vazioTxt('Narrativa ainda não escrita. Clique no lápis para começar.')),
+      'editProcNarrativa')}
+
+    ${RECURSOS.map(rc=>{
+      const sel = ex[rc.k] || [];
+      const opts = opcoesRecurso(rc.k);
+      const editando = ed === rc.k;
+      let dentro;
+      if (editando){
+        dentro = opts.length
+          ? `<div style="display:flex;flex-direction:column;gap:8px">
+               <div class="tags">${opts.map(o=>{
+                 const on = sel.includes(o);
+                 return `<button class="chip ${on?'on':''}" data-act="toggleRec" data-id="${esc(pr.respId)}" data-campo="${rc.k}" data-val="${esc(o)}"
+                   ${on?`style="background:${c.bg};color:${c.fg}"`:''}>${esc(o)}</button>`;}).join('')}</div>
+               <div><button class="mini" data-act="cancelaProc">Concluir</button></div>
+             </div>`
+          : `<div style="display:flex;flex-direction:column;gap:8px">
+               ${vazioTxt('Nenhum item cadastrado nos setores ainda. Adicione em Setores › '+rc.label+'.')}
+               <div><button class="mini" data-act="cancelaProc">Fechar</button></div>
+             </div>`;
+      } else {
+        dentro = sel.length
+          ? `<div class="tags">${sel.map(o=>`<span class="gitem">${esc(o)}</span>`).join('')}</div>`
+          : vazioTxt('Nenhum selecionado.');
+      }
+      return secProc(pr, rc.icone, rc.label, dentro, 'editProcRec_'+rc.k);
+    }).join('')}
+  </div>`;
+
+  const nRec = ['sist','main','tools'].reduce((a,k)=>a+((ex[k]||[]).length),0);
+  return `<article class="card" style="gap:0">
+    <div class="setorHead" data-act="toggleProc" data-id="${esc(pr.respId)}">
+      <div class="tile" style="background:${c.bg};color:${c.fg};font-size:13px">${i+1}</div>
+      <div style="flex:1;min-width:0">
+        <h3 style="font-size:16px">${esc(tituloProc(pr))}</h3>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px">
+          <span class="tag" style="background:${c.bg};color:${c.fg}">${esc(setorNome(pr.setorId))}</span>
+          ${pr.dim?`<span class="tag" style="background:${dc.bg};color:${dc.fg}">${esc(pr.dim.id)}</span>`:''}
+          <span style="font-size:11.5px;color:var(--text-3)">${esc(pr.topico.nome)}</span>
+        </div>
+        <div style="font-size:11.5px;color:var(--text-3);margin-top:5px">
+          ${temNarrativa ? '📝 narrativa escrita' : '📝 sem narrativa'}${nRec?` · ${nRec} recurso${nRec>1?'s':''}`:''}
+        </div>
+      </div>
+      <span class="chev" style="background:transparent">${aberto?'&#9652;':'&#9662;'}</span>
+    </div>
+    ${corpo}
+  </article>`;
+}
+
+function viewProcessos(){
+  const todos = listaProcessos();
+  const f = (ui.filtroProc||'').trim().toLowerCase();
+  const lista = !f ? todos : todos.filter(pr=>
+    (tituloProc(pr)+' '+pr.resposta.texto+' '+pr.topico.nome+' '+setorNome(pr.setorId)+' '+((pr.extra&&pr.extra.narrativa)||''))
+      .toLowerCase().includes(f));
+  const comNarrativa = todos.filter(pr=>pr.extra && (pr.extra.narrativa||'').trim()).length;
+
+  const cards = lista.map(cardProcesso).join('');
+  const vazio = !todos.length
+    ? '<div class="empty">Nenhum processo ainda. Cada resposta que você registra numa pergunta vira um card aqui.</div>'
+    : '<div class="empty">Nenhum processo corresponde à busca.</div>';
+
+  return `<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:0 0 22px 4px;flex-wrap:wrap">
+      <div>
+        <h1>Processos</h1>
+        <p class="sub">Cada resposta registrada vira um processo. Abra um card para escrever a narrativa e marcar os recursos usados.</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <span class="pill" style="cursor:default">${comNarrativa} de ${todos.length} com narrativa</span>
+        <input class="inp" id="filtroProc" value="${esc(ui.filtroProc||'')}" placeholder="Buscar processo…" style="height:38px;width:220px;border-radius:19px">
+      </div>
+    </div>
+    <div class="grid wide">${cards || vazio}</div>`;
 }
 
 /* ------------------------------------------------------------------ modais */
@@ -917,6 +1125,36 @@ document.addEventListener('click', ev => {
   const A = {
     goDim:  ()=>{ ui.page='dimensoes'; ui.openDimId=null; ui.activeTopicId=null; renderAll(); },
     goSet:  ()=>{ ui.page='setores'; ui.openDimId=null; ui.activeTopicId=null; renderAll(); },
+    goProc: ()=>{ ui.page='processos'; ui.openDimId=null; ui.activeTopicId=null; ui.editProc=null; renderAll(); },
+
+    /* --- guia Processos --- */
+    toggleProc:()=>{ ui.openProcs[id] = !ui.openProcs[id]; ui.editProc = null; renderMain(); },
+    salvaProc:()=>{
+      const { campo } = ui.editProc;
+      const e = extraProc(id);
+      const v = $('#edProc').value;
+      if (campo === 'titulo'){
+        const t = v.trim();
+        const pr = listaProcessos().find(x=>x.respId===id);
+        // título igual à pergunta = sem personalização, volta a acompanhá-la
+        e.titulo = (!t || t === pr.pergunta.texto) ? '' : t;
+      } else {
+        e.narrativa = v.trim();
+      }
+      ui.editProc = null;
+      limpaProcVazios();
+      persist(campo === 'titulo' ? 'Título atualizado' : 'Narrativa salva');
+      renderMain();
+    },
+    cancelaProc:()=>{ ui.editProc = null; limpaProcVazios(); renderMain(); },
+    toggleRec:()=>{
+      const campo = btn.dataset.campo, val = btn.dataset.val;
+      const e = extraProc(id);
+      e[campo] = (e[campo]||[]).includes(val) ? e[campo].filter(x=>x!==val) : [...(e[campo]||[]), val];
+      persist(); renderMain();
+    },
+    irSetorDeProc:()=>{ ui.page='setores'; ui.openSetores[id]=true; ui.editCampo=null; renderAll();
+      document.querySelector(`[data-act="toggleSetor"][data-id="${id}"]`)?.scrollIntoView({behavior:'smooth',block:'center'}); },
     tema:   ()=>{ dados.tema = dados.tema==='dark'?'light':'dark'; applyTheme(); persist(); renderAll(); },
     openDim:()=>{ ui.openDimId=id; renderMain(); },
     backGrid:()=>{ ui.openDimId=null; renderMain(); },
@@ -931,17 +1169,26 @@ document.addEventListener('click', ev => {
       if (!txt){ toast('Digite a resposta'); return; }
       const t = getTopico(ui.activeTopicId);
       const p = t.perguntas.find(x=>x.id===id);
-      p.respostas.push({ setorId: dr.setor || (dados.setores[0]||{}).id, texto: txt });
+      // id próprio já na criação: é a âncora do card de processo
+      p.respostas.push({ id: uid('r'), setorId: dr.setor || (dados.setores[0]||{}).id, texto: txt });
       ui.drafts[id] = { setor: dr.setor, texto:'' };
       persist('Resposta salva'); renderModais(); restoreDrafts();
       // a modal continua aberta e no mesmo lugar: pronta para a próxima resposta
       focar(`[data-draft="texto"][data-id="${id}"]`);
     },
     delResp:()=>{
-      if (!confirm('Remover esta resposta?')) return;
       const t = getTopico(ui.activeTopicId);
       const p = t.perguntas.find(x=>x.id===id);
+      const r = p.respostas[Number(btn.dataset.i)];
+      const ex = r && dados.processos.find(x=>x.respId===r.id);
+      const temConteudo = ex && ((ex.narrativa||'').trim() || (ex.titulo||'').trim()
+        || (ex.sist||[]).length || (ex.main||[]).length || (ex.tools||[]).length);
+      const aviso = temConteudo
+        ? 'Remover esta resposta?\n\nO processo gerado por ela, com a narrativa e os recursos já preenchidos, será excluído junto.'
+        : 'Remover esta resposta?';
+      if (!confirm(aviso)) return;
       p.respostas.splice(Number(btn.dataset.i), 1);
+      limpaProcVazios();
       persist('Resposta removida'); renderModais(); restoreDrafts();
     },
 
@@ -983,6 +1230,7 @@ document.addEventListener('click', ev => {
       if (!confirm('Excluir esta pergunta e suas respostas?')) return;
       const t = getTopico(ui.activeTopicId);
       t.perguntas = t.perguntas.filter(x=>x.id!==id);
+      limpaProcVazios();
       persist('Pergunta excluída'); renderModais(); restoreDrafts();
     },
 
@@ -1016,6 +1264,7 @@ document.addEventListener('click', ev => {
       if (!confirm('Excluir este tópico e todo o seu roteiro?')) return;
       dados.topicos = dados.topicos.filter(t=>t.id!==ui.activeTopicId);
       ui.activeTopicId = null;
+      limpaProcVazios();
       persist('Tópico excluído'); renderAll();
     },
 
@@ -1126,6 +1375,17 @@ document.addEventListener('click', ev => {
     }
   };
 
+  // abre a edição inline de um campo do processo (título, narrativa, recursos)
+  const abreProc = campo => ()=>{
+    ui.openProcs[id] = true;
+    ui.editProc = { respId:id, campo };
+    renderMain();
+    focar('#edProc');
+  };
+  A.editProcTitulo    = abreProc('titulo');
+  A.editProcNarrativa = abreProc('narrativa');
+  RECURSOS.forEach(rc=>{ A['editProcRec_'+rc.k] = abreProc(rc.k); });
+
   if (A[act]){ ev.preventDefault(); A[act](); }
 });
 
@@ -1135,6 +1395,7 @@ document.addEventListener('keydown', ev => {
     // ESC cancela primeiro a edição em andamento, só depois fecha a modal
     if (ui.editQ || ui.editResp){ ui.editQ=null; ui.editResp=null; renderModais(); restoreDrafts(); return; }
     if (ui.editCampo){ ui.editCampo=null; renderMain(); return; }
+    if (ui.editProc){ ui.editProc=null; limpaProcVazios(); renderMain(); return; }
     // a tela inicial de carregamento não pode ser dispensada com ESC
     const vazio = !dados.dimensoes.length && !dados.topicos.length && !dados.setores.length;
     if (ui.dadosModal){ if (!vazio){ ui.dadosModal=false; renderModais(); } return; }
@@ -1154,9 +1415,12 @@ document.addEventListener('keydown', ev => {
   }
   if (alvo.id === 'edQTexto'){    ev.preventDefault(); $('[data-act="salvaQ"]').click(); return; }
   if (alvo.id === 'edRespTexto'){ ev.preventDefault(); $('[data-act="salvaResp"]').click(); return; }
-  // no textarea de lista o Enter serve para quebrar linha
+  // nos textarea (listas, narrativa) o Enter serve para quebrar linha
   if (alvo.id === 'edCampo' && alvo.tagName === 'INPUT'){
-    ev.preventDefault(); $('[data-act="salvaCampo"]').click();
+    ev.preventDefault(); $('[data-act="salvaCampo"]').click(); return;
+  }
+  if (alvo.id === 'edProc' && alvo.tagName === 'INPUT'){
+    ev.preventDefault(); $('[data-act="salvaProc"]').click();
   }
 });
 
@@ -1175,6 +1439,16 @@ function restoreDrafts(){
     if (v != null) el.value = v;
   });
 }
+/* busca em Processos: re-renderiza a lista mantendo foco e cursor no campo */
+document.addEventListener('input', e => {
+  if (e.target.id !== 'filtroProc') return;
+  ui.filtroProc = e.target.value;
+  const pos = e.target.selectionStart;
+  renderMain();
+  const novo = $('#filtroProc');
+  if (novo){ novo.focus(); novo.setSelectionRange(pos, pos); }
+});
+
 document.addEventListener('input',  e => { if (e.target.dataset && e.target.dataset.draft) captureDrafts(); });
 document.addEventListener('change', e => { if (e.target.dataset && e.target.dataset.draft) captureDrafts(); });
 
