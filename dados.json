@@ -1,0 +1,428 @@
+{
+  "versao": 1,
+  "atualizadoEm": "2026-07-28T03:06:37.972Z",
+  "tema": "dark",
+  "dimensoes": [
+    {
+      "id": "I",
+      "nome": "Acessibilidade",
+      "desc": "Condições que permitam aos usuários obter informações, incluindo a indicação clara do local de disponibilização, a forma de realizar eventual demanda, os prazos e outras características relevantes de acesso, assegurado tratamento especial às pessoas com deficiência."
+    },
+    {
+      "id": "II",
+      "nome": "Acurácia",
+      "desc": "Medida em que a informação fornecida reflete a realidade de maneira precisa e confiável, de acordo com a metodologia utilizada."
+    },
+    {
+      "id": "III",
+      "nome": "Adaptabilidade",
+      "desc": "Capacidade de gerar informações em formato que atenda às diversas demandas, incluindo as não periodicamente reportadas e as decorrentes de mudanças regulamentares, inclusive em situações adversas ou de crise."
+    },
+    {
+      "id": "IV",
+      "nome": "Clareza",
+      "desc": "Apresentação das informações de forma concisa, permitindo a fácil compreensão e atendendo às necessidades do usuário."
+    },
+    {
+      "id": "V",
+      "nome": "Comparabilidade",
+      "desc": "Capacidade de possibilitar ao usuário identificar e compreender semelhanças e diferenças entre informações, seja em diferentes períodos ou entre diferentes áreas geográficas ou domínios não geográficos."
+    },
+    {
+      "id": "VI",
+      "nome": "Completude",
+      "desc": "Capacidade de a informação atender integralmente os aspectos requeridos, com dados completos."
+    },
+    {
+      "id": "VII",
+      "nome": "Confiabilidade",
+      "desc": "Ausência de desvio relevante nos dados revisados em relação ao seu valor inicial."
+    },
+    {
+      "id": "VIII",
+      "nome": "Consistência",
+      "desc": "Medida em que as informações referentes ao mesmo evento ou fato estão padronizadas e livres de contradições, mesmo quando geradas por diferentes fontes ou métodos."
+    },
+    {
+      "id": "IX",
+      "nome": "Integridade",
+      "desc": "Propriedade pela qual se assegura que a informação é autêntica e que não foi modificada de maneira não autorizada ou acidental."
+    },
+    {
+      "id": "X",
+      "nome": "Rastreabilidade",
+      "desc": "Condições que permitam rastrear a informação desde a origem até a sua disponibilização ao usuário final."
+    },
+    {
+      "id": "XI",
+      "nome": "Relevância",
+      "desc": "Capacidade de fornecer informações úteis, que possam influenciar a tomada de decisões pelos usuários."
+    },
+    {
+      "id": "XII",
+      "nome": "Tempestividade",
+      "desc": "Fornecimento das informações em tempo hábil, no prazo estabelecido, observado um curto intervalo entre os fatos relatados e a data da prestação da informação."
+    }
+  ],
+  "setores": [
+    {
+      "id": "ti",
+      "nome": "TI",
+      "coord": "Ana Paula S.",
+      "func": [
+        "Dev 1",
+        "Dev 2",
+        "Suporte",
+        "DBA"
+      ],
+      "resp": [
+        "Infraestrutura",
+        "Sistemas internos",
+        "Suporte técnico"
+      ],
+      "tools": [
+        "JIRA",
+        "GitHub",
+        "AWS",
+        "Oracle DB"
+      ]
+    },
+    {
+      "id": "rh",
+      "nome": "RH",
+      "coord": "Carlos M.",
+      "func": [
+        "Analista RH 1",
+        "Analista RH 2",
+        "DP"
+      ],
+      "resp": [
+        "Recrutamento",
+        "Folha de pagamento",
+        "Treinamentos"
+      ],
+      "tools": [
+        "SAP HCM",
+        "Ponto Online"
+      ]
+    },
+    {
+      "id": "fin",
+      "nome": "Financeiro",
+      "coord": "Bianca L.",
+      "func": [
+        "Analista Fin.",
+        "Contador",
+        "Tesouraria"
+      ],
+      "resp": [
+        "Contas a pagar/receber",
+        "Relatórios",
+        "Compliance"
+      ],
+      "tools": [
+        "SAP FI",
+        "Totvs Protheus",
+        "Power BI"
+      ]
+    },
+    {
+      "id": "op",
+      "nome": "Operações",
+      "coord": "Marcos T.",
+      "func": [
+        "Sup. Logística",
+        "Almoxarife",
+        "Op. 1"
+      ],
+      "resp": [
+        "Logística",
+        "Controle de estoque",
+        "Expedição"
+      ],
+      "tools": [
+        "WMS",
+        "Totvs Logix",
+        "AS/400"
+      ]
+    },
+    {
+      "id": "com",
+      "nome": "Comercial",
+      "coord": "Fernanda R.",
+      "func": [
+        "Vendedor 1",
+        "Vendedor 2",
+        "CS"
+      ],
+      "resp": [
+        "Vendas",
+        "Gestão de clientes",
+        "Indicadores"
+      ],
+      "tools": [
+        "Salesforce",
+        "HubSpot",
+        "Power BI"
+      ]
+    },
+    {
+      "id": "jur",
+      "nome": "Jurídico",
+      "coord": "Patrícia N.",
+      "func": [
+        "Advogado 1",
+        "Paralegal"
+      ],
+      "resp": [
+        "Contratos",
+        "Compliance legal",
+        "Regulatório"
+      ],
+      "tools": [
+        "Lexos",
+        "DocuSign",
+        "SharePoint"
+      ]
+    },
+    {
+      "id": "sms42k4fgfz6s",
+      "nome": "TESTE DE setior",
+      "coord": "gabbu",
+      "func": [
+        "gabu 1",
+        "pedro",
+        "pedro 2"
+      ],
+      "resp": [
+        "sei la",
+        "sei la"
+      ],
+      "tools": [
+        "oracle",
+        "mainframe yz"
+      ]
+    }
+  ],
+  "topicos": [
+    {
+      "id": "t1",
+      "nome": "Canais de atendimento",
+      "dimId": "I",
+      "norm": "MP0045",
+      "setores": [
+        "ti",
+        "com"
+      ],
+      "desc": "Avaliação dos canais disponíveis para atendimento ao usuário, incluindo canais digitais e físicos.",
+      "perguntas": [
+        {
+          "id": "p1",
+          "texto": "Os canais de atendimento estão claramente identificados e acessíveis?",
+          "respostas": [
+            {
+              "setorId": "ti",
+              "texto": "Sim, mantemos portal atualizado e helpdesk 24h."
+            },
+            {
+              "setorId": "com",
+              "texto": "Utilizamos CRM integrado com todos os canais."
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "texto": "Existe mapeamento das barreiras de acesso identificadas pelos usuários?",
+          "respostas": []
+        },
+        {
+          "id": "pms42f2i96xa9",
+          "texto": "TESTE !@#$ JSON",
+          "respostas": []
+        }
+      ]
+    },
+    {
+      "id": "t2",
+      "nome": "Precisão dos relatórios",
+      "dimId": "II",
+      "norm": "IN0012",
+      "setores": [
+        "fin",
+        "ti"
+      ],
+      "desc": "Grau de precisão das informações reportadas nos demonstrativos periódicos.",
+      "perguntas": [
+        {
+          "id": "p3",
+          "texto": "Qual é o processo de validação dos dados antes da publicação dos relatórios?",
+          "respostas": [
+            {
+              "setorId": "fin",
+              "texto": "Revisão dupla pelo analista e contador antes do fechamento."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t3",
+      "nome": "Formatos de exportação",
+      "dimId": "III",
+      "norm": "MP0067",
+      "setores": [
+        "ti"
+      ],
+      "desc": "Capacidade de exportar dados nos formatos exigidos por diferentes regulamentos e públicos.",
+      "perguntas": []
+    },
+    {
+      "id": "t4",
+      "nome": "Linguagem dos documentos",
+      "dimId": "IV",
+      "norm": "",
+      "setores": [
+        "jur",
+        "com"
+      ],
+      "desc": "Adequação da linguagem utilizada nas comunicações e documentos oficiais.",
+      "perguntas": []
+    },
+    {
+      "id": "tms42fj3lmooj",
+      "nome": "TESTE  !@#%¨&",
+      "dimId": "V",
+      "norm": "mp185355",
+      "setores": [
+        "rh",
+        "com",
+        "jur"
+      ],
+      "desc": "olaaaaa",
+      "perguntas": [
+        {
+          "id": "pms42fxt1jggz",
+          "texto": "TESTE !@#$ 12315sdfasf json 123",
+          "respostas": [
+            {
+              "setorId": "fin",
+              "texto": "eles disseram 123"
+            },
+            {
+              "setorId": "com",
+              "texto": "disseram xyz"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tms42ho6t9gxx",
+      "nome": "teste serio 123456",
+      "dimId": "XII",
+      "norm": "MP1234",
+      "setores": [
+        "ti"
+      ],
+      "desc": "testando",
+      "perguntas": [
+        {
+          "id": "pms42hxu7fo1m",
+          "texto": "Qual pergunta eu deveria fazer?",
+          "respostas": []
+        },
+        {
+          "id": "pms42i8d8bfld",
+          "texto": "qual eu poderia fazer?",
+          "respostas": []
+        }
+      ]
+    },
+    {
+      "id": "tms42kmnod2fb",
+      "nome": "olaaa",
+      "dimId": "X",
+      "norm": "mp165",
+      "setores": [
+        "sms42k4fgfz6s"
+      ],
+      "desc": "asdasdasdasdas",
+      "perguntas": [
+        {
+          "id": "pms42kze2e7me",
+          "texto": "teste de pergunta no rastreabilidade",
+          "respostas": [
+            {
+              "setorId": "rh",
+              "texto": "disseram tal tal tal coisa"
+            },
+            {
+              "setorId": "sms42k4fgfz6s",
+              "texto": "disseram xyz coisas"
+            },
+            {
+              "setorId": "fin",
+              "texto": "wqeqweqweqwe"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tms42n6814p03",
+      "perguntas": [
+        {
+          "id": "pms42nan69l42",
+          "texto": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.?",
+          "respostas": [
+            {
+              "setorId": "op",
+              "texto": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\""
+            },
+            {
+              "setorId": "com",
+              "texto": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\""
+            },
+            {
+              "setorId": "com",
+              "texto": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\""
+            },
+            {
+              "setorId": "com",
+              "texto": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\""
+            },
+            {
+              "setorId": "com",
+              "texto": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\""
+            },
+            {
+              "setorId": "com",
+              "texto": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\""
+            },
+            {
+              "setorId": "com",
+              "texto": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\""
+            }
+          ]
+        },
+        {
+          "id": "pms42nvk6upik",
+          "texto": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\"",
+          "respostas": []
+        },
+        {
+          "id": "pms42nwwlkr7t",
+          "texto": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\"",
+          "respostas": []
+        }
+      ],
+      "nome": "Lorem ipsum",
+      "norm": "mp1987",
+      "dimId": "XI",
+      "setores": [
+        "fin"
+      ],
+      "desc": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\""
+    }
+  ]
+}

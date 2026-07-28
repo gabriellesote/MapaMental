@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mapa de Processos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg1:#eef0f5; --bg2:#e3e7ef;
+  --surface:#fff; --surface-2:#f5f6f9; --surface-3:#eceef3;
+  --border:#e7e9ef; --border-2:#d9dce4;
+  --text:#12151b; --text-2:#5b6274; --text-3:#98a0b0;
+  --accent:#2f6bff; --accent-t:#1d55e6; --on-accent:#fff;
+  --shadow:0 1px 2px rgba(16,24,40,.04),0 8px 24px rgba(16,24,40,.06);
+  --shadow-lg:0 24px 70px rgba(16,24,40,.18);
+  --danger:#d9414f; --ok:#0f9d78; --warn:#c98a00;
+}
+html[data-theme="dark"]{
+  --bg1:#0d0f14; --bg2:#151922;
+  --surface:#171a21; --surface-2:#1e222b; --surface-3:#252a34;
+  --border:#262b35; --border-2:#333944;
+  --text:#f3f5f9; --text-2:#a6adbd; --text-3:#727a8b;
+  --accent:#5b8cff; --accent-t:#7aa3ff; --on-accent:#0d0f14;
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 8px 24px rgba(0,0,0,.35);
+  --shadow-lg:0 24px 70px rgba(0,0,0,.6);
+  --danger:#ff6b78; --ok:#3ecfa5; --warn:#e8b23c;
+}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg1);color:var(--text);-webkit-font-smoothing:antialiased}
+input,textarea,select,button{font-family:inherit}
+button{cursor:pointer}
+@keyframes popIn{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+#app{min-height:100vh;background:linear-gradient(170deg,var(--bg1) 0%,var(--bg2) 100%);transition:background .35s ease,color .35s ease;padding:22px 26px 70px}
+.wrap{max-width:1240px;margin:0 auto}
+
+/* header */
+header{position:sticky;top:14px;z-index:80;display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:22px;box-shadow:var(--shadow);padding:12px 14px 12px 24px;max-width:1240px;margin:0 auto 34px;flex-wrap:wrap}
+.brand{font-size:17px;font-weight:800;letter-spacing:-.02em;white-space:nowrap}
+nav{display:flex;gap:4px}
+.tab{height:34px;padding:0 16px;border-radius:17px;border:none;font-size:13px;font-weight:600;background:transparent;color:var(--text-2)}
+.tab.on{background:var(--surface-3);color:var(--text);font-weight:700}
+.spacer{margin-left:auto}
+.hbtns{display:flex;align-items:center;gap:10px}
+.ghost{height:38px;padding:0 16px;border-radius:19px;border:1px solid var(--border-2);background:var(--surface-2);color:var(--text-2);font-size:12.5px;font-weight:600;transition:all .2s}
+.ghost:hover{border-color:var(--accent);color:var(--text)}
+.primary{height:38px;padding:0 20px;border-radius:19px;border:none;background:var(--accent);color:var(--on-accent);font-size:13px;font-weight:700;transition:background .2s}
+.primary:hover{background:var(--accent-t)}
+.knob{width:26px;height:26px;border-radius:50%;background:var(--accent);transition:all .3s ease;display:inline-block;vertical-align:middle}
+html[data-theme="dark"] .knob{box-shadow:inset -7px -3px 0 0 var(--surface-2)}
+html[data-theme="light"] .knob{box-shadow:0 0 0 3px rgba(47,107,255,.18)}
+
+/* status pill */
+.pill{display:flex;align-items:center;gap:8px;height:38px;padding:0 14px;border-radius:19px;border:1px solid var(--border-2);background:var(--surface-2);color:var(--text-2);font-size:12px;font-weight:600}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--text-3);flex-shrink:0}
+.dot.ok{background:var(--ok)}
+.dot.warn{background:var(--warn)}
+.dot.busy{background:var(--accent);animation:fadeIn .6s ease-in-out infinite alternate}
+
+/* cards */
+h1{font-size:26px;font-weight:800;letter-spacing:-.03em}
+.sub{font-size:14px;color:var(--text-2);margin-top:6px;text-wrap:pretty}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:18px}
+.grid.wide{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:20px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:14px;transition:transform .18s ease,box-shadow .18s ease,border-color .18s;text-align:left;color:inherit;font:inherit;width:100%}
+.card.click{cursor:pointer}
+.card.click:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:var(--border-2)}
+.tile{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;letter-spacing:.02em;flex-shrink:0}
+.chev{width:26px;height:26px;border-radius:50%;background:var(--surface-2);color:var(--text-3);font-size:12px;display:flex;align-items:center;justify-content:center}
+.card h3{font-size:18px;font-weight:700;letter-spacing:-.02em;line-height:1.25}
+.clamp{font-size:13px;line-height:1.55;color:var(--text-2);margin-top:8px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;text-wrap:pretty}
+.foot{margin-top:auto;display:flex;align-items:center;justify-content:center;height:40px;border-radius:12px;background:var(--surface-2);border:1px solid var(--border);font-size:12.5px;font-weight:600;color:var(--text-2)}
+.tag{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.norm{font-size:10.5px;font-weight:700;letter-spacing:.04em;padding:4px 9px;border-radius:8px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-3)}
+.kicker{font-size:11.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--text-3)}
+.empty{grid-column:1/-1;padding:46px;text-align:center;border:1px dashed var(--border-2);border-radius:20px;color:var(--text-3);font-size:13.5px}
+.gitem{font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:20px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-2)}
+
+/* setores expansíveis */
+.setorHead{display:flex;align-items:center;gap:12px;cursor:pointer;width:100%;background:none;border:none;text-align:left;color:inherit}
+.secs{display:flex;flex-direction:column;gap:2px;margin-top:16px;border-top:1px solid var(--border);padding-top:4px}
+.sec{padding:11px 0;border-bottom:1px solid var(--border)}
+.sec:last-child{border-bottom:none}
+.secHead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:7px;min-height:22px}
+.pen{width:22px;height:22px;border-radius:50%;border:none;background:var(--surface-2);color:var(--text-3);font-size:10px;opacity:0;transition:opacity .15s}
+.sec:hover .pen,.pen:focus{opacity:1}
+.pen:hover{color:var(--text);background:var(--surface-3)}
+.autoSelo{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);background:var(--surface-2);border:1px solid var(--border);border-radius:20px;padding:2px 8px}
+button.gitem:hover,button.tag:hover{filter:brightness(1.08);cursor:pointer}
+
+/* modals */
+.overlay{position:fixed;inset:0;background:rgba(8,10,14,.5);backdrop-filter:blur(4px);z-index:200;display:flex;align-items:flex-start;justify-content:center;padding:5vh 20px;overflow-y:auto;animation:fadeIn .18s ease}
+.modal{width:100%;max-width:740px;background:var(--surface);border:1px solid var(--border);border-radius:24px;box-shadow:var(--shadow-lg);margin:auto;animation:popIn .22s ease}
+.modal.sm{max-width:620px}
+.mhead{padding:22px 26px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:14px}
+.mfoot{padding:16px 26px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+.x{width:32px;height:32px;border-radius:16px;border:none;background:var(--surface-2);color:var(--text-3);font-size:13px}
+.mini{height:32px;padding:0 14px;border-radius:16px;border:1px solid var(--border-2);background:var(--surface);color:var(--text-2);font-size:12px;font-weight:600}
+.mini:hover{color:var(--text)}
+.mini.danger{color:var(--danger);border-color:var(--border)}
+label.f{display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:600;color:var(--text-2)}
+.inp{height:38px;padding:0 12px;border-radius:11px;border:1px solid var(--border-2);background:var(--surface-2);color:var(--text);font-size:13.5px;font-weight:500;outline:none;width:100%}
+.inp:focus{border-color:var(--accent)}
+textarea.inp{height:auto;min-height:86px;padding:11px 12px;line-height:1.55;resize:vertical}
+.row2{display:grid;grid-template-columns:2fr 1fr;gap:14px}
+.row2e{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.chip{height:32px;padding:0 14px;border-radius:16px;border:1px solid var(--border-2);background:var(--surface-2);color:var(--text-3);font-size:12.5px;font-weight:600}
+.chip.on{border-color:transparent;font-weight:700}
+
+/* questions */
+.q{background:var(--surface-2);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.qhead{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;cursor:pointer;width:100%;background:none;border:none;text-align:left;color:inherit}
+.qn{width:24px;height:24px;flex-shrink:0;border-radius:50%;background:var(--accent);color:var(--on-accent);font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.qbody{border-top:1px solid var(--border);padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.ans{display:flex;gap:10px;align-items:flex-start}
+.ansrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:2px}
+
+#toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:500;background:var(--text);color:var(--surface);font-size:13px;font-weight:600;padding:11px 20px;border-radius:22px;box-shadow:var(--shadow-lg);animation:popIn .2s ease}
+.hide{display:none !important}
+.note{font-size:12.5px;line-height:1.6;color:var(--text-2)}
+.mono{font-family:ui-monospace,Consolas,monospace;font-size:12px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:2px 7px}
+</style>
+</head>
+<body>
+
+<!-- ===== ESQUELETO: todo conteúdo vem de dados.json ===== -->
+<div id="app">
+  <header>
+    <div class="brand">Mapa de Processos</div>
+    <nav>
+      <button class="tab" data-act="goDim">Dimensões</button>
+      <button class="tab" data-act="goSet">Setores</button>
+    </nav>
+    <div class="spacer"></div>
+    <div class="hbtns">
+      <button class="pill" data-act="dados" title="Gerenciar armazenamento">
+        <span class="dot" id="statusDot"></span><span id="statusText">…</span>
+      </button>
+      <button class="ghost" data-act="tema" title="Alternar tema" style="padding-right:6px">
+        <span id="temaLabel">Claro</span> <span class="knob"></span>
+      </button>
+      <button class="primary" data-act="novoTopico">Novo tópico</button>
+    </div>
+  </header>
+  <main class="wrap" id="main"></main>
+</div>
+
+<div id="modais"></div>
+<div id="toast" class="hide"></div>
+<input type="file" id="fileInput" accept="application/json,.json" class="hide">
+
+<script>
+"use strict";
+/* =========================================================================
+   Mapa de Processos — armazenamento local automático
+   - localStorage: gravado a cada alteração (sempre, instantâneo)
+   - dados.json:   gravado direto no disco via File System Access API
+   - backups:      últimas 10 versões guardadas no localStorage
+   Nenhuma API, backend ou banco de dados.
+   ========================================================================= */
+
+const LS_DADOS   = 'mapaProcessos.dados.v1';
+const LS_BACKUPS = 'mapaProcessos.backups.v1';
+const IDB_NAME   = 'mapaProcessos';
+const MAX_BACKUPS = 10;
+const HUES = [258,155,62,300,350,205,130,25];
+
+let dados = null;                 // conteúdo do dados.json em memória
+let fileHandle = null;            // FileSystemFileHandle do dados.json
+let filePerm  = null;             // 'granted' = pode gravar | 'prompt' = precisa reautorizar
+let fileSynced = false;           // true = disco em dia com a memória
+let writeTimer = null;
+let toastTimer = null;
+
+const ui = {
+  page: 'dimensoes',
+  openDimId: null,
+  activeTopicId: null,
+  openQ: {},        // { perguntaId: true }
+  drafts: {},       // { perguntaId: {setor, texto} }
+  topicForm: null,
+  setorForm: null,
+  dadosModal: false,
+  openSetores: {},  // { setorId: true } — cards de setor expandidos
+  editCampo: null,  // { setorId, campo } — edição inline de um atributo do setor
+  editQ: null,      // perguntaId em edição
+  editResp: null    // { qid, i } — resposta em edição
+};
+
+const FS_OK = typeof window.showOpenFilePicker === 'function';
+
+/* ---------------------------------------------------------------- utils */
+const $  = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s)
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+  .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+const uid = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+const lines = v => (v||'').split('\n').map(x=>x.trim()).filter(Boolean);
+
+function toast(msg){
+  const t = $('#toast');
+  t.textContent = msg; t.classList.remove('hide');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.add('hide'), 2400);
+}
+
+function tile(hue){
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  return dark
+    ? { bg:`oklch(0.30 0.055 ${hue})`, fg:`oklch(0.84 0.10 ${hue})` }
+    : { bg:`oklch(0.94 0.045 ${hue})`, fg:`oklch(0.50 0.13 ${hue})` };
+}
+const setorIdx  = id => dados.setores.findIndex(s=>s.id===id);
+const setorTile = id => tile(HUES[(Math.max(0,setorIdx(id))) % HUES.length]);
+const setorNome = id => (dados.setores.find(s=>s.id===id)||{}).nome || id;
+const dimIdx    = id => dados.dimensoes.findIndex(d=>d.id===id);
+const dimTile   = id => tile(HUES[Math.max(0,dimIdx(id)) % HUES.length]);
+const getTopico = id => dados.topicos.find(t=>t.id===id);
+
+/* Relacionamento AUTOMÁTICO: o setor é ligado a um tópico no formulário do tópico;
+   daí derivam-se os tópicos do setor e, pelo dimId de cada um, as dimensões. */
+const topicosDoSetor = id => dados.topicos.filter(t=>(t.setores||[]).includes(id));
+
+/* "Relacionado" vale nos dois sentidos: espelha o vínculo no outro setor. */
+function sincronizaRel(id, rel){
+  dados.setores.forEach(s=>{
+    if (s.id === id) return;
+    const tem  = (s.rel||[]).includes(id);
+    const deve = rel.includes(s.id);
+    if (deve && !tem) s.rel = [...(s.rel||[]), id];
+    else if (!deve && tem) s.rel = s.rel.filter(x=>x!==id);
+  });
+}
+function dimensoesDoSetor(id){
+  const ids = [...new Set(topicosDoSetor(id).map(t=>t.dimId))];
+  return dados.dimensoes.filter(d=>ids.includes(d.id));
+}
+
+function tagsHtml(ids){
+  return (ids||[]).map(id=>{
+    const c = setorTile(id);
+    return `<span class="tag" style="background:${c.bg};color:${c.fg}">${esc(setorNome(id))}</span>`;
+  }).join('');
+}
+
+/* ------------------------------------------------------- IndexedDB (handle) */
+function idb(mode, fn){
+  return new Promise((res, rej)=>{
+    const req = indexedDB.open(IDB_NAME, 1);
+    req.onupgradeneeded = () => req.result.createObjectStore('kv');
+    req.onerror = () => rej(req.error);
+    req.onsuccess = () => {
+      const db = req.result;
+      const tx = db.transaction('kv', mode);
+      const r  = fn(tx.objectStore('kv'));
+      tx.oncomplete = () => { db.close(); res(r && r.result); };
+      tx.onerror = () => { db.close(); rej(tx.error); };
+    };
+  });
+}
+const saveHandle = h => idb('readwrite', st => st.put(h, 'dadosFile')).catch(()=>{});
+const loadHandle = () => idb('readonly',  st => st.get('dadosFile')).catch(()=>null);
+const dropHandle = () => idb('readwrite', st => st.delete('dadosFile')).catch(()=>{});
+
+/* ------------------------------------------------------------ persistência */
+function saveLocal(){
+  dados.atualizadoEm = new Date().toISOString();
+  const json = JSON.stringify(dados);
+  try {
+    localStorage.setItem(LS_DADOS, json);
+  } catch(e){
+    // cota estourada: os backups são descartáveis, os dados atuais não
+    try {
+      localStorage.removeItem(LS_BACKUPS);
+      localStorage.setItem(LS_DADOS, json);
+      toast('Espaço cheio: backups antigos foram descartados');
+    } catch(e2){
+      console.error(e2);
+      alert('Não foi possível salvar no navegador (armazenamento cheio).\n\n'
+          + 'Use "Baixar dados.json" no botão de status para não perder as alterações.');
+      return;
+    }
+  }
+  pushBackup();
+}
+
+function pushBackup(){
+  try {
+    const arr = JSON.parse(localStorage.getItem(LS_BACKUPS) || '[]');
+    arr.unshift({ em: dados.atualizadoEm, json: JSON.stringify(dados) });
+    localStorage.setItem(LS_BACKUPS, JSON.stringify(arr.slice(0, MAX_BACKUPS)));
+  } catch(e){ /* cota cheia: backups são opcionais */ }
+}
+
+/** Chamado após QUALQUER alteração. Grava localStorage na hora e agenda o disco. */
+function persist(msg){
+  saveLocal();
+  fileSynced = false;
+  if (fileHandle && filePerm === 'granted'){
+    clearTimeout(writeTimer);
+    writeTimer = setTimeout(writeToDisk, 700);
+  }
+  renderStatus();
+  if (msg) toast(msg);
+}
+
+async function writeToDisk(){
+  if (!fileHandle) return;
+  try {
+    filePerm = await fileHandle.queryPermission({ mode:'readwrite' });
+    if (filePerm !== 'granted'){ renderStatus(); return; }
+    const w = await fileHandle.createWritable();
+    await w.write(JSON.stringify(dados, null, 2));
+    await w.close();
+    fileSynced = true;
+  } catch(e){
+    console.error(e);
+    fileSynced = false;
+  }
+  renderStatus();
+}
+
+async function connectFile(mode){
+  if (!FS_OK){ toast('Navegador não permite gravar arquivo aqui'); return; }
+  try {
+    let h;
+    if (mode === 'novo'){
+      h = await window.showSaveFilePicker({
+        suggestedName: 'dados.json',
+        types:[{ description:'JSON', accept:{ 'application/json':['.json'] } }]
+      });
+    } else {
+      [h] = await window.showOpenFilePicker({
+        types:[{ description:'JSON', accept:{ 'application/json':['.json'] } }],
+        multiple:false
+      });
+      const txt = await (await h.getFile()).text();
+      const inc = JSON.parse(txt);
+      if (!inc || !Array.isArray(inc.dimensoes)) throw new Error('JSON inválido');
+      const vazio     = !dados || (!dados.dimensoes.length && !dados.topicos.length && !dados.setores.length);
+      const incTime   = Date.parse(inc.atualizadoEm || 0) || 0;
+      const localTime = Date.parse(dados && dados.atualizadoEm || 0) || 0;
+      // com o app vazio o arquivo sempre vence; senão, vence a versão mais recente
+      if (vazio || incTime >= localTime) dados = normalize(inc);
+      ui.dadosModal = false; ui.openDimId = null; ui.activeTopicId = null;
+      applyTheme();
+    }
+    filePerm = await h.requestPermission({ mode:'readwrite' });
+    if (filePerm !== 'granted'){ toast('Permissão de gravação negada'); return; }
+    fileHandle = h;
+    await saveHandle(h);
+    saveLocal();
+    await writeToDisk();
+    renderAll();
+    toast('Arquivo conectado — salvamento automático ativo');
+  } catch(e){
+    if (e && e.name === 'AbortError') return;
+    console.error(e);
+    toast('Não foi possível conectar o arquivo');
+  }
+}
+
+function downloadJson(){
+  const blob = new Blob([JSON.stringify(dados, null, 2)], { type:'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'dados.json';
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
+  fileSynced = true; renderStatus();
+  toast('dados.json baixado');
+}
+
+function importJson(){
+  const inp = $('#fileInput');
+  inp.value = '';
+  inp.onchange = () => {
+    const f = inp.files[0]; if (!f) return;
+    const rd = new FileReader();
+    rd.onload = () => {
+      try {
+        const inc = JSON.parse(rd.result);
+        if (!inc || !Array.isArray(inc.dimensoes)) throw new Error('inválido');
+        dados = normalize(inc);
+        ui.openDimId = null; ui.activeTopicId = null; ui.dadosModal = false;
+        applyTheme(); persist('Dados importados'); renderAll();
+      } catch(e){ toast('Arquivo JSON inválido'); }
+    };
+    rd.readAsText(f);
+  };
+  inp.click();
+}
+
+/* ------------------------------------------------------------- carregamento */
+function normalize(d){
+  d = d || {};
+  return {
+    versao: d.versao || 1,
+    atualizadoEm: d.atualizadoEm || new Date().toISOString(),
+    tema: d.tema === 'dark' ? 'dark' : 'light',
+    dimensoes: Array.isArray(d.dimensoes) ? d.dimensoes : [],
+    setores:  (Array.isArray(d.setores) ? d.setores : []).map(s=>({
+      id: s.id || uid('s'), nome: s.nome || '', coord: s.coord || '',
+      func:  s.func  || [],   // 👥 Funcionários
+      resp:  s.resp  || [],   // 📋 Responsabilidades
+      sist:  s.sist  || [],   // 💻 Sistemas
+      main:  s.main  || [],   // 🖥 Mainframe
+      tools: s.tools || [],   // 🛠 Ferramentas
+      rel:   s.rel   || []    // 🤝 Setores relacionados (ids)
+    })),
+    topicos:  (Array.isArray(d.topicos) ? d.topicos : []).map(t=>({
+      id: t.id || uid('t'), nome: t.nome || '', dimId: t.dimId || '',
+      norm: t.norm || '', setores: t.setores || [], desc: t.desc || '',
+      perguntas: (t.perguntas||[]).map(p=>({
+        id: p.id || uid('p'), texto: p.texto || '',
+        respostas: (p.respostas||[]).map(r=>({ setorId:r.setorId, texto:r.texto||'' }))
+      }))
+    }))
+  };
+}
+
+async function boot(){
+  // 1. localStorage
+  let local = null;
+  try { local = JSON.parse(localStorage.getItem(LS_DADOS) || 'null'); } catch(e){}
+
+  // 2. arquivo previamente conectado
+  let doArquivo = null;
+  const h = await loadHandle();
+  if (h){
+    try {
+      fileHandle = h;
+      filePerm = await h.queryPermission({ mode:'readwrite' });
+      // 'prompt' => o navegador exige um clique do usuário para reautorizar
+      if (filePerm === 'granted') doArquivo = JSON.parse(await (await h.getFile()).text());
+    } catch(e){ await dropHandle(); fileHandle = null; filePerm = null; }
+  }
+
+  // 3. dados.json ao lado do HTML (só funciona via servidor / nem sempre em file://)
+  let doFetch = null;
+  if (!doArquivo){
+    try {
+      const r = await fetch('./dados.json', { cache:'no-store' });
+      if (r.ok) doFetch = await r.json();
+    } catch(e){ /* file:// bloqueia — normal */ }
+  }
+
+  // vence o mais recente
+  const cand = [local, doArquivo, doFetch].filter(Boolean);
+  if (!cand.length){
+    dados = normalize({ dimensoes:[], setores:[], topicos:[] });
+    applyTheme(); renderAll();
+    ui.dadosModal = true; renderModais();
+    return;
+  }
+  cand.sort((a,b)=>(Date.parse(b.atualizadoEm||0)||0)-(Date.parse(a.atualizadoEm||0)||0));
+  dados = normalize(cand[0]);
+  fileSynced = !!doArquivo && doArquivo === cand[0];
+
+  try { localStorage.setItem(LS_DADOS, JSON.stringify(dados)); } catch(e){}
+  applyTheme(); renderAll();
+}
+
+function applyTheme(){
+  document.documentElement.setAttribute('data-theme', dados.tema || 'light');
+}
+
+/* ------------------------------------------------------------------ render */
+function renderAll(){ renderHeader(); renderMain(); renderModais(); renderStatus(); }
+
+function renderHeader(){
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
+  const sel = ui.page === 'setores' ? '[data-act="goSet"]' : '[data-act="goDim"]';
+  $(sel).classList.add('on');
+  $('#temaLabel').textContent = dados.tema === 'dark' ? 'Escuro' : 'Claro';
+}
+
+function renderStatus(){
+  const dot = $('#statusDot'), txt = $('#statusText');
+  dot.className = 'dot';
+  if (fileHandle && filePerm !== 'granted'){ dot.classList.add('warn'); txt.textContent = 'reautorizar arquivo'; }
+  else if (fileHandle && fileSynced)       { dot.classList.add('ok');   txt.textContent = 'dados.json salvo'; }
+  else if (fileHandle)                     { dot.classList.add('busy'); txt.textContent = 'gravando arquivo…'; }
+  else                                     { dot.classList.add('warn'); txt.textContent = 'só no navegador'; }
+}
+
+function renderMain(){
+  const m = $('#main');
+  if (ui.page === 'setores')      m.innerHTML = viewSetores();
+  else if (ui.openDimId)          m.innerHTML = viewDimensao();
+  else                            m.innerHTML = viewDimGrid();
+}
+
+function viewDimGrid(){
+  const cards = dados.dimensoes.map(d=>{
+    const n = dados.topicos.filter(t=>t.dimId===d.id).length;
+    const c = dimTile(d.id);
+    return `<button class="card click" data-act="openDim" data-id="${esc(d.id)}">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div class="tile" style="background:${c.bg};color:${c.fg}">${esc(d.id)}</div>
+        <div class="chev">&rsaquo;</div>
+      </div>
+      <div><h3 style="font-size:19px">${esc(d.nome)}</h3><p class="clamp">${esc(d.desc)}</p></div>
+      <div class="foot">${n===1?'1 tópico':n+' tópicos'}</div>
+    </button>`;
+  }).join('');
+  return `<div style="margin:0 0 22px 4px">
+      <h1>Dimensões da informação</h1>
+      <p class="sub">Doze dimensões de qualidade. Abra uma dimensão para ver seus tópicos temáticos e o roteiro de perguntas.</p>
+    </div>
+    <div class="grid">${cards || '<div class="empty">Nenhuma dimensão carregada. Use “Dados” para importar o dados.json.</div>'}</div>`;
+}
+
+function viewDimensao(){
+  const d = dados.dimensoes.find(x=>x.id===ui.openDimId);
+  if (!d){ ui.openDimId = null; return viewDimGrid(); }
+  const list = dados.topicos.filter(t=>t.dimId===d.id);
+  const cards = list.map((t,i)=>{
+    const c = tile(HUES[i % HUES.length]);
+    const qn = (t.perguntas||[]).length;
+    return `<button class="card click" data-act="openTopic" data-id="${esc(t.id)}">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+        <div class="tile" style="background:${c.bg};color:${c.fg};font-size:15px">${esc((t.nome||'?').charAt(0).toUpperCase())}</div>
+        ${t.norm ? `<span class="norm">${esc(t.norm)}</span>` : ''}
+      </div>
+      <div><h3>${esc(t.nome)}</h3><p class="clamp">${esc(t.desc || 'Sem descrição.')}</p></div>
+      <div class="tags">${tagsHtml(t.setores)}</div>
+      <div class="foot">${qn===1?'1 pergunta':qn+' perguntas'}</div>
+    </button>`;
+  }).join('');
+  return `<div style="display:flex;align-items:flex-start;gap:18px;margin:0 0 22px 4px">
+      <button class="ghost" data-act="backGrid" style="width:38px;padding:0;background:var(--surface);border-color:var(--border)">&lsaquo;</button>
+      <div style="flex:1">
+        <div class="kicker">Dimensão ${esc(d.id)}</div>
+        <h1 style="margin-top:4px">${esc(d.nome)}</h1>
+        <p class="sub" style="line-height:1.6;max-width:760px">${esc(d.desc)}</p>
+      </div>
+      <button class="ghost" data-act="novoTopico" style="background:var(--surface)">+ Tópico</button>
+    </div>
+    <div class="grid">${cards || '<div class="empty">Nenhum tópico nesta dimensão ainda.</div>'}</div>`;
+}
+
+/* Atributos do card de setor. 'auto' = derivado do vínculo setor↔tópico, não editável. */
+const CAMPOS_SETOR = [
+  { k:'coord', icone:'👤', label:'Coordenador',          tipo:'texto'   },
+  { k:'func',  icone:'👥', label:'Funcionários',         tipo:'lista'   },
+  { k:'resp',  icone:'📋', label:'Responsabilidades',    tipo:'lista'   },
+  { k:'sist',  icone:'💻', label:'Sistemas',             tipo:'lista'   },
+  { k:'main',  icone:'🖥', label:'Mainframe',            tipo:'lista'   },
+  { k:'tools', icone:'🛠', label:'Ferramentas',          tipo:'lista'   },
+  { k:'rel',   icone:'🤝', label:'Setores relacionados', tipo:'setores' },
+  { k:'tops',  icone:'📊', label:'Tópicos Temáticos',    tipo:'auto'    },
+  { k:'dims',  icone:'✅', label:'Dimensões',            tipo:'auto'    }
+];
+
+function secaoSetor(s, campo){
+  const editando = ui.editCampo && ui.editCampo.setorId===s.id && ui.editCampo.campo===campo.k;
+  const auto = campo.tipo === 'auto';
+  const cab = `<div class="secHead">
+      <span class="kicker" style="font-size:10.5px">${campo.icone} ${campo.label}</span>
+      ${auto
+        ? '<span class="autoSelo" title="Preenchido sozinho ao vincular o setor a um tópico">automático</span>'
+        : (editando ? '' : `<button class="pen" data-act="editCampo" data-id="${esc(s.id)}" data-campo="${campo.k}" title="Editar">&#9998;</button>`)}
+    </div>`;
+
+  let corpo;
+  if (editando && campo.tipo === 'texto'){
+    corpo = `<div class="ansrow">
+      <input class="inp" id="edCampo" value="${esc(s[campo.k]||'')}" style="flex:1;min-width:160px;height:34px">
+      <button class="primary" data-act="salvaCampo" style="height:34px;padding:0 16px;font-size:12px">Salvar</button>
+      <button class="mini" data-act="cancelaCampo">Cancelar</button>
+    </div>`;
+  } else if (editando && campo.tipo === 'lista'){
+    corpo = `<div style="display:flex;flex-direction:column;gap:8px">
+      <textarea class="inp" id="edCampo" placeholder="Um item por linha" style="min-height:80px;font-size:13px">${esc((s[campo.k]||[]).join('\n'))}</textarea>
+      <div class="ansrow">
+        <button class="primary" data-act="salvaCampo" style="height:32px;padding:0 16px;font-size:12px">Salvar</button>
+        <button class="mini" data-act="cancelaCampo">Cancelar</button>
+      </div>
+    </div>`;
+  } else if (editando && campo.tipo === 'setores'){
+    const chips = dados.setores.filter(o=>o.id!==s.id).map(o=>{
+      const on = (s.rel||[]).includes(o.id);
+      const c = setorTile(o.id);
+      return `<button class="chip ${on?'on':''}" data-act="toggleRel" data-id="${esc(s.id)}" data-alvo="${esc(o.id)}"
+        ${on?`style="background:${c.bg};color:${c.fg}"`:''}>${esc(o.nome)}</button>`;
+    }).join('') || '<span style="font-size:12px;color:var(--text-3)">Nenhum outro setor cadastrado.</span>';
+    corpo = `<div style="display:flex;flex-direction:column;gap:8px">
+      <div class="tags">${chips}</div>
+      <div><button class="mini" data-act="cancelaCampo">Concluir</button></div>
+    </div>`;
+  } else if (campo.tipo === 'texto'){
+    corpo = `<div style="font-size:13px;color:var(--text-2)">${esc(s.coord||'—')}</div>`;
+  } else if (campo.tipo === 'setores'){
+    const rel = (s.rel||[]).filter(id=>dados.setores.some(x=>x.id===id));
+    corpo = rel.length
+      ? `<div class="tags">${rel.map(id=>{const c=setorTile(id);
+          return `<button class="tag" data-act="irSetor" data-id="${esc(id)}" style="background:${c.bg};color:${c.fg};border:none">${esc(setorNome(id))}</button>`;}).join('')}</div>`
+      : vazioTxt();
+  } else if (campo.k === 'tops'){
+    const tops = topicosDoSetor(s.id);
+    corpo = tops.length
+      ? `<div class="tags">${tops.map(t=>`<button class="gitem" data-act="irTopico" data-id="${esc(t.id)}" style="cursor:pointer">${esc(t.nome)}</button>`).join('')}</div>`
+      : vazioTxt('Vincule este setor a um tópico para preencher.');
+  } else if (campo.k === 'dims'){
+    const ds = dimensoesDoSetor(s.id);
+    corpo = ds.length
+      ? `<div class="tags">${ds.map(d=>{const c=dimTile(d.id);
+          return `<button class="tag" data-act="irDim" data-id="${esc(d.id)}" style="background:${c.bg};color:${c.fg};border:none">${esc(d.id)} — ${esc(d.nome)}</button>`;}).join('')}</div>`
+      : vazioTxt('Derivado dos tópicos acima.');
+  } else {
+    const it = s[campo.k] || [];
+    corpo = it.length
+      ? `<div class="tags">${it.map(x=>`<span class="gitem">${esc(x)}</span>`).join('')}</div>`
+      : vazioTxt();
+  }
+  return `<div class="sec">${cab}${corpo}</div>`;
+}
+const vazioTxt = (t='Não informado.') => `<div style="font-size:12.5px;color:var(--text-3);font-style:italic">${t}</div>`;
+
+function viewSetores(){
+  const cards = dados.setores.map((s,i)=>{
+    const c = tile(HUES[i % HUES.length]);
+    const aberto = !!ui.openSetores[s.id];
+    const resumo = `${(s.func||[]).length} pessoas · ${topicosDoSetor(s.id).length} tópicos · ${dimensoesDoSetor(s.id).length} dimensões`;
+    return `<article class="card" style="gap:0">
+      <div class="setorHead" data-act="toggleSetor" data-id="${esc(s.id)}">
+        <div class="tile" style="background:${c.bg};color:${c.fg};font-size:15px">${esc((s.nome||'?').charAt(0).toUpperCase())}</div>
+        <div style="flex:1;min-width:0">
+          <h3>${esc(s.nome)}</h3>
+          <div style="font-size:12px;color:var(--text-3);margin-top:3px">${resumo}</div>
+        </div>
+        <button class="chev" data-act="editSetor" data-id="${esc(s.id)}" style="border:none" title="Editar tudo">&#9998;</button>
+        <span class="chev" style="background:transparent">${aberto?'&#9652;':'&#9662;'}</span>
+      </div>
+      ${aberto ? `<div class="secs">${CAMPOS_SETOR.map(cp=>secaoSetor(s,cp)).join('')}</div>` : ''}
+    </article>`;
+  }).join('');
+  return `<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:0 0 22px 4px;flex-wrap:wrap">
+      <div><h1>Setores</h1><p class="sub">Clique num setor para abrir e editar seus atributos. Tópicos e dimensões são preenchidos sozinhos.</p></div>
+      <button class="primary" data-act="novoSetor">+ Novo setor</button>
+    </div>
+    <div class="grid wide">${cards || '<div class="empty">Nenhum setor cadastrado.</div>'}</div>`;
+}
+
+/* ------------------------------------------------------------------ modais */
+/* Recria o HTML dos modais preservando a rolagem — sem isso, adicionar uma
+   pergunta ou resposta joga a modal de volta ao topo e parece que ela fechou. */
+function renderModais(){
+  const cont = $('#modais');
+  const antes = [...cont.querySelectorAll('.overlay')].map(o=>o.scrollTop);
+
+  const parts = [];
+  if (ui.activeTopicId) parts.push(modalTopico());
+  if (ui.topicForm)     parts.push(modalTopicForm());
+  if (ui.setorForm)     parts.push(modalSetorForm());
+  if (ui.dadosModal)    parts.push(modalDados());
+  cont.innerHTML = parts.join('');
+
+  cont.querySelectorAll('.overlay').forEach((o,i)=>{ if (antes[i]) o.scrollTop = antes[i]; });
+}
+
+function focar(sel){
+  const el = $(sel);
+  if (el){ el.focus(); if (el.select) el.select(); }
+}
+
+function modalTopico(){
+  const t = getTopico(ui.activeTopicId);
+  if (!t){ ui.activeTopicId = null; return ''; }
+  const d = dados.dimensoes.find(x=>x.id===t.dimId);
+  const c = dimTile(t.dimId);
+  const opts = dados.setores.map(s=>`<option value="${esc(s.id)}">${esc(s.nome)}</option>`).join('');
+
+  const qs = (t.perguntas||[]).map((p,i)=>{
+    const open = !!ui.openQ[p.id];
+    const dr = ui.drafts[p.id] || {};
+    const ans = (p.respostas||[]).map((r,ri)=>{
+      const rc = setorTile(r.setorId);
+      if (ui.editResp && ui.editResp.qid===p.id && ui.editResp.i===ri){
+        const sel = dados.setores.map(s=>
+          `<option value="${esc(s.id)}" ${s.id===r.setorId?'selected':''}>${esc(s.nome)}</option>`).join('');
+        return `<div class="ansrow" style="margin:0">
+          <select class="inp" id="edRespSetor" style="height:32px;width:auto;font-size:12px;background:var(--surface)">${sel}</select>
+          <input class="inp" id="edRespTexto" value="${esc(r.texto)}" style="flex:1;min-width:180px;height:32px;font-size:12.5px;background:var(--surface)">
+          <button class="primary" data-act="salvaResp" data-id="${esc(p.id)}" data-i="${ri}" style="height:32px;padding:0 16px;font-size:12px">Salvar</button>
+          <button class="mini" data-act="cancelaEdit">Cancelar</button>
+        </div>`;
+      }
+      return `<div class="ans">
+        <span class="tag" style="background:${rc.bg};color:${rc.fg};flex-shrink:0">${esc(setorNome(r.setorId))}</span>
+        <span style="font-size:13px;line-height:1.55;color:var(--text-2);flex:1">${esc(r.texto)}</span>
+        <button class="pen" data-act="editResp" data-id="${esc(p.id)}" data-i="${ri}" title="Editar resposta" style="opacity:1">&#9998;</button>
+        <button class="x" data-act="delResp" data-id="${esc(p.id)}" data-i="${ri}" title="Remover resposta" style="width:24px;height:24px;font-size:11px">&times;</button>
+      </div>`;
+    }).join('') || '<div style="font-size:12.5px;color:var(--text-3);font-style:italic">Sem respostas ainda.</div>';
+
+    const cabeca = ui.editQ === p.id
+      ? `<div class="ansrow" style="padding:12px 14px;margin:0">
+          <span class="qn">${i+1}</span>
+          <input class="inp" id="edQTexto" value="${esc(p.texto)}" style="flex:1;min-width:180px;height:34px;font-size:13px;background:var(--surface)">
+          <button class="primary" data-act="salvaQ" data-id="${esc(p.id)}" style="height:34px;padding:0 16px;font-size:12px">Salvar</button>
+          <button class="mini" data-act="cancelaEdit">Cancelar</button>
+        </div>`
+      : `<div style="display:flex;align-items:flex-start">
+          <button class="qhead" data-act="toggleQ" data-id="${esc(p.id)}">
+            <span class="qn">${i+1}</span>
+            <span style="flex:1;font-size:13.5px;line-height:1.5;color:var(--text)">${esc(p.texto)}</span>
+          </button>
+          <div style="display:flex;align-items:center;gap:4px;padding:14px 12px 0 0">
+            <button class="pen" data-act="editQ" data-id="${esc(p.id)}" title="Editar pergunta" style="opacity:1">&#9998;</button>
+            <button class="pen" data-act="delQ" data-id="${esc(p.id)}" title="Excluir pergunta" style="opacity:1;color:var(--danger)">&times;</button>
+            <button class="pen" data-act="toggleQ" data-id="${esc(p.id)}" style="opacity:1;background:transparent">${open?'&#9652;':'&#9662;'}</button>
+          </div>
+        </div>`;
+
+    return `<div class="q">
+      ${cabeca}
+      ${open ? `<div class="qbody">
+        ${ans}
+        <div class="ansrow">
+          <select class="inp" data-draft="setor" data-id="${esc(p.id)}" style="height:32px;width:auto;font-size:12px;background:var(--surface)">${opts}</select>
+          <input class="inp" data-draft="texto" data-id="${esc(p.id)}" value="${esc(dr.texto||'')}" placeholder="Nova resposta do setor…" style="flex:1;min-width:180px;height:32px;font-size:12.5px;background:var(--surface)">
+          <button class="primary" data-act="saveResp" data-id="${esc(p.id)}" style="height:32px;padding:0 16px;font-size:12px">+ Resposta</button>
+        </div>
+      </div>` : ''}
+    </div>`;
+  }).join('') || '<div class="empty" style="padding:28px;border-radius:16px;font-size:13px">Nenhuma pergunta cadastrada.</div>';
+
+  return `<div class="overlay" data-act="closeTopic">
+    <div class="modal" data-stop>
+      <div class="mhead">
+        <div class="tile" style="width:46px;height:46px;border-radius:14px;background:${c.bg};color:${c.fg};font-size:16px">${esc((t.nome||'?').charAt(0).toUpperCase())}</div>
+        <div style="flex:1">
+          <div class="kicker">Dimensão ${esc(t.dimId)} &middot; ${esc(d?d.nome:'')}</div>
+          <h2 style="font-size:22px;font-weight:800;letter-spacing:-.025em;margin-top:4px">${esc(t.nome)}</h2>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="mini" data-act="editTopic">Editar</button>
+          <button class="mini danger" data-act="delTopic">Excluir</button>
+          <button class="x" data-act="closeTopic">&times;</button>
+        </div>
+      </div>
+      <div style="padding:22px 26px 8px">
+        <p style="font-size:14px;line-height:1.65;color:var(--text-2);text-wrap:pretty">${esc(t.desc||'Sem descrição.')}</p>
+        <div class="tags" style="margin-top:14px">${tagsHtml(t.setores)}</div>
+      </div>
+      <div style="padding:22px 26px 26px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:10px">
+          <div class="kicker" style="font-size:10.5px">Roteiro de perguntas</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">${qs}</div>
+        <div class="ansrow" style="margin-top:12px">
+          <input class="inp" id="novaPergunta" placeholder="Nova pergunta…" style="flex:1;min-width:200px;height:36px;font-size:13px">
+          <button class="primary" data-act="addQ" style="height:36px;padding:0 18px;font-size:12.5px">+ Pergunta</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function modalTopicForm(){
+  const f = ui.topicForm;
+  const dimOpts = dados.dimensoes.map(d=>
+    `<option value="${esc(d.id)}" ${d.id===f.dimId?'selected':''}>${esc(d.id)} — ${esc(d.nome)}</option>`).join('');
+  return `<div class="overlay" style="z-index:300" data-act="closeTopicForm">
+    <div class="modal sm" data-stop>
+      <div class="mhead" style="align-items:center;justify-content:space-between">
+        <h2 style="font-size:19px;font-weight:800;letter-spacing:-.02em">${esc(f.title)}</h2>
+        <button class="x" data-act="closeTopicForm">&times;</button>
+      </div>
+      <div style="padding:22px 26px;display:flex;flex-direction:column;gap:16px">
+        <div class="row2">
+          <label class="f">Nome do tópico
+            <input class="inp" id="fTopNome" value="${esc(f.nome)}" placeholder="Ex: Qualidade dos dados"></label>
+          <label class="f">Normativo
+            <input class="inp" id="fTopNorm" value="${esc(f.norm)}" placeholder="MP0123"></label>
+        </div>
+        <label class="f">Dimensão
+          <select class="inp" id="fTopDim">${dimOpts}</select></label>
+        <div class="f">Setores envolvidos
+          <div class="tags" id="chipsSetores">${chipsHtml(f.setores)}</div>
+        </div>
+        <label class="f">Descrição
+          <textarea class="inp" id="fTopDesc" placeholder="Descreva o tópico…">${esc(f.desc)}</textarea></label>
+      </div>
+      <div class="mfoot">
+        <button class="ghost" data-act="closeTopicForm" style="background:var(--surface)">Cancelar</button>
+        <button class="primary" data-act="saveTopic">Salvar</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function chipsRelHtml(selfId, sel){
+  const outros = dados.setores.filter(s=>s.id!==selfId);
+  if (!outros.length) return '<span style="font-size:12px;color:var(--text-3)">Nenhum outro setor cadastrado.</span>';
+  return outros.map(s=>{
+    const on = (sel||[]).includes(s.id);
+    const c = setorTile(s.id);
+    return `<button class="chip ${on?'on':''}" data-act="chipRel" data-id="${esc(s.id)}"
+      ${on?`style="background:${c.bg};color:${c.fg}"`:''}>${esc(s.nome)}</button>`;
+  }).join('');
+}
+
+function chipsHtml(sel){
+  return dados.setores.map(s=>{
+    const on = sel.includes(s.id);
+    const c = setorTile(s.id);
+    return `<button class="chip ${on?'on':''}" data-act="chip" data-id="${esc(s.id)}"
+      ${on?`style="background:${c.bg};color:${c.fg}"`:''}>${esc(s.nome)}</button>`;
+  }).join('');
+}
+
+function modalSetorForm(){
+  const f = ui.setorForm;
+  return `<div class="overlay" style="z-index:300" data-act="closeSetorForm">
+    <div class="modal sm" data-stop>
+      <div class="mhead" style="align-items:center;justify-content:space-between">
+        <h2 style="font-size:19px;font-weight:800;letter-spacing:-.02em">${esc(f.title)}</h2>
+        <button class="x" data-act="closeSetorForm">&times;</button>
+      </div>
+      <div style="padding:22px 26px;display:flex;flex-direction:column;gap:16px">
+        <div class="row2e">
+          <label class="f">Nome do setor<input class="inp" id="fSetNome" value="${esc(f.nome)}" placeholder="Ex: TI"></label>
+          <label class="f">Coordenador(a)<input class="inp" id="fSetCoord" value="${esc(f.coord)}" placeholder="Nome"></label>
+        </div>
+        <label class="f">👥 Funcionários (um por linha)<textarea class="inp" id="fSetFunc" style="min-height:70px">${esc(f.func)}</textarea></label>
+        <label class="f">📋 Responsabilidades (uma por linha)<textarea class="inp" id="fSetResp" style="min-height:70px">${esc(f.resp)}</textarea></label>
+        <label class="f">💻 Sistemas (um por linha)<textarea class="inp" id="fSetSist" style="min-height:70px">${esc(f.sist)}</textarea></label>
+        <label class="f">🖥 Mainframe (um por linha)<textarea class="inp" id="fSetMain" style="min-height:70px">${esc(f.main)}</textarea></label>
+        <label class="f">🛠 Ferramentas (uma por linha)<textarea class="inp" id="fSetTools" style="min-height:70px">${esc(f.tools)}</textarea></label>
+        <div class="f">🤝 Setores relacionados
+          <div class="tags" id="chipsRel">${chipsRelHtml(f.id, f.rel)}</div>
+        </div>
+        ${f.id ? `<div class="f" style="gap:8px">
+          <span>📊 Tópicos Temáticos e ✅ Dimensões <span class="autoSelo">automático</span></span>
+          <span class="note">Preenchidos sozinhos: marque este setor no formulário de um tópico e a dimensão desse tópico entra aqui.</span>
+        </div>` : ''}
+      </div>
+      <div class="mfoot">
+        ${f.id ? '<button class="ghost" data-act="delSetor" style="margin-right:auto;background:var(--surface);color:var(--danger)">Excluir setor</button>' : ''}
+        <button class="ghost" data-act="closeSetorForm" style="background:var(--surface)">Cancelar</button>
+        <button class="primary" data-act="saveSetor">Salvar</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function modalDados(){
+  let bk = [];
+  try { bk = JSON.parse(localStorage.getItem(LS_BACKUPS) || '[]'); } catch(e){}
+  const bkHtml = bk.map((b,i)=>`<div style="display:flex;align-items:center;gap:10px;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
+      <span style="font-size:12.5px;color:var(--text-2)">${new Date(b.em).toLocaleString('pt-BR')}</span>
+      <button class="mini" data-act="restore" data-i="${i}">Restaurar</button>
+    </div>`).join('') || '<div style="font-size:12.5px;color:var(--text-3)">Nenhum backup ainda.</div>';
+
+  const vazio = !dados.dimensoes.length && !dados.topicos.length && !dados.setores.length;
+
+  let estado;
+  if (vazio)
+    estado = `<p class="note">Bem-vinda! Nada foi carregado ainda porque o navegador bloqueia a leitura automática de arquivos vizinhos quando o HTML é aberto por duplo clique.<br><br>
+      Clique em <b>Conectar dados.json</b> e escolha o arquivo <span class="mono">dados.json</span> que está na mesma pasta deste HTML. Isso só é preciso uma vez: a partir daí tudo é salvo sozinho, no navegador e no próprio arquivo.</p>`;
+  else if (fileHandle && filePerm !== 'granted')
+    estado = `<p class="note" style="color:var(--warn)">O <span class="mono">dados.json</span> já foi conectado antes, mas o navegador exige um clique para reautorizar a gravação nesta sessão.</p>
+      <button class="primary" data-act="reautorizar">Reautorizar gravação</button>`;
+  else if (fileHandle)
+    estado = `<p class="note">Arquivo conectado. Toda alteração é gravada automaticamente no <span class="mono">dados.json</span> escolhido${fileSynced?' (em dia).':' — gravação pendente.'}</p>`;
+  else
+    estado = `<p class="note">As alterações estão sendo salvas <b>no navegador (localStorage)</b>. Conecte o <span class="mono">dados.json</span> abaixo para que o arquivo também seja gravado sozinho a cada mudança.</p>`;
+
+  const fsWarn = FS_OK ? '' :
+    `<p class="note" style="color:var(--warn)">Este navegador (ou o modo de abertura do arquivo) não permite gravação direta em disco. Use <b>Baixar dados.json</b> para atualizar o arquivo manualmente, ou abra o HTML pelo Chrome/Edge.</p>`;
+
+  return `<div class="overlay" style="z-index:400" ${vazio?'':'data-act="closeDados"'}>
+    <div class="modal sm" data-stop>
+      <div class="mhead" style="align-items:center;justify-content:space-between">
+        <h2 style="font-size:19px;font-weight:800;letter-spacing:-.02em">${vazio?'Carregar dados':'Dados e backup'}</h2>
+        ${vazio?'':'<button class="x" data-act="closeDados">&times;</button>'}
+      </div>
+      <div style="padding:22px 26px;display:flex;flex-direction:column;gap:18px">
+        ${estado}${fsWarn}
+        <div class="tags">
+          <button class="primary" data-act="conectar">Conectar dados.json</button>
+          <button class="ghost" data-act="importar" style="background:var(--surface)">Importar JSON (sem gravação automática)</button>
+          ${vazio?'':`<button class="ghost" data-act="criarArquivo" style="background:var(--surface)">Criar novo arquivo</button>
+          <button class="ghost" data-act="baixar" style="background:var(--surface)">Baixar dados.json</button>`}
+        </div>
+        ${vazio?'':`<div>
+          <div class="kicker" style="margin-bottom:8px">Backups automáticos (últimos ${MAX_BACKUPS})</div>
+          ${bkHtml}
+        </div>
+        <div>
+          <div class="kicker" style="margin-bottom:8px">Zona de risco</div>
+          <button class="ghost" data-act="limpar" style="background:var(--surface);color:var(--danger)">Apagar dados do navegador</button>
+        </div>`}
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ----------------------------------------------------------------- ações */
+document.addEventListener('click', ev => {
+  const stopEl = ev.target.closest('[data-stop]');
+  const btn = ev.target.closest('[data-act]');
+  if (!btn) return;
+  // clique dentro do modal não deve fechar o overlay
+  if (btn.hasAttribute('data-stop')) return;
+  if (stopEl && btn === ev.target.closest('.overlay')) return;
+  const act = btn.dataset.act, id = btn.dataset.id;
+
+  const A = {
+    goDim:  ()=>{ ui.page='dimensoes'; ui.openDimId=null; ui.activeTopicId=null; renderAll(); },
+    goSet:  ()=>{ ui.page='setores'; ui.openDimId=null; ui.activeTopicId=null; renderAll(); },
+    tema:   ()=>{ dados.tema = dados.tema==='dark'?'light':'dark'; applyTheme(); persist(); renderAll(); },
+    openDim:()=>{ ui.openDimId=id; renderMain(); },
+    backGrid:()=>{ ui.openDimId=null; renderMain(); },
+    openTopic:()=>{ ui.activeTopicId=id; ui.editQ=null; ui.editResp=null; renderModais(); },
+    closeTopic:()=>{ ui.activeTopicId=null; ui.editQ=null; ui.editResp=null; renderModais(); },
+
+    toggleQ:()=>{ captureDrafts(); ui.openQ[id]=!ui.openQ[id]; renderModais(); restoreDrafts(); },
+    saveResp:()=>{
+      captureDrafts();
+      const dr = ui.drafts[id]||{};
+      const txt = (dr.texto||'').trim();
+      if (!txt){ toast('Digite a resposta'); return; }
+      const t = getTopico(ui.activeTopicId);
+      const p = t.perguntas.find(x=>x.id===id);
+      p.respostas.push({ setorId: dr.setor || (dados.setores[0]||{}).id, texto: txt });
+      ui.drafts[id] = { setor: dr.setor, texto:'' };
+      persist('Resposta salva'); renderModais(); restoreDrafts();
+      // a modal continua aberta e no mesmo lugar: pronta para a próxima resposta
+      focar(`[data-draft="texto"][data-id="${id}"]`);
+    },
+    delResp:()=>{
+      if (!confirm('Remover esta resposta?')) return;
+      const t = getTopico(ui.activeTopicId);
+      const p = t.perguntas.find(x=>x.id===id);
+      p.respostas.splice(Number(btn.dataset.i), 1);
+      persist('Resposta removida'); renderModais(); restoreDrafts();
+    },
+
+    /* --- edição de perguntas e respostas --- */
+    editQ:()=>{ ui.editQ = id; ui.editResp = null; renderModais(); focar('#edQTexto'); },
+    salvaQ:()=>{
+      const txt = $('#edQTexto').value.trim();
+      if (!txt){ toast('A pergunta não pode ficar vazia'); return; }
+      getTopico(ui.activeTopicId).perguntas.find(x=>x.id===id).texto = txt;
+      ui.editQ = null;
+      persist('Pergunta atualizada'); renderModais(); restoreDrafts();
+    },
+    editResp:()=>{
+      ui.editResp = { qid:id, i:Number(btn.dataset.i) }; ui.editQ = null;
+      ui.openQ[id] = true;
+      renderModais(); focar('#edRespTexto');
+    },
+    salvaResp:()=>{
+      const txt = $('#edRespTexto').value.trim();
+      if (!txt){ toast('A resposta não pode ficar vazia'); return; }
+      const p = getTopico(ui.activeTopicId).perguntas.find(x=>x.id===id);
+      const r = p.respostas[Number(btn.dataset.i)];
+      r.texto = txt; r.setorId = $('#edRespSetor').value;
+      ui.editResp = null;
+      persist('Resposta atualizada'); renderModais(); restoreDrafts();
+    },
+    cancelaEdit:()=>{ ui.editQ = null; ui.editResp = null; renderModais(); restoreDrafts(); },
+    addQ:()=>{
+      const inp = $('#novaPergunta');
+      const txt = (inp.value||'').trim();
+      if (!txt){ toast('Digite a pergunta'); inp.focus(); return; }
+      const t = getTopico(ui.activeTopicId);
+      t.perguntas.push({ id: uid('p'), texto: txt, respostas: [] });
+      persist('Pergunta adicionada'); renderModais(); restoreDrafts();
+      // a modal continua aberta e no mesmo lugar: pronta para a próxima pergunta
+      focar('#novaPergunta');
+    },
+    delQ:()=>{
+      if (!confirm('Excluir esta pergunta e suas respostas?')) return;
+      const t = getTopico(ui.activeTopicId);
+      t.perguntas = t.perguntas.filter(x=>x.id!==id);
+      persist('Pergunta excluída'); renderModais(); restoreDrafts();
+    },
+
+    novoTopico:()=>{ ui.topicForm = { id:null, title:'Novo tópico', nome:'', norm:'',
+      dimId: ui.openDimId || (dados.dimensoes[0]||{}).id || '', setores:[], desc:'' }; renderModais(); },
+    editTopic:()=>{
+      const t = getTopico(ui.activeTopicId); if (!t) return;
+      ui.topicForm = { id:t.id, title:'Editar tópico', nome:t.nome, norm:t.norm||'',
+        dimId:t.dimId, setores:[...(t.setores||[])], desc:t.desc||'' };
+      renderModais();
+    },
+    closeTopicForm:()=>{ ui.topicForm=null; renderModais(); },
+    chip:()=>{
+      const s = ui.topicForm.setores;
+      ui.topicForm.setores = s.includes(id) ? s.filter(x=>x!==id) : [...s, id];
+      $('#chipsSetores').innerHTML = chipsHtml(ui.topicForm.setores);
+    },
+    saveTopic:()=>{
+      const f = ui.topicForm;
+      const nome = $('#fTopNome').value.trim();
+      if (!nome){ toast('Informe o nome do tópico'); return; }
+      const data = { nome, norm:$('#fTopNorm').value.trim(), dimId:$('#fTopDim').value,
+                     setores:f.setores, desc:$('#fTopDesc').value.trim() };
+      if (f.id) Object.assign(getTopico(f.id), data);
+      else dados.topicos.push({ id: uid('t'), perguntas: [], ...data });
+      ui.openDimId = data.dimId; ui.topicForm = null;
+      persist(f.id ? 'Tópico atualizado' : 'Tópico criado');
+      renderAll();
+    },
+    delTopic:()=>{
+      if (!confirm('Excluir este tópico e todo o seu roteiro?')) return;
+      dados.topicos = dados.topicos.filter(t=>t.id!==ui.activeTopicId);
+      ui.activeTopicId = null;
+      persist('Tópico excluído'); renderAll();
+    },
+
+    novoSetor:()=>{ ui.setorForm = { id:null, title:'Novo setor', nome:'', coord:'',
+      func:'', resp:'', sist:'', main:'', tools:'', rel:[] }; renderModais(); },
+    editSetor:()=>{
+      const s = dados.setores.find(x=>x.id===id); if (!s) return;
+      const j = k => (s[k]||[]).join('\n');
+      ui.setorForm = { id:s.id, title:'Editar setor', nome:s.nome, coord:s.coord||'',
+        func:j('func'), resp:j('resp'), sist:j('sist'), main:j('main'), tools:j('tools'),
+        rel:[...(s.rel||[])] };
+      renderModais();
+    },
+    closeSetorForm:()=>{ ui.setorForm=null; renderModais(); },
+    chipRel:()=>{
+      const r = ui.setorForm.rel;
+      ui.setorForm.rel = r.includes(id) ? r.filter(x=>x!==id) : [...r, id];
+      $('#chipsRel').innerHTML = chipsRelHtml(ui.setorForm.id, ui.setorForm.rel);
+    },
+    saveSetor:()=>{
+      const f = ui.setorForm;
+      const nome = $('#fSetNome').value.trim();
+      if (!nome){ toast('Informe o nome'); $('#fSetNome').focus(); return; }
+      const data = { nome, coord:$('#fSetCoord').value.trim()||'—',
+        func:lines($('#fSetFunc').value), resp:lines($('#fSetResp').value),
+        sist:lines($('#fSetSist').value), main:lines($('#fSetMain').value),
+        tools:lines($('#fSetTools').value), rel:[...f.rel] };
+      const alvo = f.id || uid('s');
+      if (f.id) Object.assign(dados.setores.find(x=>x.id===f.id), data);
+      else dados.setores.push({ id: alvo, ...data });
+      sincronizaRel(alvo, data.rel);
+      ui.setorForm = null;
+      persist(f.id ? 'Setor atualizado' : 'Setor criado'); renderAll();
+    },
+    delSetor:()=>{
+      const f = ui.setorForm;
+      if (!confirm('Excluir este setor? As respostas já registradas mantêm o texto.')) return;
+      dados.setores = dados.setores.filter(x=>x.id!==f.id);
+      dados.setores.forEach(s=>{ s.rel = (s.rel||[]).filter(x=>x!==f.id); });
+      dados.topicos.forEach(t=>{ t.setores = (t.setores||[]).filter(x=>x!==f.id); });
+      ui.setorForm = null;
+      persist('Setor excluído'); renderAll();
+    },
+
+    /* --- card de setor: expandir e editar atributo por atributo --- */
+    toggleSetor:()=>{
+      ui.openSetores[id] = !ui.openSetores[id];
+      ui.editCampo = null;
+      renderMain();
+    },
+    editCampo:()=>{
+      ui.openSetores[id] = true;
+      ui.editCampo = { setorId:id, campo:btn.dataset.campo };
+      renderMain();
+      const el = $('#edCampo'); if (el){ el.focus(); el.select && el.select(); }
+    },
+    cancelaCampo:()=>{ ui.editCampo = null; renderMain(); },
+    salvaCampo:()=>{
+      const { setorId, campo } = ui.editCampo;
+      const s = dados.setores.find(x=>x.id===setorId);
+      const v = $('#edCampo').value;
+      s[campo] = campo === 'coord' ? (v.trim() || '—') : lines(v);
+      ui.editCampo = null;
+      persist('Setor atualizado'); renderMain();
+    },
+    toggleRel:()=>{
+      const s = dados.setores.find(x=>x.id===id);
+      const alvo = btn.dataset.alvo;
+      s.rel = (s.rel||[]).includes(alvo) ? s.rel.filter(x=>x!==alvo) : [...(s.rel||[]), alvo];
+      sincronizaRel(id, s.rel);
+      persist(); renderMain();
+    },
+    irSetor:()=>{ ui.openSetores[id] = true; ui.editCampo = null; renderMain();
+      document.querySelector(`[data-act="toggleSetor"][data-id="${id}"]`)?.scrollIntoView({behavior:'smooth',block:'center'}); },
+    irTopico:()=>{ const t = getTopico(id); if(!t) return;
+      ui.page='dimensoes'; ui.openDimId=t.dimId; ui.activeTopicId=id; renderAll(); },
+    irDim:()=>{ ui.page='dimensoes'; ui.openDimId=id; ui.activeTopicId=null; renderAll(); },
+
+    dados:()=>{ ui.dadosModal=true; renderModais(); },
+    closeDados:()=>{ ui.dadosModal=false; renderModais(); },
+    conectar:()=>connectFile('abrir'),
+    criarArquivo:()=>connectFile('novo'),
+    reautorizar:async()=>{
+      try {
+        filePerm = await fileHandle.requestPermission({ mode:'readwrite' });
+        if (filePerm !== 'granted'){ toast('Permissão negada'); renderStatus(); return; }
+        await writeToDisk();
+        renderModais();
+        toast('Gravação automática reativada');
+      } catch(e){ toast('Falha ao reautorizar'); }
+    },
+    baixar:downloadJson,
+    importar:importJson,
+    restore:()=>{
+      const i = Number(btn.dataset.i);
+      if (!confirm('Restaurar esta versão? O estado atual vira o backup mais recente.')) return;
+      try {
+        const arr = JSON.parse(localStorage.getItem(LS_BACKUPS)||'[]');
+        dados = normalize(JSON.parse(arr[i].json));
+        ui.openDimId=null; ui.activeTopicId=null; ui.dadosModal=false;
+        applyTheme(); persist('Versão restaurada'); renderAll();
+      } catch(e){ toast('Falha ao restaurar'); }
+    },
+    limpar:()=>{
+      if (!confirm('Apagar os dados guardados no navegador? O arquivo dados.json no disco NÃO é apagado.')) return;
+      localStorage.removeItem(LS_DADOS); localStorage.removeItem(LS_BACKUPS);
+      dropHandle(); location.reload();
+    }
+  };
+
+  if (A[act]){ ev.preventDefault(); A[act](); }
+});
+
+// Enter em "nova pergunta"
+document.addEventListener('keydown', ev => {
+  if (ev.key === 'Escape'){
+    // ESC cancela primeiro a edição em andamento, só depois fecha a modal
+    if (ui.editQ || ui.editResp){ ui.editQ=null; ui.editResp=null; renderModais(); restoreDrafts(); return; }
+    if (ui.editCampo){ ui.editCampo=null; renderMain(); return; }
+    // a tela inicial de carregamento não pode ser dispensada com ESC
+    const vazio = !dados.dimensoes.length && !dados.topicos.length && !dados.setores.length;
+    if (ui.dadosModal){ if (!vazio){ ui.dadosModal=false; renderModais(); } return; }
+    if (ui.topicForm){ ui.topicForm=null; renderModais(); return; }
+    if (ui.setorForm){ ui.setorForm=null; renderModais(); return; }
+    if (ui.activeTopicId){ ui.activeTopicId=null; renderModais(); return; }
+  }
+  if (ev.key !== 'Enter') return;
+  const alvo = ev.target;
+
+  // Enter confirma; a modal segue aberta para o próximo item
+  if (alvo.id === 'novaPergunta'){
+    ev.preventDefault(); $('[data-act="addQ"]').click(); return;
+  }
+  if (alvo.dataset && alvo.dataset.draft === 'texto'){
+    ev.preventDefault(); $(`[data-act="saveResp"][data-id="${alvo.dataset.id}"]`).click(); return;
+  }
+  if (alvo.id === 'edQTexto'){    ev.preventDefault(); $('[data-act="salvaQ"]').click(); return; }
+  if (alvo.id === 'edRespTexto'){ ev.preventDefault(); $('[data-act="salvaResp"]').click(); return; }
+  // no textarea de lista o Enter serve para quebrar linha
+  if (alvo.id === 'edCampo' && alvo.tagName === 'INPUT'){
+    ev.preventDefault(); $('[data-act="salvaCampo"]').click();
+  }
+});
+
+/* rascunhos de resposta: guardados fora do DOM para sobreviver ao re-render */
+function captureDrafts(){
+  document.querySelectorAll('[data-draft]').forEach(el=>{
+    const id = el.dataset.id;
+    ui.drafts[id] = ui.drafts[id] || {};
+    ui.drafts[id][el.dataset.draft === 'setor' ? 'setor' : 'texto'] = el.value;
+  });
+}
+function restoreDrafts(){
+  document.querySelectorAll('[data-draft]').forEach(el=>{
+    const d = ui.drafts[el.dataset.id]; if (!d) return;
+    const v = el.dataset.draft === 'setor' ? d.setor : d.texto;
+    if (v != null) el.value = v;
+  });
+}
+document.addEventListener('input',  e => { if (e.target.dataset && e.target.dataset.draft) captureDrafts(); });
+document.addEventListener('change', e => { if (e.target.dataset && e.target.dataset.draft) captureDrafts(); });
+
+/* aviso se houver alteração ainda não gravada no arquivo */
+window.addEventListener('beforeunload', e => {
+  // localStorage já está gravado; só avisa se a escrita no disco ficou pendente
+  if (fileHandle && filePerm === 'granted' && !fileSynced){ e.preventDefault(); e.returnValue = ''; }
+});
+
+boot();
+</script>
+</body>
+</html>
