@@ -93,6 +93,31 @@ h1{font-size:26px;font-weight:800;letter-spacing:-.03em}
 .autoSelo{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);background:var(--surface-2);border:1px solid var(--border);border-radius:20px;padding:2px 8px}
 button.gitem:hover,button.tag:hover{filter:brightness(1.08);cursor:pointer}
 
+/* guia Processos — agrupamento discreto */
+.grupo{margin:0 0 30px}
+.grupoHead{display:flex;align-items:baseline;gap:12px;padding:0 2px 9px;border-bottom:1px solid var(--border);margin-bottom:16px}
+.grupoPonto{width:7px;height:7px;border-radius:50%;flex-shrink:0;align-self:center}
+.grupoNome{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2)}
+.grupoQtd{margin-left:auto;font-size:11.5px;color:var(--text-3);font-variant-numeric:tabular-nums}
+
+/* card de processo: mais leve que os demais, sem sombra e sem tile */
+.procCard{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color .18s ease,background .18s ease}
+.procCard:hover{border-color:var(--border-2)}
+.procCard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--barra)}
+.procHead{display:flex;align-items:flex-start;gap:12px;width:100%;background:none;border:none;text-align:left;color:inherit;cursor:pointer;padding:14px 16px 14px 19px}
+.procTit{font-size:14.5px;font-weight:600;letter-spacing:-.01em;line-height:1.35;color:var(--text)}
+.procMeta{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-top:5px;font-size:11.5px;color:var(--text-3)}
+.procMeta b{font-weight:600;color:var(--text-2)}
+.procSep{opacity:.5}
+.procFlag{font-size:11px;color:var(--text-3)}
+.procFlag.tem{color:var(--ok)}
+.procCard .secs{margin:0 16px 14px 19px;padding-top:2px;border-top:1px solid var(--border)}
+.segmented{display:inline-flex;background:var(--surface-2);border:1px solid var(--border-2);border-radius:19px;padding:3px;gap:2px}
+.segbtn{height:30px;padding:0 13px;border-radius:16px;border:none;background:transparent;color:var(--text-3);font-size:12px;font-weight:600;transition:all .18s}
+.segbtn.on{background:var(--surface);color:var(--text);box-shadow:var(--shadow)}
+.origemLinha{display:flex;gap:10px;align-items:baseline;font-size:12.5px;line-height:1.55;color:var(--text-2);padding:3px 0}
+.origemRot{flex-shrink:0;width:64px;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3)}
+
 /* modals */
 .overlay{position:fixed;inset:0;background:rgba(8,10,14,.5);backdrop-filter:blur(4px);z-index:200;display:flex;align-items:flex-start;justify-content:center;padding:5vh 20px;overflow-y:auto;animation:fadeIn .18s ease}
 .modal{width:100%;max-width:740px;background:var(--surface);border:1px solid var(--border);border-radius:24px;box-shadow:var(--shadow-lg);margin:auto;animation:popIn .22s ease}
@@ -192,6 +217,7 @@ const ui = {
   openProcs: {},    // { respId: true } — cards de processo expandidos
   editProc: null,   // { respId, campo } — edição inline de um campo do processo
   filtroProc: '',
+  grupoProc: 'dim', // eixo de agrupamento da guia Processos: 'dim' | 'setor'
   editQ: null,      // perguntaId em edição
   editResp: null    // { qid, i } — resposta em edição
 };
@@ -729,12 +755,12 @@ function secProc(pr, icone, label, corpo, acao){
     ? `<button class="pen" data-act="${acao}" data-id="${esc(pr.respId)}" title="Editar" style="opacity:1">&#9998;</button>`
     : '<span class="autoSelo" title="Vem da resposta de origem">automático</span>';
   return `<div class="sec">
-    <div class="secHead"><span class="kicker" style="font-size:10.5px">${icone} ${label}</span>${pen}</div>
+    <div class="secHead"><span class="kicker" style="font-size:10.5px">${icone?icone+' ':''}${label}</span>${pen}</div>
     ${corpo}
   </div>`;
 }
 
-function cardProcesso(pr, i){
+function cardProcesso(pr, modo){
   const aberto = !!ui.openProcs[pr.respId];
   const c  = setorTile(pr.setorId);
   const dc = pr.dim ? dimTile(pr.dim.id) : {bg:'var(--surface-2)',fg:'var(--text-3)'};
@@ -742,33 +768,35 @@ function cardProcesso(pr, i){
   const ed = ui.editProc && ui.editProc.respId === pr.respId ? ui.editProc.campo : null;
   const temNarrativa = !!(ex.narrativa||'').trim();
 
+  // As seis informações de origem cabem num bloco só: reduz o ruído de cinco
+  // selos "automático" repetidos para um, e de dez seções para seis.
+  const origem = `<div class="sec">
+    <div class="secHead">
+      <span class="kicker" style="font-size:10.5px">Origem</span>
+      <span class="autoSelo" title="Vem da resposta que gerou este processo">automático</span>
+    </div>
+    <div class="tags" style="margin-bottom:10px">
+      <button class="tag" data-act="irSetorDeProc" data-id="${esc(pr.setorId)}" style="background:${c.bg};color:${c.fg};border:none">${esc(setorNome(pr.setorId))}</button>
+      ${pr.dim?`<button class="tag" data-act="irDim" data-id="${esc(pr.dim.id)}" style="background:${dc.bg};color:${dc.fg};border:none">${esc(pr.dim.id)} · ${esc(pr.dim.nome)}</button>`:''}
+      <button class="gitem" data-act="irTopico" data-id="${esc(pr.topico.id)}" style="cursor:pointer">${esc(pr.topico.nome)}</button>
+    </div>
+    <div class="origemLinha"><span class="origemRot">Pergunta</span><span>${esc(pr.pergunta.texto)}</span></div>
+    <div class="origemLinha"><span class="origemRot">Resposta</span><span>${esc(pr.resposta.texto)}</span></div>
+  </div>`;
+
   const corpo = !aberto ? '' : `<div class="secs">
-    ${secProc(pr,'🏷','Título do processo',
+    ${secProc(pr,'','Título do processo',
       ed==='titulo'
         ? `<div class="ansrow"><input class="inp" id="edProc" value="${esc(tituloProc(pr))}" style="flex:1;min-width:180px;height:34px">
              <button class="primary" data-act="salvaProc" data-id="${esc(pr.respId)}" style="height:34px;padding:0 16px;font-size:12px">Salvar</button>
              <button class="mini" data-act="cancelaProc">Cancelar</button></div>`
         : `<div style="font-size:13.5px;font-weight:600">${esc(tituloProc(pr))}</div>
-           ${ex.titulo ? '<div style="font-size:11.5px;color:var(--text-3);margin-top:3px">Título personalizado — o original é a pergunta abaixo.</div>' : ''}`,
+           ${ex.titulo ? '<div style="font-size:11.5px;color:var(--text-3);margin-top:3px">Personalizado — o original é a pergunta abaixo.</div>' : ''}`,
       'editProcTitulo')}
 
-    ${secProc(pr,'🏢','Setor responsável',
-      `<div class="tags"><button class="tag" data-act="irSetorDeProc" data-id="${esc(pr.setorId)}" style="background:${c.bg};color:${c.fg};border:none">${esc(setorNome(pr.setorId))}</button></div>`)}
+    ${origem}
 
-    ${secProc(pr,'✅','Dimensão', pr.dim
-      ? `<div class="tags"><button class="tag" data-act="irDim" data-id="${esc(pr.dim.id)}" style="background:${dc.bg};color:${dc.fg};border:none">${esc(pr.dim.id)} — ${esc(pr.dim.nome)}</button></div>`
-      : vazioTxt('Tópico sem dimensão.'))}
-
-    ${secProc(pr,'📊','Tópico relacionado',
-      `<div class="tags"><button class="gitem" data-act="irTopico" data-id="${esc(pr.topico.id)}" style="cursor:pointer">${esc(pr.topico.nome)}</button></div>`)}
-
-    ${secProc(pr,'❓','Pergunta de origem',
-      `<div style="font-size:13px;line-height:1.55;color:var(--text-2)">${esc(pr.pergunta.texto)}</div>`)}
-
-    ${secProc(pr,'💬','Resposta de origem',
-      `<div style="font-size:13px;line-height:1.55;color:var(--text-2);background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:10px 12px">${esc(pr.resposta.texto)}</div>`)}
-
-    ${secProc(pr,'📝','Narrativa do processo',
+    ${secProc(pr,'','Narrativa do processo',
       ed==='narrativa'
         ? `<div style="display:flex;flex-direction:column;gap:8px">
              <textarea class="inp" id="edProc" placeholder="Descreva como o processo acontece: etapas, responsáveis, entradas e saídas…" style="min-height:150px;font-size:13px">${esc(ex.narrativa||'')}</textarea>
@@ -805,29 +833,52 @@ function cardProcesso(pr, i){
           ? `<div class="tags">${sel.map(o=>`<span class="gitem">${esc(o)}</span>`).join('')}</div>`
           : vazioTxt('Nenhum selecionado.');
       }
-      return secProc(pr, rc.icone, rc.label, dentro, 'editProcRec_'+rc.k);
+      return secProc(pr, '', rc.label, dentro, 'editProcRec_'+rc.k);
     }).join('')}
   </div>`;
 
   const nRec = ['sist','main','tools'].reduce((a,k)=>a+((ex[k]||[]).length),0);
-  return `<article class="card" style="gap:0">
-    <div class="setorHead" data-act="toggleProc" data-id="${esc(pr.respId)}">
-      <div class="tile" style="background:${c.bg};color:${c.fg};font-size:13px">${i+1}</div>
+  // a barra lateral mostra o eixo que NÃO está sendo usado para agrupar
+  const barra = modo === 'setor' ? dc.fg : c.fg;
+  const meta = modo === 'setor'
+    ? [pr.dim ? `<b>${esc(pr.dim.id)} · ${esc(pr.dim.nome)}</b>` : '', esc(pr.topico.nome)]
+    : [`<b>${esc(setorNome(pr.setorId))}</b>`, esc(pr.topico.nome)];
+
+  return `<article class="procCard" style="--barra:${barra}">
+    <button class="procHead" data-act="toggleProc" data-id="${esc(pr.respId)}">
       <div style="flex:1;min-width:0">
-        <h3 style="font-size:16px">${esc(tituloProc(pr))}</h3>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px">
-          <span class="tag" style="background:${c.bg};color:${c.fg}">${esc(setorNome(pr.setorId))}</span>
-          ${pr.dim?`<span class="tag" style="background:${dc.bg};color:${dc.fg}">${esc(pr.dim.id)}</span>`:''}
-          <span style="font-size:11.5px;color:var(--text-3)">${esc(pr.topico.nome)}</span>
-        </div>
-        <div style="font-size:11.5px;color:var(--text-3);margin-top:5px">
-          ${temNarrativa ? '📝 narrativa escrita' : '📝 sem narrativa'}${nRec?` · ${nRec} recurso${nRec>1?'s':''}`:''}
+        <div class="procTit">${esc(tituloProc(pr))}</div>
+        <div class="procMeta">${meta.filter(Boolean).join('<span class="procSep">·</span>')}</div>
+        <div class="procFlag ${temNarrativa?'tem':''}" style="margin-top:4px">
+          ${temNarrativa ? 'narrativa escrita' : 'sem narrativa'}${nRec?` · ${nRec} recurso${nRec>1?'s':''}`:''}
         </div>
       </div>
-      <span class="chev" style="background:transparent">${aberto?'&#9652;':'&#9662;'}</span>
-    </div>
+      <span style="font-size:13px;color:var(--text-3);padding-top:3px">${aberto?'&#9652;':'&#9662;'}</span>
+    </button>
     ${corpo}
   </article>`;
+}
+
+/* Monta os grupos conforme o eixo escolhido, preservando a ordem canônica
+   (as dimensões na ordem I..XII, os setores na ordem de cadastro). */
+function gruposProcesso(lista, modo){
+  const grupos = [];
+  if (modo === 'setor'){
+    dados.setores.forEach(s=>{
+      const itens = lista.filter(pr=>pr.setorId===s.id);
+      if (itens.length) grupos.push({ nome:s.nome, cor:setorTile(s.id).fg, itens });
+    });
+    const orfaos = lista.filter(pr=>!dados.setores.some(s=>s.id===pr.setorId));
+    if (orfaos.length) grupos.push({ nome:'Setor removido', cor:'var(--text-3)', itens:orfaos });
+  } else {
+    dados.dimensoes.forEach(d=>{
+      const itens = lista.filter(pr=>pr.topico.dimId===d.id);
+      if (itens.length) grupos.push({ nome:`${d.id} · ${d.nome}`, cor:dimTile(d.id).fg, itens });
+    });
+    const orfaos = lista.filter(pr=>!dados.dimensoes.some(d=>d.id===pr.topico.dimId));
+    if (orfaos.length) grupos.push({ nome:'Sem dimensão', cor:'var(--text-3)', itens:orfaos });
+  }
+  return grupos;
 }
 
 function viewProcessos(){
@@ -837,23 +888,36 @@ function viewProcessos(){
     (tituloProc(pr)+' '+pr.resposta.texto+' '+pr.topico.nome+' '+setorNome(pr.setorId)+' '+((pr.extra&&pr.extra.narrativa)||''))
       .toLowerCase().includes(f));
   const comNarrativa = todos.filter(pr=>pr.extra && (pr.extra.narrativa||'').trim()).length;
+  const modo = ui.grupoProc === 'setor' ? 'setor' : 'dim';
 
-  const cards = lista.map(cardProcesso).join('');
-  const vazio = !todos.length
-    ? '<div class="empty">Nenhum processo ainda. Cada resposta que você registra numa pergunta vira um card aqui.</div>'
-    : '<div class="empty">Nenhum processo corresponde à busca.</div>';
+  const corpo = !lista.length
+    ? `<div class="empty">${todos.length
+        ? 'Nenhum processo corresponde à busca.'
+        : 'Nenhum processo ainda. Cada resposta que você registra numa pergunta vira um card aqui.'}</div>`
+    : gruposProcesso(lista, modo).map(g=>`
+        <section class="grupo">
+          <div class="grupoHead">
+            <span class="grupoPonto" style="background:${g.cor}"></span>
+            <span class="grupoNome">${esc(g.nome)}</span>
+            <span class="grupoQtd">${g.itens.length}</span>
+          </div>
+          <div class="grid wide" style="gap:12px">${g.itens.map(pr=>cardProcesso(pr, modo)).join('')}</div>
+        </section>`).join('');
 
-  return `<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:0 0 22px 4px;flex-wrap:wrap">
+  return `<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:0 0 26px 2px;flex-wrap:wrap">
       <div>
         <h1>Processos</h1>
-        <p class="sub">Cada resposta registrada vira um processo. Abra um card para escrever a narrativa e marcar os recursos usados.</p>
+        <p class="sub">${comNarrativa} de ${todos.length} com narrativa escrita.</p>
       </div>
       <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-        <span class="pill" style="cursor:default">${comNarrativa} de ${todos.length} com narrativa</span>
-        <input class="inp" id="filtroProc" value="${esc(ui.filtroProc||'')}" placeholder="Buscar processo…" style="height:38px;width:220px;border-radius:19px">
+        <div class="segmented">
+          <button class="segbtn ${modo==='dim'?'on':''}" data-act="agruparProc" data-modo="dim">Dimensão</button>
+          <button class="segbtn ${modo==='setor'?'on':''}" data-act="agruparProc" data-modo="setor">Setor</button>
+        </div>
+        <input class="inp" id="filtroProc" value="${esc(ui.filtroProc||'')}" placeholder="Buscar…" style="height:38px;width:190px;border-radius:19px">
       </div>
     </div>
-    <div class="grid wide">${cards || vazio}</div>`;
+    ${corpo}`;
 }
 
 /* ------------------------------------------------------------------ modais */
@@ -1129,6 +1193,7 @@ document.addEventListener('click', ev => {
 
     /* --- guia Processos --- */
     toggleProc:()=>{ ui.openProcs[id] = !ui.openProcs[id]; ui.editProc = null; renderMain(); },
+    agruparProc:()=>{ ui.grupoProc = btn.dataset.modo; ui.editProc = null; renderMain(); },
     salvaProc:()=>{
       const { campo } = ui.editProc;
       const e = extraProc(id);
