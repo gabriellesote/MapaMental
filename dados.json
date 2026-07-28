@@ -1,6 +1,6 @@
 {
   "versao": 1,
-  "atualizadoEm": "2026-07-28T03:06:37.972Z",
+  "atualizadoEm": "2026-07-28T03:52:26.485Z",
   "tema": "dark",
   "dimensoes": [
     {
@@ -80,12 +80,15 @@
         "Sistemas internos",
         "Suporte técnico"
       ],
+      "sist": [],
+      "main": [],
       "tools": [
         "JIRA",
         "GitHub",
         "AWS",
         "Oracle DB"
-      ]
+      ],
+      "rel": []
     },
     {
       "id": "rh",
@@ -101,10 +104,13 @@
         "Folha de pagamento",
         "Treinamentos"
       ],
+      "sist": [],
+      "main": [],
       "tools": [
         "SAP HCM",
         "Ponto Online"
-      ]
+      ],
+      "rel": []
     },
     {
       "id": "fin",
@@ -120,11 +126,14 @@
         "Relatórios",
         "Compliance"
       ],
+      "sist": [],
+      "main": [],
       "tools": [
         "SAP FI",
         "Totvs Protheus",
         "Power BI"
-      ]
+      ],
+      "rel": []
     },
     {
       "id": "op",
@@ -140,11 +149,14 @@
         "Controle de estoque",
         "Expedição"
       ],
+      "sist": [],
+      "main": [],
       "tools": [
         "WMS",
         "Totvs Logix",
         "AS/400"
-      ]
+      ],
+      "rel": []
     },
     {
       "id": "com",
@@ -160,11 +172,14 @@
         "Gestão de clientes",
         "Indicadores"
       ],
+      "sist": [],
+      "main": [],
       "tools": [
         "Salesforce",
         "HubSpot",
         "Power BI"
-      ]
+      ],
+      "rel": []
     },
     {
       "id": "jur",
@@ -179,29 +194,14 @@
         "Compliance legal",
         "Regulatório"
       ],
+      "sist": [],
+      "main": [],
       "tools": [
         "Lexos",
         "DocuSign",
         "SharePoint"
-      ]
-    },
-    {
-      "id": "sms42k4fgfz6s",
-      "nome": "TESTE DE setior",
-      "coord": "gabbu",
-      "func": [
-        "gabu 1",
-        "pedro",
-        "pedro 2"
       ],
-      "resp": [
-        "sei la",
-        "sei la"
-      ],
-      "tools": [
-        "oracle",
-        "mainframe yz"
-      ]
+      "rel": []
     }
   ],
   "topicos": [
@@ -221,10 +221,12 @@
           "texto": "Os canais de atendimento estão claramente identificados e acessíveis?",
           "respostas": [
             {
+              "id": "rms44colknh18",
               "setorId": "ti",
               "texto": "Sim, mantemos portal atualizado e helpdesk 24h."
             },
             {
+              "id": "rms44colkjfim",
               "setorId": "com",
               "texto": "Utilizamos CRM integrado com todos os canais."
             }
@@ -238,6 +240,11 @@
         {
           "id": "pms42f2i96xa9",
           "texto": "TESTE !@#$ JSON",
+          "respostas": []
+        },
+        {
+          "id": "pms42wvytxb8v",
+          "texto": "teste design pergunta",
           "respostas": []
         }
       ]
@@ -258,6 +265,7 @@
           "texto": "Qual é o processo de validação dos dados antes da publicação dos relatórios?",
           "respostas": [
             {
+              "id": "rms44colkclq1",
               "setorId": "fin",
               "texto": "Revisão dupla pelo analista e contador antes do fechamento."
             }
@@ -305,14 +313,21 @@
           "texto": "TESTE !@#$ 12315sdfasf json 123",
           "respostas": [
             {
+              "id": "rms44colknxtg",
               "setorId": "fin",
               "texto": "eles disseram 123"
             },
             {
+              "id": "rms44colkple4",
               "setorId": "com",
               "texto": "disseram xyz"
             }
           ]
+        },
+        {
+          "id": "pms43mtd6dkqb",
+          "texto": "asdasdasd",
+          "respostas": []
         }
       ]
     },
@@ -335,94 +350,25 @@
           "id": "pms42i8d8bfld",
           "texto": "qual eu poderia fazer?",
           "respostas": []
-        }
-      ]
-    },
-    {
-      "id": "tms42kmnod2fb",
-      "nome": "olaaa",
-      "dimId": "X",
-      "norm": "mp165",
-      "setores": [
-        "sms42k4fgfz6s"
-      ],
-      "desc": "asdasdasdasdas",
-      "perguntas": [
-        {
-          "id": "pms42kze2e7me",
-          "texto": "teste de pergunta no rastreabilidade",
-          "respostas": [
-            {
-              "setorId": "rh",
-              "texto": "disseram tal tal tal coisa"
-            },
-            {
-              "setorId": "sms42k4fgfz6s",
-              "texto": "disseram xyz coisas"
-            },
-            {
-              "setorId": "fin",
-              "texto": "wqeqweqweqwe"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "tms42n6814p03",
-      "perguntas": [
-        {
-          "id": "pms42nan69l42",
-          "texto": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.?",
-          "respostas": [
-            {
-              "setorId": "op",
-              "texto": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\""
-            },
-            {
-              "setorId": "com",
-              "texto": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\""
-            },
-            {
-              "setorId": "com",
-              "texto": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\""
-            },
-            {
-              "setorId": "com",
-              "texto": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\""
-            },
-            {
-              "setorId": "com",
-              "texto": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\""
-            },
-            {
-              "setorId": "com",
-              "texto": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\""
-            },
-            {
-              "setorId": "com",
-              "texto": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\""
-            }
-          ]
         },
         {
-          "id": "pms42nvk6upik",
-          "texto": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\"",
-          "respostas": []
-        },
-        {
-          "id": "pms42nwwlkr7t",
-          "texto": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\"",
+          "id": "pms42inqrlzof",
+          "texto": "eqweqweqw",
           "respostas": []
         }
-      ],
-      "nome": "Lorem ipsum",
-      "norm": "mp1987",
-      "dimId": "XI",
-      "setores": [
-        "fin"
-      ],
-      "desc": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\""
+      ]
+    }
+  ],
+  "processos": [
+    {
+      "respId": "rms44colknh18",
+      "titulo": "",
+      "narrativa": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "sist": [],
+      "main": [],
+      "tools": [
+        "Oracle DB"
+      ]
     }
   ]
 }
