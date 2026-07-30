@@ -182,6 +182,17 @@ button.gitem:hover,button.tag:hover{filter:brightness(1.08);cursor:pointer}
 .row3{display:grid;grid-template-columns:1fr 1fr 2.2fr;gap:10px}
 .fonteForm{display:flex;align-items:flex-end;gap:10px}
 .fonteForm .row3{flex:1;min-width:0}
+/* diálogo de confirmação — substitui o alerta do navegador */
+.confBox{width:100%;max-width:420px;margin:auto;background:var(--surface);border:1px solid var(--border);border-radius:22px;box-shadow:var(--shadow-lg);padding:26px;display:flex;flex-direction:column;gap:14px;animation:popIn .26s var(--ease)}
+.confIco{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:var(--surface-2);border:1px solid var(--border-2);color:var(--text-2);flex-shrink:0}
+.confIco.perigo{color:var(--danger);border-color:color-mix(in oklab,var(--danger) 30%,transparent);background:color-mix(in oklab,var(--danger) 8%,var(--surface-2))}
+.confTit{font-size:17px;font-weight:800;letter-spacing:-.02em;color:var(--text);line-height:1.3}
+.confTxt{font-size:13.5px;line-height:1.65;color:var(--text-2);text-wrap:pretty}
+.confBtns{display:flex;justify-content:flex-end;gap:9px;margin-top:4px}
+.danger{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:38px;padding:0 19px;border-radius:19px;border:none;background:var(--danger);color:#fff;font-size:13px;font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.1);transition:filter .22s var(--ease),transform .12s var(--ease)}
+.danger:hover{filter:brightness(1.07)}
+.danger:active{transform:translateY(1px)}
+
 /* descrição do tópico: o texto principal da leitura */
 .desc{font-size:15px;font-weight:500;line-height:1.75;color:var(--text);text-wrap:pretty}
 .mapaVazio .no{opacity:.42}
@@ -277,6 +288,7 @@ textarea.inp{height:auto;min-height:86px;padding:11px 12px;line-height:1.55;resi
 
 <div id="modais"></div>
 <div id="foco"></div>
+<div id="confirma"></div>
 <div id="toast" class="hide"></div>
 <input type="file" id="fileInput" accept="application/json,.json" class="hide">
 
@@ -322,7 +334,8 @@ const ui = {
   editResp: null,   // { qid, i } — resposta em edição
   foco: null,       // { tipo:'setor'|'proc', id } — card isolado no centro da tela
   mapaAberto: {},   // { 'dim:I': true, 'set:I|ti': true } — ramos abertos do mapa
-  tags: {}          // { chave: ['item', …] } — conteúdo das entradas de etiquetas
+  tags: {},         // { chave: ['item', …] } — conteúdo das entradas de etiquetas
+  confirma: null    // diálogo de confirmação em aberto
 };
 
 const FS_OK = typeof window.showOpenFilePicker === 'function';
@@ -468,9 +481,75 @@ function masonry(itens, min, gap){
   const g = gap || 18;
   const cols = Array.from({length:n}, ()=>[]);
   itens.forEach((html,i)=>cols[i % n].push(html));
-  return '<div class="mas" style="gap:'+g+'px">'
+  return '<div class="mas" data-cols="'+n+'" style="gap:'+g+'px">'
     + cols.map(c=>'<div class="masCol" style="gap:'+g+'px">'+c.join('')+'</div>').join('')
     + '</div>';
+}
+/* Depois do desenho, mede a altura real de cada card e realoca: o próximo card
+   vai sempre para a coluna mais curta. Assim, ao expandir um card, o de baixo
+   sobe para a coluna vizinha em vez de ser empurrado para longe. */
+function equilibraMas(){
+  document.querySelectorAll('.mas').forEach(mas=>{
+    const cols = [...mas.children];
+    const n = cols.length;
+    if (n < 2) return;
+    const g = parseFloat(mas.style.gap) || 18;
+    // a marcação inicial é round-robin: coluna c, posição p => card p*n + c
+    const itens = [];
+    cols.forEach((col,c)=>[...col.children].forEach((el,p)=>{ itens[p*n + c] = el; }));
+    const lista = itens.filter(Boolean);
+    const alturas = lista.map(el=>el.getBoundingClientRect().height);
+    const acum = new Array(n).fill(0);
+    lista.forEach((el,i)=>{
+      let k = 0;
+      for (let j=1; j<n; j++) if (acum[j] < acum[k] - 0.5) k = j;
+      acum[k] += alturas[i] + g;
+      cols[k].appendChild(el);
+    });
+  });
+}
+
+/* ------------------------------------------------- diálogo de confirmação */
+/* Nada de confirm() do navegador: o aviso é uma modal do próprio site. */
+function pedeConfirma(op){
+  return new Promise(res=>{
+    ui.confirma = {
+      titulo: op.titulo || 'Confirmar',
+      texto:  op.texto  || '',
+      rotulo: op.rotulo || 'Confirmar',
+      perigo: op.perigo !== false,
+      resolve: res
+    };
+    renderConfirma();
+    setTimeout(()=>{ const b = $('#confirmaOk'); if (b) b.focus(); }, 30);
+  });
+}
+function fechaConfirma(ok){
+  const c = ui.confirma;
+  ui.confirma = null;
+  renderConfirma();
+  if (c) c.resolve(ok);
+}
+function renderConfirma(){
+  const cont = $('#confirma');
+  if (!cont) return;
+  const c = ui.confirma;
+  if (!c){ cont.innerHTML = ''; return; }
+  cont.innerHTML = `<div class="overlay" style="z-index:500;align-items:center" data-act="confirmaNao">
+    <div class="confBox" data-stop>
+      <div style="display:flex;align-items:flex-start;gap:14px">
+        <span class="confIco ${c.perigo?'perigo':''}">${ico(c.perigo?'alerta':'olho',18)}</span>
+        <div style="display:flex;flex-direction:column;gap:7px;min-width:0">
+          <div class="confTit">${esc(c.titulo)}</div>
+          ${c.texto ? `<div class="confTxt">${esc(c.texto)}</div>` : ''}
+        </div>
+      </div>
+      <div class="confBtns">
+        <button class="ghost" data-act="confirmaNao">Cancelar</button>
+        <button class="${c.perigo?'danger':'primary'}" id="confirmaOk" data-act="confirmaSim">${c.perigo?ico('lixo',13):''}${esc(c.rotulo)}</button>
+      </div>
+    </div>
+  </div>`;
 }
 
 /* ------------------------------------------------------- IndexedDB (handle) */
@@ -755,6 +834,7 @@ function renderMain(){
   else                              m.innerHTML = viewDimGrid();
   renderFoco();
   if (ui.page === 'mapa') agendaMapa();
+  else if (ui.page === 'setores' || ui.page === 'processos') requestAnimationFrame(equilibraMas);
 }
 
 function viewDimGrid(){
@@ -894,7 +974,9 @@ const FORMAS = {
   sol:  '<circle cx="11" cy="11" r="3.9"/><path d="M11 1.9v2.3M11 17.8v2.3M1.9 11h2.3M17.8 11h2.3M4.6 4.6l1.6 1.6M15.8 15.8l1.6 1.6M17.4 4.6l-1.6 1.6M6.2 15.8l-1.6 1.6"/>',
   lua:  '<path d="M17.6 13.5A7.1 7.1 0 0 1 8.5 4.4a7.3 7.3 0 1 0 9.1 9.1Z"/>',
   olho: '<path d="M1.9 11S5 5.4 11 5.4 20.1 11 20.1 11 17 16.6 11 16.6 1.9 11 1.9 11Z"/><circle cx="11" cy="11" r="2.6"/>',
-  copia:'<rect x="3.3" y="3.3" width="10.6" height="10.6" rx="3.2"/><rect x="8.1" y="8.1" width="10.6" height="10.6" rx="3.2"/>'
+  copia:'<rect x="3.3" y="3.3" width="10.6" height="10.6" rx="3.2"/><rect x="8.1" y="8.1" width="10.6" height="10.6" rx="3.2"/>',
+  alerta:'<path d="M11 3.4 1.9 18.6h18.2L11 3.4Z"/><path d="M11 9v3.6"/><path d="M11 15.4h.01"/>',
+  lixo: '<path d="M3.7 6.2h14.6M8.3 6.2V4.1h5.4v2.1M5.5 6.2l1 11.4a1.6 1.6 0 0 0 1.6 1.5h5.8a1.6 1.6 0 0 0 1.6-1.5l1-11.4"/>'
 };
 function ico(nome, tam, rot){
   const t = tam || 13;
@@ -1647,6 +1729,8 @@ document.addEventListener('click', ev => {
     focarProc: ()=>{ ui.openProcs[id]=true;   ui.foco={tipo:'proc', id}; renderMain(); },
     verTopico: ()=>{ ui.foco={tipo:'topico', id}; renderMain(); },
     fecharFoco:()=>{ ui.foco=null; renderMain(); },
+    confirmaSim:()=>fechaConfirma(true),
+    confirmaNao:()=>fechaConfirma(false),
 
     /* --- guia Processos --- */
     toggleProc:()=>{ ui.openProcs[id] = !ui.openProcs[id]; ui.editProc = null; renderMain(); },
@@ -1698,17 +1782,21 @@ document.addEventListener('click', ev => {
       // a modal continua aberta e no mesmo lugar: pronta para a próxima resposta
       focar(`[data-draft="texto"][data-id="${id}"]`);
     },
-    delResp:()=>{
+    delResp:async ()=>{
       const t = getTopico(ui.activeTopicId);
       const p = t.perguntas.find(x=>x.id===id);
       const r = p.respostas[Number(btn.dataset.i)];
       const ex = r && dados.processos.find(x=>x.respId===r.id);
       const temConteudo = ex && ((ex.narrativa||'').trim() || (ex.titulo||'').trim()
         || (ex.sist||[]).length || (ex.main||[]).length || (ex.tools||[]).length);
-      const aviso = temConteudo
-        ? 'Remover esta resposta?\n\nO processo gerado por ela, com a narrativa e os recursos já preenchidos, será excluído junto.'
-        : 'Remover esta resposta?';
-      if (!confirm(aviso)) return;
+      const ok = await pedeConfirma({
+        titulo: 'Remover esta resposta?',
+        texto: temConteudo
+          ? 'O processo gerado por ela, com a narrativa e os recursos já preenchidos, será excluído junto.'
+          : 'A resposta sai do roteiro desta pergunta.',
+        rotulo: 'Remover'
+      });
+      if (!ok) return;
       p.respostas.splice(Number(btn.dataset.i), 1);
       limpaProcVazios();
       persist('Resposta removida'); renderModais(); restoreDrafts();
@@ -1748,8 +1836,10 @@ document.addEventListener('click', ev => {
       // a modal continua aberta e no mesmo lugar: pronta para a próxima pergunta
       focar('#novaPergunta');
     },
-    delQ:()=>{
-      if (!confirm('Excluir esta pergunta e suas respostas?')) return;
+    delQ:async ()=>{
+      const ok = await pedeConfirma({ titulo:'Excluir esta pergunta?',
+        texto:'Todas as respostas registradas nela serão excluídas junto.', rotulo:'Excluir' });
+      if (!ok) return;
       const t = getTopico(ui.activeTopicId);
       t.perguntas = t.perguntas.filter(x=>x.id!==id);
       limpaProcVazios();
@@ -1793,8 +1883,10 @@ document.addEventListener('click', ev => {
       persist(f.id ? 'Tópico atualizado' : 'Tópico criado');
       renderAll();
     },
-    delTopic:()=>{
-      if (!confirm('Excluir este tópico e todo o seu roteiro?')) return;
+    delTopic:async ()=>{
+      const ok = await pedeConfirma({ titulo:'Excluir este tópico?',
+        texto:'O roteiro completo de perguntas e respostas será excluído junto.', rotulo:'Excluir' });
+      if (!ok) return;
       dados.topicos = dados.topicos.filter(t=>t.id!==ui.activeTopicId);
       ui.activeTopicId = null;
       limpaProcVazios();
@@ -1834,9 +1926,11 @@ document.addEventListener('click', ev => {
       ui.setorForm = null;
       persist(f.id ? 'Setor atualizado' : 'Setor criado'); renderAll();
     },
-    delSetor:()=>{
+    delSetor:async ()=>{
       const f = ui.setorForm;
-      if (!confirm('Excluir este setor? As respostas já registradas mantêm o texto.')) return;
+      const ok = await pedeConfirma({ titulo:'Excluir este setor?',
+        texto:'As respostas já registradas mantêm o texto, mas perdem o vínculo com o setor.', rotulo:'Excluir' });
+      if (!ok) return;
       dados.setores = dados.setores.filter(x=>x.id!==f.id);
       dados.setores.forEach(s=>{ s.rel = (s.rel||[]).filter(x=>x!==f.id); });
       dados.topicos.forEach(t=>{ t.setores = (t.setores||[]).filter(x=>x!==f.id); });
@@ -1908,9 +2002,12 @@ document.addEventListener('click', ev => {
     },
     baixar:downloadJson,
     importar:importJson,
-    restore:()=>{
+    restore:async ()=>{
       const i = Number(btn.dataset.i);
-      if (!confirm('Restaurar esta versão? O estado atual vira o backup mais recente.')) return;
+      const ok = await pedeConfirma({ titulo:'Restaurar esta versão?',
+        texto:'O estado atual passa a ser o backup mais recente, então nada é perdido.',
+        rotulo:'Restaurar', perigo:false });
+      if (!ok) return;
       try {
         const arr = JSON.parse(localStorage.getItem(LS_BACKUPS)||'[]');
         dados = normalize(JSON.parse(arr[i].json));
@@ -1918,8 +2015,10 @@ document.addEventListener('click', ev => {
         applyTheme(); persist('Versão restaurada'); renderAll();
       } catch(e){ toast('Falha ao restaurar'); }
     },
-    limpar:()=>{
-      if (!confirm('Apagar os dados guardados no navegador? O arquivo dados.json no disco NÃO é apagado.')) return;
+    limpar:async ()=>{
+      const ok = await pedeConfirma({ titulo:'Apagar os dados do navegador?',
+        texto:'O arquivo dados.json no disco não é apagado — só a cópia guardada aqui.', rotulo:'Apagar' });
+      if (!ok) return;
       localStorage.removeItem(LS_DADOS); localStorage.removeItem(LS_BACKUPS);
       dropHandle(); location.reload();
     }
@@ -1946,6 +2045,7 @@ document.addEventListener('keydown', ev => {
     if (ui.editQ || ui.editResp){ ui.editQ=null; ui.editResp=null; renderModais(); restoreDrafts(); return; }
     if (ui.editCampo){ ui.editCampo=null; renderMain(); return; }
     if (ui.editProc){ ui.editProc=null; limpaProcVazios(); renderMain(); return; }
+    if (ui.confirma){ fechaConfirma(false); return; }
     if (ui.foco){ ui.foco=null; renderMain(); return; }
     // a tela inicial de carregamento não pode ser dispensada com ESC
     const vazio = !dados.dimensoes.length && !dados.topicos.length && !dados.setores.length;
