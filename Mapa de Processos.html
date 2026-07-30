@@ -10,14 +10,17 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg1:#eef0f5; --bg2:#e3e7ef;
-  --surface:#fff; --surface-2:#f5f6f9; --surface-3:#eceef3;
-  --border:#e7e9ef; --border-2:#d9dce4;
-  --text:#12151b; --text-2:#5b6274; --text-3:#98a0b0;
-  --accent:#2f6bff; --accent-t:#1d55e6; --on-accent:#fff;
-  --shadow:0 1px 2px rgba(16,24,40,.04),0 8px 24px rgba(16,24,40,.06);
-  --shadow-lg:0 24px 70px rgba(16,24,40,.18);
-  --danger:#d9414f; --ok:#0f9d78; --warn:#c98a00;
+  /* claro: papel morno de baixa saturação — branco suave, sem estridência */
+  --bg1:#f7f6f2; --bg2:#f0eee8;
+  --surface:#fffefb; --surface-2:#f6f4ef; --surface-3:#eeebe4;
+  --border:#e9e6df; --border-2:#dad6cd;
+  --text:#1f211f; --text-2:#5e615d; --text-3:#96968e;
+  --accent:#3860cc; --accent-t:#2a4fb2; --on-accent:#fff;
+  --shadow:0 1px 2px rgba(64,54,42,.05),0 8px 24px rgba(64,54,42,.07);
+  --shadow-lg:0 24px 70px rgba(64,54,42,.17);
+  --danger:#c04a45; --ok:#3d8a67; --warn:#a97d1c;
+  --ease:cubic-bezier(.22,.72,.24,1);
+  --ring:rgba(56,96,204,.15);
 }
 html[data-theme="dark"]{
   --bg1:#0d0f14; --bg2:#151922;
@@ -28,31 +31,44 @@ html[data-theme="dark"]{
   --shadow:0 1px 2px rgba(0,0,0,.5),0 8px 24px rgba(0,0,0,.35);
   --shadow-lg:0 24px 70px rgba(0,0,0,.6);
   --danger:#ff6b78; --ok:#3ecfa5; --warn:#e8b23c;
+  --ring:rgba(91,140,255,.22);
 }
 body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg1);color:var(--text);-webkit-font-smoothing:antialiased}
 input,textarea,select,button{font-family:inherit}
 button{cursor:pointer}
-@keyframes popIn{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes popIn{from{opacity:0;transform:translateY(14px) scale(.982)}to{opacity:1;transform:none}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes abre{from{opacity:0;transform:translateY(-7px)}to{opacity:1;transform:none}}
+@keyframes surge{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+::selection{background:var(--ring)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+svg{display:block;flex-shrink:0}
 
 #app{min-height:100vh;background:linear-gradient(170deg,var(--bg1) 0%,var(--bg2) 100%);transition:background .35s ease,color .35s ease;padding:22px 26px 70px}
 .wrap{max-width:1240px;margin:0 auto}
 
 /* header */
-header{position:sticky;top:14px;z-index:80;display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:22px;box-shadow:var(--shadow);padding:12px 14px 12px 24px;max-width:1240px;margin:0 auto 34px;flex-wrap:wrap}
+header{position:sticky;top:14px;z-index:80;display:flex;align-items:center;gap:18px;background:var(--surface);border:1px solid var(--border);border-radius:24px;box-shadow:var(--shadow);padding:13px 16px 13px 26px;max-width:1240px;margin:0 auto 38px;flex-wrap:wrap;transition:background .35s var(--ease),border-color .35s var(--ease)}
 .brand{font-size:17px;font-weight:800;letter-spacing:-.02em;white-space:nowrap}
-nav{display:flex;gap:4px}
-.tab{height:34px;padding:0 16px;border-radius:17px;border:none;font-size:13px;font-weight:600;background:transparent;color:var(--text-2)}
-.tab.on{background:var(--surface-3);color:var(--text);font-weight:700}
+nav{display:flex;gap:3px;background:var(--surface-2);border:1px solid var(--border);border-radius:20px;padding:3px}
+.tab{height:34px;padding:0 17px;border-radius:17px;border:none;font-size:13px;font-weight:600;background:transparent;color:var(--text-2);transition:color .2s var(--ease),background .24s var(--ease)}
+.tab:hover{color:var(--text)}
+.tab.on{background:var(--surface);color:var(--text);font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.09)}
 .spacer{margin-left:auto}
-.hbtns{display:flex;align-items:center;gap:10px}
-.ghost{height:38px;padding:0 16px;border-radius:19px;border:1px solid var(--border-2);background:var(--surface-2);color:var(--text-2);font-size:12.5px;font-weight:600;transition:all .2s}
+.hbtns{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-left:auto}
+.ghost{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:38px;padding:0 17px;border-radius:19px;border:1px solid var(--border-2);background:var(--surface-2);color:var(--text-2);font-size:12.5px;font-weight:600;transition:border-color .22s var(--ease),color .22s var(--ease),background .22s var(--ease),transform .12s var(--ease)}
 .ghost:hover{border-color:var(--accent);color:var(--text)}
-.primary{height:38px;padding:0 20px;border-radius:19px;border:none;background:var(--accent);color:var(--on-accent);font-size:13px;font-weight:700;transition:background .2s}
-.primary:hover{background:var(--accent-t)}
+.ghost:active,.primary:active,.iconBtn:active{transform:translateY(1px)}
+.primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:38px;padding:0 21px;border-radius:19px;border:none;background:var(--accent);color:var(--on-accent);font-size:13px;font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.1);transition:background .22s var(--ease),box-shadow .22s var(--ease),transform .12s var(--ease)}
+.primary:hover{background:var(--accent-t);box-shadow:0 4px 14px var(--ring)}
+/* alternador de tema: sol e lua, no canto direito do cabeçalho */
+.iconBtn{width:38px;height:38px;border-radius:50%;border:1px solid var(--border-2);background:var(--surface-2);color:var(--text-2);display:inline-flex;align-items:center;justify-content:center;transition:color .22s var(--ease),border-color .22s var(--ease),background .22s var(--ease),transform .12s var(--ease)}
+.iconBtn:hover{color:var(--text);border-color:var(--accent);background:var(--surface-3)}
+.iconBtn svg{animation:girar .34s var(--ease)}
+@keyframes girar{from{opacity:0;transform:rotate(-70deg) scale(.7)}to{opacity:1;transform:none}}
 .knob{width:26px;height:26px;border-radius:50%;background:var(--accent);transition:all .3s ease;display:inline-block;vertical-align:middle}
 html[data-theme="dark"] .knob{box-shadow:inset -7px -3px 0 0 var(--surface-2)}
-html[data-theme="light"] .knob{box-shadow:0 0 0 3px rgba(47,107,255,.18)}
+html[data-theme="light"] .knob{box-shadow:0 0 0 3px var(--ring)}
 
 /* status pill */
 .pill{display:flex;align-items:center;gap:8px;height:38px;padding:0 14px;border-radius:19px;border:1px solid var(--border-2);background:var(--surface-2);color:var(--text-2);font-size:12px;font-weight:600}
@@ -65,33 +81,110 @@ html[data-theme="light"] .knob{box-shadow:0 0 0 3px rgba(47,107,255,.18)}
 h1{font-size:26px;font-weight:800;letter-spacing:-.03em}
 .sub{font-size:14px;color:var(--text-2);margin-top:6px;text-wrap:pretty}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:18px}
-.grid.wide{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:20px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:14px;transition:transform .18s ease,box-shadow .18s ease,border-color .18s;text-align:left;color:inherit;font:inherit;width:100%}
+/* cada card tem a altura do próprio conteúdo: expandir um não estica os vizinhos */
+.grid.wide{grid-template-columns:repeat(auto-fill,minmax(300px,1fr));align-items:start}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:22px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:14px;transition:transform .26s var(--ease),box-shadow .26s var(--ease),border-color .26s var(--ease);text-align:left;color:inherit;font:inherit;width:100%}
 .card.click{cursor:pointer}
-.card.click:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:var(--border-2)}
+.card.click:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--border-2)}
+.card.click:active{transform:translateY(-1px)}
 .tile{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;letter-spacing:.02em;flex-shrink:0}
-.chev{width:26px;height:26px;border-radius:50%;background:var(--surface-2);color:var(--text-3);font-size:12px;display:flex;align-items:center;justify-content:center}
+.chev{width:28px;height:28px;border-radius:50%;background:var(--surface-2);color:var(--text-3);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;transition:color .2s var(--ease),background .2s var(--ease),transform .2s var(--ease)}
+.chev:hover{color:var(--text);background:var(--surface-3)}
+.card.click:hover .chev{transform:translateX(2px);color:var(--text-2)}
 .card h3{font-size:18px;font-weight:700;letter-spacing:-.02em;line-height:1.25}
 .clamp{font-size:13px;line-height:1.55;color:var(--text-2);margin-top:8px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;text-wrap:pretty}
-.foot{margin-top:auto;display:flex;align-items:center;justify-content:center;height:40px;border-radius:12px;background:var(--surface-2);border:1px solid var(--border);font-size:12.5px;font-weight:600;color:var(--text-2)}
-.tag{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap}
-.tags{display:flex;flex-wrap:wrap;gap:6px}
+.foot{margin-top:auto;display:flex;align-items:center;justify-content:center;height:40px;border-radius:12px;background:var(--surface-2);border:1px solid var(--border);font-size:12.5px;font-weight:600;color:var(--text-2);transition:background .22s var(--ease)}
+.card.click:hover .foot{background:var(--surface-3)}
+.tag{font-size:11px;font-weight:600;padding:4px 11px;border-radius:20px;white-space:nowrap;line-height:1.35}
+.tags{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+#chipsRel,#chipsSetores{gap:9px;padding:3px 0 1px}
 .norm{font-size:10.5px;font-weight:700;letter-spacing:.04em;padding:4px 9px;border-radius:8px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-3)}
 .kicker{font-size:11.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--text-3)}
 .empty{grid-column:1/-1;padding:46px;text-align:center;border:1px dashed var(--border-2);border-radius:20px;color:var(--text-3);font-size:13.5px}
-.gitem{font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:20px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-2)}
+.gitem{font-size:11.5px;font-weight:500;padding:5px 11px;border-radius:20px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-2);transition:border-color .2s var(--ease),color .2s var(--ease)}
+.tag{transition:filter .2s var(--ease)}
 
 /* setores expansíveis */
-.setorHead{display:flex;align-items:center;gap:12px;cursor:pointer;width:100%;background:none;border:none;text-align:left;color:inherit}
-.secs{display:flex;flex-direction:column;gap:2px;margin-top:16px;border-top:1px solid var(--border);padding-top:4px}
-.sec{padding:11px 0;border-bottom:1px solid var(--border)}
+.setorHead{display:flex;align-items:center;gap:13px;cursor:pointer;width:100%;background:none;border:none;text-align:left;color:inherit}
+.chevGiro{display:flex;transition:transform .28s var(--ease)}
+.chevGiro.on{transform:rotate(-180deg)}
+.secs{display:flex;flex-direction:column;gap:2px;margin-top:18px;border-top:1px solid var(--border);padding-top:6px;animation:abre .3s var(--ease)}
+.sec{padding:13px 0;border-bottom:1px solid var(--border)}
 .sec:last-child{border-bottom:none}
-.secHead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:7px;min-height:22px}
-.pen{width:22px;height:22px;border-radius:50%;border:none;background:var(--surface-2);color:var(--text-3);font-size:10px;opacity:0;transition:opacity .15s}
+.secHead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px;min-height:24px}
+.pen{width:24px;height:24px;border-radius:50%;border:none;background:var(--surface-2);color:var(--text-3);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;opacity:0;transition:opacity .18s var(--ease),color .18s var(--ease),background .18s var(--ease)}
 .sec:hover .pen,.pen:focus{opacity:1}
 .pen:hover{color:var(--text);background:var(--surface-3)}
-.autoSelo{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);background:var(--surface-2);border:1px solid var(--border);border-radius:20px;padding:2px 8px}
+.autoSelo{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);background:var(--surface-2);border:1px solid var(--border);border-radius:20px;padding:3px 9px;white-space:nowrap}
 button.gitem:hover,button.tag:hover{filter:brightness(1.08);cursor:pointer}
+
+/* foco: o card vai para o centro e o resto da tela escurece */
+.overlay.foco{background:rgba(4,6,10,.6);backdrop-filter:blur(9px) saturate(120%);z-index:250;align-items:center;padding:4vh 20px}
+.focoBox{width:100%;max-width:660px;margin:auto;display:flex;flex-direction:column;gap:12px;animation:popIn .28s var(--ease)}
+.focoBar{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.focoRot{display:flex;align-items:center;gap:9px;font-size:11.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,.66)}
+.focoRot .autoSelo{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.16);color:rgba(255,255,255,.66)}
+.focoBox .card,.focoBox .procCard{box-shadow:var(--shadow-lg)}
+.focoBox .x{background:rgba(255,255,255,.14);color:#fff}
+
+/* guia Mapa */
+.arvore{display:flex;flex-direction:column;gap:22px}
+.mapaWrap{position:relative}
+.mapaSvg{position:absolute;left:0;top:0;pointer-events:none}
+.ramo{display:flex;align-items:center}
+.noLinha{display:flex;align-items:center;flex-shrink:0}
+.filhos{display:flex;flex-direction:column;gap:10px;padding-left:56px}
+.no{display:inline-flex;align-items:baseline;gap:9px;padding:13px 17px;border-radius:13px;background:var(--surface-2);border:1px solid var(--border);font-size:14.5px;font-weight:600;color:var(--text);text-align:left;line-height:1.3;max-width:360px;transition:border-color .22s var(--ease),background .22s var(--ease),transform .22s var(--ease),box-shadow .22s var(--ease)}
+.no:hover{border-color:var(--border-2);background:var(--surface-3);transform:translateY(-1px);box-shadow:var(--shadow)}
+.no.raiz{font-weight:700;font-size:15px}
+.no.topico{background:var(--surface);font-weight:500;font-size:13.5px}
+.no.topico.dup{box-shadow:inset 3px 0 0 0 var(--warn)}
+.no.topico.dup:hover{box-shadow:inset 3px 0 0 0 var(--warn),var(--shadow)}
+.dupSelo svg{opacity:.9}
+.no small{font-size:11.5px;font-weight:500;color:var(--text-3);white-space:nowrap}
+.noBtn{width:24px;height:24px;flex-shrink:0;margin-left:11px;border-radius:50%;border:1px solid var(--border-2);background:var(--surface-3);color:var(--text-2);display:inline-flex;align-items:center;justify-content:center;position:relative;z-index:2;transition:color .2s var(--ease),border-color .2s var(--ease),transform .3s var(--ease)}
+.noBtn:hover{color:var(--text);border-color:var(--accent)}
+.noBtn.on{transform:rotate(180deg)}
+.filhos>.ramo{animation:surge .3s var(--ease) both}
+
+/* entrada de etiquetas: vírgula ou Enter cria o chip */
+.tagbox{display:flex;flex-wrap:wrap;align-items:center;gap:7px;min-height:40px;padding:7px 9px;border-radius:12px;border:1px solid var(--border-2);background:var(--surface-2);cursor:text;transition:border-color .2s var(--ease),box-shadow .2s var(--ease)}
+.tagbox:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+.tagchip{display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 5px 0 11px;border-radius:14px;background:var(--surface);border:1px solid var(--border-2);color:var(--text);font-size:12.5px;font-weight:600;animation:surge .2s var(--ease)}
+.tagx{width:19px;height:19px;border-radius:50%;border:none;background:transparent;color:var(--text-3);display:inline-flex;align-items:center;justify-content:center;transition:color .18s var(--ease),background .18s var(--ease)}
+.tagx:hover{color:var(--danger);background:var(--surface-3)}
+.taginp{flex:1;min-width:130px;height:26px;border:none;background:transparent;color:var(--text);font-size:13px;font-weight:500;outline:none}
+.taginp::placeholder{color:var(--text-3);font-weight:400}
+.dica{font-size:11.5px;font-weight:500;color:var(--text-3)}
+
+/* colunas independentes: expandir um card não desloca nem estica os vizinhos */
+.mas{display:flex;align-items:flex-start}
+.masCol{flex:1;min-width:0;display:flex;flex-direction:column}
+
+/* tópico presente em mais de um setor */
+.dupSelo{display:inline-flex;align-items:center;gap:5px;height:21px;padding:0 8px;border-radius:11px;background:var(--surface-3);border:1px solid var(--border-2);color:var(--warn);font-size:10.5px;font-weight:700;letter-spacing:.04em;white-space:nowrap;box-shadow:inset 0 0 0 1px rgba(0,0,0,.02)}
+.tip{position:relative}
+.tip::after{content:attr(data-tip);position:absolute;left:50%;bottom:calc(100% + 9px);transform:translate(-50%,5px);background:var(--text);color:var(--surface);font-size:11.5px;font-weight:600;letter-spacing:0;text-transform:none;padding:7px 11px;border-radius:9px;white-space:nowrap;box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transition:opacity .18s var(--ease),transform .18s var(--ease);z-index:70}
+.tip:hover::after{opacity:1;transform:translate(-50%,0)}
+
+/* fonte oficial do normativo: plaqueta em destaque no cabeçalho do tópico */
+.fonte{display:flex;flex-direction:column;gap:9px;padding:12px 15px;border-radius:14px;background:var(--surface-2);border:1px solid var(--border);box-shadow:inset 3px 0 0 0 var(--accent)}
+.fonteTopo{display:flex;align-items:center;gap:10px}
+.fonteCod{font-family:ui-monospace,Consolas,monospace;font-size:11.5px;font-weight:700;letter-spacing:.05em;padding:6px 10px;border-radius:8px;background:var(--surface);border:1px solid var(--border-2);color:var(--text);white-space:nowrap;flex-shrink:0}
+.fonteLista{display:flex;flex-direction:column}
+.fonteRow{display:flex;flex-direction:column;gap:3px;padding:8px 0;border-bottom:1px dashed var(--border-2)}
+.fonteRow:first-child{padding-top:2px}
+.fonteRow:last-child{border-bottom:none;padding-bottom:2px}
+.fonteTit{font-size:12.5px;font-weight:600;color:var(--text-2);line-height:1.45}
+.fonteLinha{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:11.5px;color:var(--text-2)}
+.fonteItem{display:inline-flex;align-items:baseline;gap:5px;font-weight:700;color:var(--text)}
+.fonteRot{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3)}
+.row3{display:grid;grid-template-columns:1fr 1fr 2.2fr;gap:10px}
+.fonteForm{display:flex;align-items:flex-end;gap:10px}
+.fonteForm .row3{flex:1;min-width:0}
+/* descrição do tópico: o texto principal da leitura */
+.desc{font-size:15px;font-weight:500;line-height:1.75;color:var(--text);text-wrap:pretty}
+.mapaVazio .no{opacity:.42}
 
 /* guia Processos — agrupamento discreto */
 .grupo{margin:0 0 30px}
@@ -101,10 +194,10 @@ button.gitem:hover,button.tag:hover{filter:brightness(1.08);cursor:pointer}
 .grupoQtd{margin-left:auto;font-size:11.5px;color:var(--text-3);font-variant-numeric:tabular-nums}
 
 /* card de processo: mais leve que os demais, sem sombra e sem tile */
-.procCard{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color .18s ease,background .18s ease}
-.procCard:hover{border-color:var(--border-2)}
+.procCard{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color .24s var(--ease),box-shadow .24s var(--ease)}
+.procCard:hover{border-color:var(--border-2);box-shadow:var(--shadow)}
 .procCard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--barra)}
-.procHead{display:flex;align-items:flex-start;gap:12px;width:100%;background:none;border:none;text-align:left;color:inherit;cursor:pointer;padding:14px 16px 14px 19px}
+.procHead{display:flex;align-items:flex-start;gap:12px;width:100%;background:none;border:none;text-align:left;color:inherit;cursor:pointer;padding:15px 16px 15px 20px}
 .procTit{font-size:14.5px;font-weight:600;letter-spacing:-.01em;line-height:1.35;color:var(--text)}
 .procMeta{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-top:5px;font-size:11.5px;color:var(--text-3)}
 .procMeta b{font-weight:600;color:var(--text-2)}
@@ -113,35 +206,42 @@ button.gitem:hover,button.tag:hover{filter:brightness(1.08);cursor:pointer}
 .procFlag.tem{color:var(--ok)}
 .procCard .secs{margin:0 16px 14px 19px;padding-top:2px;border-top:1px solid var(--border)}
 .segmented{display:inline-flex;background:var(--surface-2);border:1px solid var(--border-2);border-radius:19px;padding:3px;gap:2px}
-.segbtn{height:30px;padding:0 13px;border-radius:16px;border:none;background:transparent;color:var(--text-3);font-size:12px;font-weight:600;transition:all .18s}
+.segbtn{height:30px;padding:0 14px;border-radius:16px;border:none;background:transparent;color:var(--text-3);font-size:12px;font-weight:600;transition:background .22s var(--ease),color .22s var(--ease)}
+.segbtn:hover{color:var(--text-2)}
 .segbtn.on{background:var(--surface);color:var(--text);box-shadow:var(--shadow)}
 .origemLinha{display:flex;gap:10px;align-items:baseline;font-size:12.5px;line-height:1.55;color:var(--text-2);padding:3px 0}
 .origemRot{flex-shrink:0;width:64px;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3)}
 
 /* modals */
-.overlay{position:fixed;inset:0;background:rgba(8,10,14,.5);backdrop-filter:blur(4px);z-index:200;display:flex;align-items:flex-start;justify-content:center;padding:5vh 20px;overflow-y:auto;animation:fadeIn .18s ease}
-.modal{width:100%;max-width:740px;background:var(--surface);border:1px solid var(--border);border-radius:24px;box-shadow:var(--shadow-lg);margin:auto;animation:popIn .22s ease}
+.overlay{position:fixed;inset:0;background:rgba(8,10,14,.52);backdrop-filter:blur(6px);z-index:200;display:flex;align-items:flex-start;justify-content:center;padding:5vh 20px;overflow-y:auto;animation:fadeIn .22s var(--ease)}
+.modal{width:100%;max-width:740px;background:var(--surface);border:1px solid var(--border);border-radius:24px;box-shadow:var(--shadow-lg);margin:auto;animation:popIn .26s var(--ease)}
 .modal.sm{max-width:620px}
 .mhead{padding:22px 26px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:14px}
 .mfoot{padding:16px 26px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
-.x{width:32px;height:32px;border-radius:16px;border:none;background:var(--surface-2);color:var(--text-3);font-size:13px}
+.x{width:32px;height:32px;border-radius:50%;border:none;background:var(--surface-2);color:var(--text-3);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;transition:color .2s var(--ease),background .2s var(--ease)}
+.x:hover{color:var(--text);background:var(--surface-3)}
 .mini{height:32px;padding:0 14px;border-radius:16px;border:1px solid var(--border-2);background:var(--surface);color:var(--text-2);font-size:12px;font-weight:600}
-.mini:hover{color:var(--text)}
+.mini{display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:color .2s var(--ease),border-color .2s var(--ease)}
+.mini:hover{color:var(--text);border-color:var(--text-3)}
 .mini.danger{color:var(--danger);border-color:var(--border)}
-label.f{display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:600;color:var(--text-2)}
+label.f,.f{display:flex;flex-direction:column;gap:8px;font-size:12px;font-weight:600;color:var(--text-2)}
 .inp{height:38px;padding:0 12px;border-radius:11px;border:1px solid var(--border-2);background:var(--surface-2);color:var(--text);font-size:13.5px;font-weight:500;outline:none;width:100%}
-.inp:focus{border-color:var(--accent)}
+.inp{transition:border-color .2s var(--ease),box-shadow .2s var(--ease)}
+.inp:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
 textarea.inp{height:auto;min-height:86px;padding:11px 12px;line-height:1.55;resize:vertical}
 .row2{display:grid;grid-template-columns:2fr 1fr;gap:14px}
 .row2e{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.chip{height:32px;padding:0 14px;border-radius:16px;border:1px solid var(--border-2);background:var(--surface-2);color:var(--text-3);font-size:12.5px;font-weight:600}
+.chip{height:32px;padding:0 14px;border-radius:16px;border:1px solid var(--border-2);background:var(--surface-2);color:var(--text-3);font-size:12.5px;font-weight:600;transition:background .2s var(--ease),color .2s var(--ease),border-color .2s var(--ease)}
+.chip{display:inline-flex;align-items:center;line-height:1}
+.chip:hover{color:var(--text)}
 .chip.on{border-color:transparent;font-weight:700}
 
 /* questions */
-.q{background:var(--surface-2);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.q{background:var(--surface-2);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:border-color .22s var(--ease)}
+.q:hover{border-color:var(--border-2)}
 .qhead{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;cursor:pointer;width:100%;background:none;border:none;text-align:left;color:inherit}
-.qn{width:24px;height:24px;flex-shrink:0;border-radius:50%;background:var(--accent);color:var(--on-accent);font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center}
-.qbody{border-top:1px solid var(--border);padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.qn{width:24px;height:24px;flex-shrink:0;border-radius:50%;background:var(--accent);color:var(--on-accent);font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center;line-height:1}
+.qbody{border-top:1px solid var(--border);padding:14px 16px;display:flex;flex-direction:column;gap:10px;animation:abre .28s var(--ease)}
 .ans{display:flex;gap:10px;align-items:flex-start}
 .ansrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:2px}
 
@@ -161,22 +261,22 @@ textarea.inp{height:auto;min-height:86px;padding:11px 12px;line-height:1.55;resi
       <button class="tab" data-act="goDim">Dimensões</button>
       <button class="tab" data-act="goSet">Setores</button>
       <button class="tab" data-act="goProc">Processos</button>
+      <button class="tab" data-act="goMapa">Mapa</button>
     </nav>
     <div class="spacer"></div>
     <div class="hbtns">
       <button class="pill" data-act="dados" title="Gerenciar armazenamento">
         <span class="dot" id="statusDot"></span><span id="statusText">…</span>
       </button>
-      <button class="ghost" data-act="tema" title="Alternar tema" style="padding-right:6px">
-        <span id="temaLabel">Claro</span> <span class="knob"></span>
-      </button>
       <button class="primary" data-act="novoTopico">Novo tópico</button>
+      <button class="iconBtn" id="temaBtn" data-act="tema" aria-label="Alternar tema"></button>
     </div>
   </header>
   <main class="wrap" id="main"></main>
 </div>
 
 <div id="modais"></div>
+<div id="foco"></div>
 <div id="toast" class="hide"></div>
 <input type="file" id="fileInput" accept="application/json,.json" class="hide">
 
@@ -219,7 +319,10 @@ const ui = {
   filtroProc: '',
   grupoProc: 'dim', // eixo de agrupamento da guia Processos: 'dim' | 'setor'
   editQ: null,      // perguntaId em edição
-  editResp: null    // { qid, i } — resposta em edição
+  editResp: null,   // { qid, i } — resposta em edição
+  foco: null,       // { tipo:'setor'|'proc', id } — card isolado no centro da tela
+  mapaAberto: {},   // { 'dim:I': true, 'set:I|ti': true } — ramos abertos do mapa
+  tags: {}          // { chave: ['item', …] } — conteúdo das entradas de etiquetas
 };
 
 const FS_OK = typeof window.showOpenFilePicker === 'function';
@@ -243,7 +346,7 @@ function tile(hue){
   const dark = document.documentElement.getAttribute('data-theme') === 'dark';
   return dark
     ? { bg:`oklch(0.30 0.055 ${hue})`, fg:`oklch(0.84 0.10 ${hue})` }
-    : { bg:`oklch(0.94 0.045 ${hue})`, fg:`oklch(0.50 0.13 ${hue})` };
+    : { bg:`oklch(0.955 0.030 ${hue})`, fg:`oklch(0.47 0.095 ${hue})` };
 }
 const setorIdx  = id => dados.setores.findIndex(s=>s.id===id);
 const setorTile = id => tile(HUES[(Math.max(0,setorIdx(id))) % HUES.length]);
@@ -317,6 +420,57 @@ function tagsHtml(ids){
     const c = setorTile(id);
     return `<span class="tag" style="background:${c.bg};color:${c.fg}">${esc(setorNome(id))}</span>`;
   }).join('');
+}
+
+/* ------------------------------------------------- entrada de etiquetas */
+/* Um campo de lista = chips. Vírgula ou Enter cria; Backspace apaga o último. */
+function tagBox(chave, ph){
+  const arr = ui.tags[chave] || [];
+  return '<div class="tagbox" data-tagbox="'+esc(chave)+'">'
+    + arr.map((v,i)=>'<span class="tagchip">'+esc(v)
+        +'<button class="tagx" data-act="tagDel" data-key="'+esc(chave)+'" data-i="'+i+'" title="Remover">'+ico('x',9)+'</button></span>').join('')
+    + '<input class="taginp" data-taginput="'+esc(chave)+'" placeholder="'+esc(ph||'Digite e separe por vírgula')+'"></div>';
+}
+function pintaTagBox(chave, foco){
+  const box = document.querySelector('[data-tagbox="'+chave+'"]');
+  if (!box) return;
+  const inp = box.querySelector('.taginp');
+  const ph  = inp ? inp.placeholder : '';
+  box.outerHTML = tagBox(chave, ph);
+  if (foco){ const novo = document.querySelector('[data-taginput="'+chave+'"]'); if (novo) novo.focus(); }
+}
+function addTags(chave, txt){
+  const arr = ui.tags[chave] || (ui.tags[chave] = []);
+  let mudou = false;
+  String(txt||'').split(',').map(x=>x.trim()).filter(Boolean).forEach(v=>{
+    if (!arr.some(x=>x.toLowerCase()===v.toLowerCase())){ arr.push(v); mudou = true; }
+  });
+  return mudou;
+}
+/* o que ficou digitado sem vírgula também conta no momento de salvar */
+function commitPendentes(){
+  document.querySelectorAll('.taginp').forEach(el=>{
+    if ((el.value||'').trim()){ addTags(el.dataset.taginput, el.value); el.value = ''; }
+  });
+}
+const tagsDe = chave => [...(ui.tags[chave] || [])];
+
+/* --------------------------------------------------- colunas independentes */
+function colunasMas(min){
+  const l = ($('#main') || {}).clientWidth || 1200;
+  return Math.max(1, Math.min(4, Math.floor((l + 18) / ((min||300) + 18))));
+}
+/* Distribui os cards em colunas (1,2 na primeira faixa; 3,4 na seguinte).
+   Cada coluna cresce sozinha: abrir um card não empurra nem estica os outros. */
+function masonry(itens, min, gap){
+  if (!itens.length) return '';
+  const n = colunasMas(min);
+  const g = gap || 18;
+  const cols = Array.from({length:n}, ()=>[]);
+  itens.forEach((html,i)=>cols[i % n].push(html));
+  return '<div class="mas" style="gap:'+g+'px">'
+    + cols.map(c=>'<div class="masCol" style="gap:'+g+'px">'+c.join('')+'</div>').join('')
+    + '</div>';
 }
 
 /* ------------------------------------------------------- IndexedDB (handle) */
@@ -493,11 +647,16 @@ function normalize(d){
       sist:  s.sist  || [],   // 💻 Sistemas
       main:  s.main  || [],   // 🖥 Mainframe
       tools: s.tools || [],   // 🛠 Ferramentas
-      rel:   s.rel   || []    // 🤝 Setores relacionados (ids)
+      rel:   s.rel   || []    // Setores relacionados (ids)
     })),
     topicos:  (Array.isArray(d.topicos) ? d.topicos : []).map(t=>({
       id: t.id || uid('t'), nome: t.nome || '', dimId: t.dimId || '',
       norm: t.norm || '', setores: t.setores || [], desc: t.desc || '',
+      // onde a informação está de fato no normativo — uma ou várias fontes
+      fontes: (Array.isArray(t.fontes) ? t.fontes
+                : (t.fpag || t.fsec || t.fsecTit ? [{ pag:t.fpag, sec:t.fsec, tit:t.fsecTit }] : []))
+              .map(x=>({ pag:(x&&x.pag)||'', sec:(x&&x.sec)||'', tit:(x&&x.tit)||'' }))
+              .filter(x=>x.pag || x.sec || x.tit),
       perguntas: (t.perguntas||[]).map(p=>({
         id: p.id || uid('p'), texto: p.texto || '',
         // cada resposta ganha id próprio: é a âncora estável do card de processo
@@ -569,9 +728,13 @@ function renderHeader(){
   document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
   const sel = ui.page === 'setores'  ? '[data-act="goSet"]'
             : ui.page === 'processos'? '[data-act="goProc"]'
+            : ui.page === 'mapa'     ? '[data-act="goMapa"]'
             : '[data-act="goDim"]';
   $(sel).classList.add('on');
-  $('#temaLabel').textContent = dados.tema === 'dark' ? 'Escuro' : 'Claro';
+  const escuro = dados.tema === 'dark';
+  const bt = $('#temaBtn');
+  bt.innerHTML = escuro ? ico('sol',16) : ico('lua',16);
+  bt.title = escuro ? 'Mudar para o tema claro' : 'Mudar para o tema escuro';
 }
 
 function renderStatus(){
@@ -587,8 +750,11 @@ function renderMain(){
   const m = $('#main');
   if (ui.page === 'setores')        m.innerHTML = viewSetores();
   else if (ui.page === 'processos') m.innerHTML = viewProcessos();
+  else if (ui.page === 'mapa')      m.innerHTML = viewMapa();
   else if (ui.openDimId)            m.innerHTML = viewDimensao();
   else                              m.innerHTML = viewDimGrid();
+  renderFoco();
+  if (ui.page === 'mapa') agendaMapa();
 }
 
 function viewDimGrid(){
@@ -598,7 +764,7 @@ function viewDimGrid(){
     return `<button class="card click" data-act="openDim" data-id="${esc(d.id)}">
       <div style="display:flex;align-items:flex-start;justify-content:space-between">
         <div class="tile" style="background:${c.bg};color:${c.fg}">${esc(d.id)}</div>
-        <div class="chev">&rsaquo;</div>
+        <div class="chev">${ico('chev',13)}</div>
       </div>
       <div><h3 style="font-size:19px">${esc(d.nome)}</h3><p class="clamp">${esc(d.desc)}</p></div>
       <div class="foot">${n===1?'1 tópico':n+' tópicos'}</div>
@@ -629,7 +795,7 @@ function viewDimensao(){
     </button>`;
   }).join('');
   return `<div style="display:flex;align-items:flex-start;gap:18px;margin:0 0 22px 4px">
-      <button class="ghost" data-act="backGrid" style="width:38px;padding:0;background:var(--surface);border-color:var(--border)">&lsaquo;</button>
+      <button class="ghost" data-act="backGrid" style="width:38px;padding:0;background:var(--surface);border-color:var(--border)" title="Voltar">${ico('chev',14,180)}</button>
       <div style="flex:1">
         <div class="kicker">Dimensão ${esc(d.id)}</div>
         <h1 style="margin-top:4px">${esc(d.nome)}</h1>
@@ -642,25 +808,25 @@ function viewDimensao(){
 
 /* Atributos do card de setor. 'auto' = derivado do vínculo setor↔tópico, não editável. */
 const CAMPOS_SETOR = [
-  { k:'coord', icone:'👤', label:'Coordenador',          tipo:'texto'   },
-  { k:'func',  icone:'👥', label:'Funcionários',         tipo:'lista'   },
-  { k:'resp',  icone:'📋', label:'Responsabilidades',    tipo:'lista'   },
-  { k:'sist',  icone:'💻', label:'Sistemas',             tipo:'lista'   },
-  { k:'main',  icone:'🖥', label:'Mainframe',            tipo:'lista'   },
-  { k:'tools', icone:'🛠', label:'Ferramentas',          tipo:'lista'   },
-  { k:'rel',   icone:'🤝', label:'Setores relacionados', tipo:'setores' },
-  { k:'tops',  icone:'📊', label:'Tópicos Temáticos',    tipo:'auto'    },
-  { k:'dims',  icone:'✅', label:'Dimensões',            tipo:'auto'    }
+  { k:'coord', icone:'', label:'Coordenador',          tipo:'texto'   },
+  { k:'func',  icone:'', label:'Funcionários',         tipo:'lista'   },
+  { k:'resp',  icone:'', label:'Responsabilidades',    tipo:'lista'   },
+  { k:'sist',  icone:'', label:'Sistemas',             tipo:'lista'   },
+  { k:'main',  icone:'', label:'Mainframe',            tipo:'lista'   },
+  { k:'tools', icone:'', label:'Ferramentas',          tipo:'lista'   },
+  { k:'rel',   icone:'', label:'Setores relacionados', tipo:'setores' },
+  { k:'tops',  icone:'', label:'Tópicos Temáticos',    tipo:'auto'    },
+  { k:'dims',  icone:'', label:'Dimensões',            tipo:'auto'    }
 ];
 
 function secaoSetor(s, campo){
   const editando = ui.editCampo && ui.editCampo.setorId===s.id && ui.editCampo.campo===campo.k;
   const auto = campo.tipo === 'auto';
   const cab = `<div class="secHead">
-      <span class="kicker" style="font-size:10.5px">${campo.icone} ${campo.label}</span>
+      <span class="kicker" style="font-size:10.5px">${campo.icone?campo.icone+' ':''}${campo.label}</span>
       ${auto
         ? '<span class="autoSelo" title="Preenchido sozinho ao vincular o setor a um tópico">automático</span>'
-        : (editando ? '' : `<button class="pen" data-act="editCampo" data-id="${esc(s.id)}" data-campo="${campo.k}" title="Editar">&#9998;</button>`)}
+        : (editando ? '' : `<button class="pen" data-act="editCampo" data-id="${esc(s.id)}" data-campo="${campo.k}" title="Editar">${ico('pen',12)}</button>`)}
     </div>`;
 
   let corpo;
@@ -671,8 +837,9 @@ function secaoSetor(s, campo){
       <button class="mini" data-act="cancelaCampo">Cancelar</button>
     </div>`;
   } else if (editando && campo.tipo === 'lista'){
-    corpo = `<div style="display:flex;flex-direction:column;gap:8px">
-      <textarea class="inp" id="edCampo" placeholder="Um item por linha" style="min-height:80px;font-size:13px">${esc((s[campo.k]||[]).join('\n'))}</textarea>
+    corpo = `<div style="display:flex;flex-direction:column;gap:9px">
+      ${tagBox('sec')}
+      <span class="dica">Separe por vírgula &mdash; cada item vira uma etiqueta.</span>
       <div class="ansrow">
         <button class="primary" data-act="salvaCampo" style="height:32px;padding:0 16px;font-size:12px">Salvar</button>
         <button class="mini" data-act="cancelaCampo">Cancelar</button>
@@ -718,41 +885,88 @@ function secaoSetor(s, campo){
 }
 const vazioTxt = (t='Não informado.') => `<div style="font-size:12.5px;color:var(--text-3);font-style:italic">${t}</div>`;
 
-function viewSetores(){
-  const cards = dados.setores.map((s,i)=>{
-    const c = tile(HUES[i % HUES.length]);
-    const aberto = !!ui.openSetores[s.id];
-    const resumo = `${(s.func||[]).length} pessoas · ${topicosDoSetor(s.id).length} tópicos · ${dimensoesDoSetor(s.id).length} dimensões`;
-    return `<article class="card" style="gap:0">
-      <div class="setorHead" data-act="toggleSetor" data-id="${esc(s.id)}">
-        <div class="tile" style="background:${c.bg};color:${c.fg};font-size:15px">${esc((s.nome||'?').charAt(0).toUpperCase())}</div>
-        <div style="flex:1;min-width:0">
-          <h3>${esc(s.nome)}</h3>
-          <div style="font-size:12px;color:var(--text-3);margin-top:3px">${resumo}</div>
-        </div>
-        <button class="chev" data-act="editSetor" data-id="${esc(s.id)}" style="border:none" title="Editar tudo">&#9998;</button>
-        <span class="chev" style="background:transparent">${aberto?'&#9652;':'&#9662;'}</span>
+/* Ícones em SVG inline: sem emoji, sem fonte de ícone, sem rede. */
+const FORMAS = {
+  chev: '<path d="M8.5 4.5 15 11l-6.5 6.5"/>',
+  x:    '<path d="M5.8 5.8l10.4 10.4M16.2 5.8L5.8 16.2"/>',
+  pen:  '<path d="M4 18h3.3L17.2 8.1 13.9 4.8 4 14.7V18Z"/>',
+  foco: '<rect x="3.6" y="3.6" width="14.8" height="14.8" rx="4.4"/><circle cx="11" cy="11" r="2.6"/>',
+  sol:  '<circle cx="11" cy="11" r="3.9"/><path d="M11 1.9v2.3M11 17.8v2.3M1.9 11h2.3M17.8 11h2.3M4.6 4.6l1.6 1.6M15.8 15.8l1.6 1.6M17.4 4.6l-1.6 1.6M6.2 15.8l-1.6 1.6"/>',
+  lua:  '<path d="M17.6 13.5A7.1 7.1 0 0 1 8.5 4.4a7.3 7.3 0 1 0 9.1 9.1Z"/>',
+  olho: '<path d="M1.9 11S5 5.4 11 5.4 20.1 11 20.1 11 17 16.6 11 16.6 1.9 11 1.9 11Z"/><circle cx="11" cy="11" r="2.6"/>',
+  copia:'<rect x="3.3" y="3.3" width="10.6" height="10.6" rx="3.2"/><rect x="8.1" y="8.1" width="10.6" height="10.6" rx="3.2"/>'
+};
+function ico(nome, tam, rot){
+  const t = tam || 13;
+  const g = rot ? ' style="transform:rotate('+rot+'deg)"' : '';
+  return '<svg width="'+t+'" height="'+t+'" viewBox="0 0 22 22" fill="none" stroke="currentColor" '
+    + 'stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"'+g+'>'
+    + FORMAS[nome] + '</svg>';
+}
+const ICO_FOCO = ico('foco', 13);
+
+function cardSetor(s, i, focado){
+  const c = tile(HUES[i % HUES.length]);
+  const aberto = focado || !!ui.openSetores[s.id];
+  const resumo = `${(s.func||[]).length} pessoas · ${topicosDoSetor(s.id).length} tópicos · ${dimensoesDoSetor(s.id).length} dimensões`;
+  return `<article class="card" style="gap:0">
+    <div class="setorHead" data-act="toggleSetor" data-id="${esc(s.id)}">
+      <div class="tile" style="background:${c.bg};color:${c.fg};font-size:15px">${esc((s.nome||'?').charAt(0).toUpperCase())}</div>
+      <div style="flex:1;min-width:0">
+        <h3>${esc(s.nome)}</h3>
+        <div style="font-size:12px;color:var(--text-3);margin-top:3px">${resumo}</div>
       </div>
-      ${aberto ? `<div class="secs">${CAMPOS_SETOR.map(cp=>secaoSetor(s,cp)).join('')}</div>` : ''}
-    </article>`;
-  }).join('');
+      ${aberto && !focado ? `<button class="chev" data-act="focarSetor" data-id="${esc(s.id)}" style="border:none" title="Focalizar este card">${ICO_FOCO}</button>` : ''}
+      <button class="chev" data-act="editSetor" data-id="${esc(s.id)}" style="border:none" title="Editar tudo">${ico('pen',12)}</button>
+      ${focado ? '' : `<span class="chev" style="background:transparent"><span class="chevGiro ${aberto?'on':''}">${ico('chev',13,90)}</span></span>`}
+    </div>
+    ${aberto ? `<div class="secs">${CAMPOS_SETOR.map(cp=>secaoSetor(s,cp)).join('')}</div>` : ''}
+  </article>`;
+}
+
+/* Código do normativo + a fonte exata: página, seção e título da seção. */
+function blocoFonte(t){
+  const fs = t.fontes || [];
+  if (!t.norm && !fs.length) return '';
+  const linhas = fs.length
+    ? fs.map(f=>{
+        const bits = [];
+        if (f.pag) bits.push('<span class="fonteItem"><span class="fonteRot">Pág.</span>'+esc(f.pag)+'</span>');
+        if (f.sec) bits.push('<span class="fonteItem"><span class="fonteRot">Seção</span>'+esc(f.sec)+'</span>');
+        return `<div class="fonteRow">
+          <div class="fonteLinha">${bits.join('<span class="procSep">·</span>') || '<span class="dica">Página e seção não informadas.</span>'}</div>
+          ${f.tit ? `<div class="fonteTit">${esc(f.tit)}</div>` : ''}
+        </div>`;
+      }).join('')
+    : '<div class="fonteRow"><span class="dica">Fonte ainda não detalhada.</span></div>';
+  return `<div class="fonte">
+    <div class="fonteTopo">
+      <span class="fonteCod">${esc(t.norm || 'sem normativo')}</span>
+      <span class="kicker" style="font-size:10px">${fs.length > 1 ? fs.length+' fontes oficiais' : 'Fonte oficial'}</span>
+    </div>
+    <div class="fonteLista">${linhas}</div>
+  </div>`;
+}
+
+function viewSetores(){
+  const cards = masonry(dados.setores.map((s,i)=>cardSetor(s,i,false)), 300);
   return `<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:0 0 22px 4px;flex-wrap:wrap">
       <div><h1>Setores</h1><p class="sub">Clique num setor para abrir e editar seus atributos. Tópicos e dimensões são preenchidos sozinhos.</p></div>
       <button class="primary" data-act="novoSetor">+ Novo setor</button>
     </div>
-    <div class="grid wide">${cards || '<div class="empty">Nenhum setor cadastrado.</div>'}</div>`;
+    ${cards || '<div class="empty">Nenhum setor cadastrado.</div>'}`;
 }
 
 /* ------------------------------------------------------------- processos */
 const RECURSOS = [
-  { k:'sist',  icone:'💻', label:'Sistemas'    },
-  { k:'main',  icone:'🖥', label:'Mainframe'   },
-  { k:'tools', icone:'🛠', label:'Ferramentas' }
+  { k:'sist',  icone:'', label:'Sistemas'    },
+  { k:'main',  icone:'', label:'Mainframe'   },
+  { k:'tools', icone:'', label:'Ferramentas' }
 ];
 
 function secProc(pr, icone, label, corpo, acao){
   const pen = acao
-    ? `<button class="pen" data-act="${acao}" data-id="${esc(pr.respId)}" title="Editar" style="opacity:1">&#9998;</button>`
+    ? `<button class="pen" data-act="${acao}" data-id="${esc(pr.respId)}" title="Editar" style="opacity:1">${ico('pen',12)}</button>`
     : '<span class="autoSelo" title="Vem da resposta de origem">automático</span>';
   return `<div class="sec">
     <div class="secHead"><span class="kicker" style="font-size:10.5px">${icone?icone+' ':''}${label}</span>${pen}</div>
@@ -760,8 +974,8 @@ function secProc(pr, icone, label, corpo, acao){
   </div>`;
 }
 
-function cardProcesso(pr, modo){
-  const aberto = !!ui.openProcs[pr.respId];
+function cardProcesso(pr, modo, focado){
+  const aberto = focado || !!ui.openProcs[pr.respId];
   const c  = setorTile(pr.setorId);
   const dc = pr.dim ? dimTile(pr.dim.id) : {bg:'var(--surface-2)',fg:'var(--text-3)'};
   const ex = pr.extra || {};
@@ -845,7 +1059,8 @@ function cardProcesso(pr, modo){
     : [`<b>${esc(setorNome(pr.setorId))}</b>`, esc(pr.topico.nome)];
 
   return `<article class="procCard" style="--barra:${barra}">
-    <button class="procHead" data-act="toggleProc" data-id="${esc(pr.respId)}">
+    <div style="display:flex;align-items:flex-start">
+    <button class="procHead" data-act="toggleProc" data-id="${esc(pr.respId)}" style="flex:1;min-width:0">
       <div style="flex:1;min-width:0">
         <div class="procTit">${esc(tituloProc(pr))}</div>
         <div class="procMeta">${meta.filter(Boolean).join('<span class="procSep">·</span>')}</div>
@@ -853,8 +1068,10 @@ function cardProcesso(pr, modo){
           ${temNarrativa ? 'narrativa escrita' : 'sem narrativa'}${nRec?` · ${nRec} recurso${nRec>1?'s':''}`:''}
         </div>
       </div>
-      <span style="font-size:13px;color:var(--text-3);padding-top:3px">${aberto?'&#9652;':'&#9662;'}</span>
+      <span class="chev" style="background:transparent;margin-top:2px"><span class="chevGiro ${aberto?'on':''}">${ico('chev',13,90)}</span></span>
     </button>
+    ${aberto && !focado ? `<button class="chev" data-act="focarProc" data-id="${esc(pr.respId)}" style="border:none;margin:14px 14px 0 0;flex-shrink:0" title="Focalizar este card">${ICO_FOCO}</button>` : ''}
+    </div>
     ${corpo}
   </article>`;
 }
@@ -901,7 +1118,7 @@ function viewProcessos(){
             <span class="grupoNome">${esc(g.nome)}</span>
             <span class="grupoQtd">${g.itens.length}</span>
           </div>
-          <div class="grid wide" style="gap:12px">${g.itens.map(pr=>cardProcesso(pr, modo)).join('')}</div>
+          ${masonry(g.itens.map(pr=>cardProcesso(pr, modo)), 300, 12)}
         </section>`).join('');
 
   return `<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:0 0 26px 2px;flex-wrap:wrap">
@@ -918,6 +1135,198 @@ function viewProcessos(){
       </div>
     </div>
     ${corpo}`;
+}
+
+/* ------------------------------------------------------------------ mapa */
+/* Dimensão é o pivô: ramifica em setores e, dentro de cada setor, nos tópicos
+   daquela dimensão. Cada botão abre e, no mesmo clique, recolhe o ramo. */
+function mapaSetores(dimId){
+  const tops = dados.topicos.filter(t=>t.dimId===dimId);
+  return dados.setores
+    .map(s=>({ s, tops: tops.filter(t=>(t.setores||[]).includes(s.id)) }))
+    .filter(x=>x.tops.length);
+}
+
+/* "RH e Comercial", "RH, Comercial e Jurídico" */
+function listaPt(arr){
+  if (arr.length === 1) return arr[0];
+  return arr.slice(0,-1).join(', ') + ' e ' + arr[arr.length-1];
+}
+
+function viewMapa(){
+  let seq = 0;
+  const nid = () => 'n' + (++seq);
+
+  const ramos = dados.dimensoes.map(d=>{
+    const sets = mapaSetores(d.id);
+    // um mesmo tópico pode ser respondido por vários setores: registra onde aparece
+    const onde = {};
+    sets.forEach(({s, tops})=>tops.forEach(t=>{ (onde[t.id] = onde[t.id] || []).push(s.nome); }));
+    const nTop = dados.topicos.filter(t=>t.dimId===d.id).length;
+    const c    = dimTile(d.id);
+    const k    = 'dim:' + d.id;
+    const ab   = !!ui.mapaAberto[k] && sets.length > 0;
+    const id   = nid();
+
+    const filhos = !ab ? '' : sets.map(({s, tops})=>{
+      const sk  = 'set:' + d.id + '|' + s.id;
+      const sab = !!ui.mapaAberto[sk];
+      const sc  = setorTile(s.id);
+      const sid = nid();
+      const tramos = !sab ? '' : tops.map(t=>{
+        const outros = (onde[t.id]||[]).filter(n=>n!==s.nome);
+        const selo = outros.length
+          ? `<span class="dupSelo tip" data-tip="Mesmo tópico em ${esc(listaPt(outros))}" title="Mesmo tópico em ${esc(listaPt(outros))}">${ico('copia',10)}${outros.length+1}×</span>`
+          : '';
+        return `<div class="ramo"><div class="noLinha">
+          <button class="no topico${outros.length?' dup':''}" data-act="verTopico" data-id="${esc(t.id)}" title="Ver as informações deste tópico">${esc(t.nome)}${t.norm?`<small>${esc(t.norm)}</small>`:''}</button>
+          ${selo}
+        </div></div>`;
+      }).join('');
+      return `<div class="ramo">
+        <div class="noLinha">
+          <button class="no" data-act="mapaTog" data-key="${esc(sk)}" style="box-shadow:inset 3px 0 0 0 ${sc.fg}">${esc(s.nome)}<small>${tops.length} tópico${tops.length===1?'':'s'}</small></button>
+          <button class="noBtn ${sab?'on':''}" data-act="mapaTog" data-key="${esc(sk)}" data-nid="${sid}" title="${sab?'Recolher':'Expandir'}">${ico('chev',12)}</button>
+        </div>
+        ${sab ? `<div class="filhos" data-parent="${sid}">${tramos}</div>` : ''}
+      </div>`;
+    }).join('');
+
+    return `<div class="ramo ${sets.length?'':'mapaVazio'}">
+      <div class="noLinha">
+        <button class="no raiz" data-act="mapaTog" data-key="${esc(k)}" style="background:${c.bg};color:${c.fg};border-color:transparent">${esc(d.id)} — ${esc(d.nome)}<small style="color:${c.fg};opacity:.75">${nTop} tópico${nTop===1?'':'s'}</small></button>
+        ${sets.length ? `<button class="noBtn ${ab?'on':''}" data-act="mapaTog" data-key="${esc(k)}" data-nid="${id}" title="${ab?'Recolher':'Expandir'}">${ico('chev',12)}</button>` : ''}
+      </div>
+      ${ab ? `<div class="filhos" data-parent="${id}">${filhos}</div>` : ''}
+    </div>`;
+  }).join('');
+
+  return `<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:0 0 26px 2px;flex-wrap:wrap">
+      <div>
+        <h1>Mapa</h1>
+        <p class="sub">Cada dimensão ramifica nos setores que a respondem e, dentro deles, nos tópicos. Clique no botão do nó para abrir — e no mesmo botão para recolher.</p>
+        <p class="sub" style="display:flex;align-items:center;gap:8px;margin-top:9px;font-size:12.5px"><span class="dupSelo">${ico('copia',10)}2×</span> o mesmo tópico é respondido por mais de um setor — passe o mouse para ver quais.</p>
+      </div>
+      <div class="tags">
+        <button class="ghost" data-act="mapaTudo" data-modo="abrir" style="background:var(--surface)">Expandir tudo</button>
+        <button class="ghost" data-act="mapaTudo" data-modo="fechar" style="background:var(--surface)">Recolher tudo</button>
+      </div>
+    </div>
+    <div class="mapaWrap" id="mapaWrap">
+      <svg class="mapaSvg" id="mapaSvg"></svg>
+      <div class="arvore">${ramos || '<div class="empty">Nenhuma dimensão carregada.</div>'}</div>
+    </div>`;
+}
+
+/* As ligações são desenhadas depois do layout: saída no botão do nó pai,
+   chegada na borda esquerda de cada filho. */
+/* o layout precisa estar pronto (e as fontes carregadas) antes de medir */
+function agendaMapa(){
+  requestAnimationFrame(desenhaMapa);
+  setTimeout(desenhaMapa, 140);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(desenhaMapa);
+}
+
+function desenhaMapa(){
+  const wrap = $('#mapaWrap'), svg = $('#mapaSvg');
+  if (!wrap || !svg) return;
+  const W = wrap.getBoundingClientRect();
+  svg.setAttribute('width', W.width);
+  svg.setAttribute('height', W.height);
+  svg.setAttribute('viewBox', `0 0 ${W.width} ${W.height}`);
+  let d = '';
+  wrap.querySelectorAll('[data-parent]').forEach(box=>{
+    const bt = wrap.querySelector(`.noBtn[data-nid="${box.dataset.parent}"]`);
+    if (!bt) return;
+    const b  = bt.getBoundingClientRect();
+    const x1 = b.right - W.left, y1 = b.top + b.height/2 - W.top;
+    [...box.children].forEach(ramo=>{
+      const no = ramo.querySelector('.no');
+      if (!no) return;
+      const r  = no.getBoundingClientRect();
+      const x2 = r.left - W.left, y2 = r.top + r.height/2 - W.top;
+      const mx = x1 + (x2 - x1) * .55;
+      d += `M${x1} ${y1} C${mx} ${y1} ${mx} ${y2} ${x2} ${y2} `;
+    });
+  });
+  svg.innerHTML = d ? `<path d="${d}" style="fill:none;stroke:var(--accent);stroke-opacity:.55;stroke-width:1.6"/>` : '';
+}
+
+/* Painel de leitura do tópico, usado no foco da guia Mapa: mostra tudo,
+   sem editar nem excluir — essas ações continuam na guia Dimensões. */
+function painelTopico(t){
+  const d = dados.dimensoes.find(x=>x.id===t.dimId);
+  const c = dimTile(t.dimId);
+  const qs = (t.perguntas||[]).map((p,i)=>{
+    const ans = (p.respostas||[]).map(r=>{
+      const rc = setorTile(r.setorId);
+      return `<div class="ans">
+        <span class="tag" style="background:${rc.bg};color:${rc.fg};flex-shrink:0">${esc(setorNome(r.setorId))}</span>
+        <span style="font-size:13px;line-height:1.6;color:var(--text-2);flex:1">${esc(r.texto)}</span>
+      </div>`;
+    }).join('') || vazioTxt('Sem respostas registradas.');
+    return `<div class="q" style="padding:15px 16px;display:flex;flex-direction:column;gap:11px">
+      <div style="display:flex;gap:11px;align-items:flex-start">
+        <span class="qn">${i+1}</span>
+        <span style="flex:1;font-size:13.5px;line-height:1.5;color:var(--text)">${esc(p.texto)}</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:9px;padding-left:35px">${ans}</div>
+    </div>`;
+  }).join('') || '<div class="empty" style="padding:26px;border-radius:16px;font-size:13px">Nenhuma pergunta cadastrada neste tópico.</div>';
+
+  return `<article class="card" style="gap:0;padding:0;overflow:hidden">
+    <div style="display:flex;align-items:flex-start;gap:14px;padding:22px 24px;border-bottom:1px solid var(--border)">
+      <div class="tile" style="width:46px;height:46px;border-radius:14px;background:${c.bg};color:${c.fg};font-size:16px">${esc((t.nome||'?').charAt(0).toUpperCase())}</div>
+      <div style="flex:1;min-width:0">
+        <div class="kicker">Dimensão ${esc(t.dimId)} &middot; ${esc(d?d.nome:'')}</div>
+        <h3 style="font-size:21px;font-weight:800;letter-spacing:-.025em;margin-top:5px">${esc(t.nome)}</h3>
+      </div>
+      ${t.norm ? `<span class="norm">${esc(t.norm)}</span>` : ''}
+    </div>
+    <div style="padding:22px 24px;display:flex;flex-direction:column;gap:17px;border-bottom:1px solid var(--border)">
+      <p class="desc" style="font-size:14.5px">${esc(t.desc||'Sem descrição.')}</p>
+      ${blocoFonte(t)}
+      <div class="tags">${tagsHtml(t.setores)}</div>
+    </div>
+    <div style="padding:20px 24px 24px;display:flex;flex-direction:column;gap:11px">
+      <div class="kicker" style="font-size:10.5px">Roteiro de perguntas e respostas</div>
+      ${qs}
+    </div>
+  </article>`;
+}
+
+/* ------------------------------------------------------------------- foco */
+function renderFoco(){
+  const cont = $('#foco');
+  if (!cont) return;
+  const f = ui.foco;
+  if (!f){ cont.innerHTML = ''; return; }
+  let card = '', rot = '', larga = '';
+  if (f.tipo === 'topico'){
+    const t = getTopico(f.id);
+    if (!t){ ui.foco = null; cont.innerHTML = ''; return; }
+    rot = `${ico('olho',13)} Tópico em foco <span class="autoSelo">somente leitura</span>`;
+    larga = 'max-width:740px';
+    card = painelTopico(t);
+  } else if (f.tipo === 'setor'){
+    const i = setorIdx(f.id), s = dados.setores[i];
+    if (!s){ ui.foco = null; cont.innerHTML = ''; return; }
+    rot = 'Setor em foco'; card = cardSetor(s, i, true);
+  } else {
+    const pr = listaProcessos().find(x=>x.respId===f.id);
+    if (!pr){ ui.foco = null; cont.innerHTML = ''; return; }
+    rot = 'Processo em foco';
+    card = cardProcesso(pr, ui.grupoProc === 'setor' ? 'setor' : 'dim', true);
+  }
+  cont.innerHTML = `<div class="overlay foco" data-act="fecharFoco">
+    <div class="focoBox" data-stop style="${larga}">
+      <div class="focoBar">
+        <span class="focoRot">${rot}</span>
+        <button class="x" data-act="fecharFoco" title="Sair do foco (Esc)">${ico('x',13)}</button>
+      </div>
+      ${card}
+    </div>
+  </div>`;
 }
 
 /* ------------------------------------------------------------------ modais */
@@ -967,8 +1376,8 @@ function modalTopico(){
       return `<div class="ans">
         <span class="tag" style="background:${rc.bg};color:${rc.fg};flex-shrink:0">${esc(setorNome(r.setorId))}</span>
         <span style="font-size:13px;line-height:1.55;color:var(--text-2);flex:1">${esc(r.texto)}</span>
-        <button class="pen" data-act="editResp" data-id="${esc(p.id)}" data-i="${ri}" title="Editar resposta" style="opacity:1">&#9998;</button>
-        <button class="x" data-act="delResp" data-id="${esc(p.id)}" data-i="${ri}" title="Remover resposta" style="width:24px;height:24px;font-size:11px">&times;</button>
+        <button class="pen" data-act="editResp" data-id="${esc(p.id)}" data-i="${ri}" title="Editar resposta" style="opacity:1">${ico('pen',12)}</button>
+        <button class="x" data-act="delResp" data-id="${esc(p.id)}" data-i="${ri}" title="Remover resposta" style="width:24px;height:24px">${ico('x',11)}</button>
       </div>`;
     }).join('') || '<div style="font-size:12.5px;color:var(--text-3);font-style:italic">Sem respostas ainda.</div>';
 
@@ -985,9 +1394,9 @@ function modalTopico(){
             <span style="flex:1;font-size:13.5px;line-height:1.5;color:var(--text)">${esc(p.texto)}</span>
           </button>
           <div style="display:flex;align-items:center;gap:4px;padding:14px 12px 0 0">
-            <button class="pen" data-act="editQ" data-id="${esc(p.id)}" title="Editar pergunta" style="opacity:1">&#9998;</button>
-            <button class="pen" data-act="delQ" data-id="${esc(p.id)}" title="Excluir pergunta" style="opacity:1;color:var(--danger)">&times;</button>
-            <button class="pen" data-act="toggleQ" data-id="${esc(p.id)}" style="opacity:1;background:transparent">${open?'&#9652;':'&#9662;'}</button>
+            <button class="pen" data-act="editQ" data-id="${esc(p.id)}" title="Editar pergunta" style="opacity:1">${ico('pen',12)}</button>
+            <button class="pen" data-act="delQ" data-id="${esc(p.id)}" title="Excluir pergunta" style="opacity:1;color:var(--danger)">${ico('x',12)}</button>
+            <button class="pen" data-act="toggleQ" data-id="${esc(p.id)}" style="opacity:1;background:transparent" title="${open?'Recolher':'Expandir'}"><span class="chevGiro ${open?'on':''}">${ico('chev',12,90)}</span></button>
           </div>
         </div>`;
 
@@ -1012,15 +1421,16 @@ function modalTopico(){
           <div class="kicker">Dimensão ${esc(t.dimId)} &middot; ${esc(d?d.nome:'')}</div>
           <h2 style="font-size:22px;font-weight:800;letter-spacing:-.025em;margin-top:4px">${esc(t.nome)}</h2>
         </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
           <button class="mini" data-act="editTopic">Editar</button>
           <button class="mini danger" data-act="delTopic">Excluir</button>
-          <button class="x" data-act="closeTopic">&times;</button>
+          <button class="x" data-act="closeTopic" title="Fechar">${ico('x',13)}</button>
         </div>
       </div>
-      <div style="padding:22px 26px 8px">
-        <p style="font-size:14px;line-height:1.65;color:var(--text-2);text-wrap:pretty">${esc(t.desc||'Sem descrição.')}</p>
-        <div class="tags" style="margin-top:14px">${tagsHtml(t.setores)}</div>
+      <div style="padding:24px 26px 10px;display:flex;flex-direction:column;gap:18px">
+        <p class="desc">${esc(t.desc||'Sem descrição.')}</p>
+        ${blocoFonte(t)}
+        <div class="tags">${tagsHtml(t.setores)}</div>
       </div>
       <div style="padding:22px 26px 26px">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:10px">
@@ -1044,7 +1454,7 @@ function modalTopicForm(){
     <div class="modal sm" data-stop>
       <div class="mhead" style="align-items:center;justify-content:space-between">
         <h2 style="font-size:19px;font-weight:800;letter-spacing:-.02em">${esc(f.title)}</h2>
-        <button class="x" data-act="closeTopicForm">&times;</button>
+        <button class="x" data-act="closeTopicForm" title="Fechar">${ico('x',13)}</button>
       </div>
       <div style="padding:22px 26px;display:flex;flex-direction:column;gap:16px">
         <div class="row2">
@@ -1055,6 +1465,21 @@ function modalTopicForm(){
         </div>
         <label class="f">Dimensão
           <select class="inp" id="fTopDim">${dimOpts}</select></label>
+        <div class="f">Fontes oficiais no normativo
+          ${f.fontes.map((x,i)=>`<div class="fonteForm">
+            <div class="row3">
+              <label class="f" style="gap:5px">${i===0?'<span class="fonteRot">Página</span>':''}
+                <input class="inp" id="fF${i}p" value="${esc(x.pag)}" placeholder="Ex: 12"></label>
+              <label class="f" style="gap:5px">${i===0?'<span class="fonteRot">Seção</span>':''}
+                <input class="inp" id="fF${i}s" value="${esc(x.sec)}" placeholder="Ex: 4.2"></label>
+              <label class="f" style="gap:5px">${i===0?'<span class="fonteRot">Título da seção</span>':''}
+                <input class="inp" id="fF${i}t" value="${esc(x.tit)}" placeholder="Ex: Divulgação de informações"></label>
+            </div>
+            <button class="pen" data-act="delFonte" data-i="${i}" title="Remover esta fonte" style="opacity:1;height:38px;width:32px;border-radius:11px">${ico('x',11)}</button>
+          </div>`).join('')}
+          <div><button class="mini" data-act="addFonte">+ Adicionar fonte</button></div>
+          <span class="dica">Uma linha por página/seção do normativo. Todas aparecem ao ler o tópico.</span>
+        </div>
         <div class="f">Setores envolvidos
           <div class="tags" id="chipsSetores">${chipsHtml(f.setores)}</div>
         </div>
@@ -1080,6 +1505,16 @@ function chipsRelHtml(selfId, sel){
   }).join('');
 }
 
+/* guarda o que já foi digitado nas linhas de fonte antes de recriar a modal */
+function capturaFontes(){
+  const f = ui.topicForm; if (!f) return;
+  f.fontes = (f.fontes||[]).map((x,i)=>({
+    pag: (($('#fF'+i+'p')||{}).value || '').trim(),
+    sec: (($('#fF'+i+'s')||{}).value || '').trim(),
+    tit: (($('#fF'+i+'t')||{}).value || '').trim()
+  }));
+}
+
 function chipsHtml(sel){
   return dados.setores.map(s=>{
     const on = sel.includes(s.id);
@@ -1095,23 +1530,24 @@ function modalSetorForm(){
     <div class="modal sm" data-stop>
       <div class="mhead" style="align-items:center;justify-content:space-between">
         <h2 style="font-size:19px;font-weight:800;letter-spacing:-.02em">${esc(f.title)}</h2>
-        <button class="x" data-act="closeSetorForm">&times;</button>
+        <button class="x" data-act="closeSetorForm" title="Fechar">${ico('x',13)}</button>
       </div>
       <div style="padding:22px 26px;display:flex;flex-direction:column;gap:16px">
         <div class="row2e">
           <label class="f">Nome do setor<input class="inp" id="fSetNome" value="${esc(f.nome)}" placeholder="Ex: TI"></label>
           <label class="f">Coordenador(a)<input class="inp" id="fSetCoord" value="${esc(f.coord)}" placeholder="Nome"></label>
         </div>
-        <label class="f">👥 Funcionários (um por linha)<textarea class="inp" id="fSetFunc" style="min-height:70px">${esc(f.func)}</textarea></label>
-        <label class="f">📋 Responsabilidades (uma por linha)<textarea class="inp" id="fSetResp" style="min-height:70px">${esc(f.resp)}</textarea></label>
-        <label class="f">💻 Sistemas (um por linha)<textarea class="inp" id="fSetSist" style="min-height:70px">${esc(f.sist)}</textarea></label>
-        <label class="f">🖥 Mainframe (um por linha)<textarea class="inp" id="fSetMain" style="min-height:70px">${esc(f.main)}</textarea></label>
-        <label class="f">🛠 Ferramentas (uma por linha)<textarea class="inp" id="fSetTools" style="min-height:70px">${esc(f.tools)}</textarea></label>
-        <div class="f">🤝 Setores relacionados
+        <div class="f">Funcionários (separe por vírgula)${tagBox('form:func','Ex: Dev 1, Dev 2, DBA')}</div>
+        <div class="f">Responsabilidades (separe por vírgula)${tagBox('form:resp','Ex: Infraestrutura, Suporte técnico')}</div>
+        <div class="f">Sistemas (separe por vírgula)${tagBox('form:sist','Ex: SAP, Protheus')}</div>
+        <div class="f">Mainframe (separe por vírgula)${tagBox('form:main','Ex: AS/400')}</div>
+        <div class="f">Ferramentas (separe por vírgula)${tagBox('form:tools','Ex: JIRA, GitHub, AWS')}</div>
+        <span class="dica">Digite e use vírgula (ou Enter) para criar cada etiqueta.</span>
+        <div class="f">Setores relacionados
           <div class="tags" id="chipsRel">${chipsRelHtml(f.id, f.rel)}</div>
         </div>
         ${f.id ? `<div class="f" style="gap:8px">
-          <span>📊 Tópicos Temáticos e ✅ Dimensões <span class="autoSelo">automático</span></span>
+          <span>Tópicos Temáticos e Dimensões <span class="autoSelo">automático</span></span>
           <span class="note">Preenchidos sozinhos: marque este setor no formulário de um tópico e a dimensão desse tópico entra aqui.</span>
         </div>` : ''}
       </div>
@@ -1153,7 +1589,7 @@ function modalDados(){
     <div class="modal sm" data-stop>
       <div class="mhead" style="align-items:center;justify-content:space-between">
         <h2 style="font-size:19px;font-weight:800;letter-spacing:-.02em">${vazio?'Carregar dados':'Dados e backup'}</h2>
-        ${vazio?'':'<button class="x" data-act="closeDados">&times;</button>'}
+        ${vazio?'':'<button class="x" data-act="closeDados" title="Fechar">'+ico('x',13)+'</button>'}
       </div>
       <div style="padding:22px 26px;display:flex;flex-direction:column;gap:18px">
         ${estado}${fsWarn}
@@ -1190,6 +1626,27 @@ document.addEventListener('click', ev => {
     goDim:  ()=>{ ui.page='dimensoes'; ui.openDimId=null; ui.activeTopicId=null; renderAll(); },
     goSet:  ()=>{ ui.page='setores'; ui.openDimId=null; ui.activeTopicId=null; renderAll(); },
     goProc: ()=>{ ui.page='processos'; ui.openDimId=null; ui.activeTopicId=null; ui.editProc=null; renderAll(); },
+    goMapa: ()=>{ ui.page='mapa'; ui.openDimId=null; ui.activeTopicId=null; ui.foco=null; renderAll(); },
+
+    /* --- guia Mapa --- */
+    mapaTog:()=>{ const k = btn.dataset.key; ui.mapaAberto[k] = !ui.mapaAberto[k]; renderMain(); },
+    mapaTudo:()=>{
+      if (btn.dataset.modo === 'fechar'){ ui.mapaAberto = {}; renderMain(); return; }
+      const ab = {};
+      dados.dimensoes.forEach(d=>{
+        const sets = mapaSetores(d.id);
+        if (!sets.length) return;
+        ab['dim:'+d.id] = true;
+        sets.forEach(({s})=>{ ab['set:'+d.id+'|'+s.id] = true; });
+      });
+      ui.mapaAberto = ab; renderMain();
+    },
+
+    /* --- foco: card isolado no centro, fundo escurecido --- */
+    focarSetor:()=>{ ui.openSetores[id]=true; ui.editCampo=null; ui.foco={tipo:'setor',id}; renderMain(); },
+    focarProc: ()=>{ ui.openProcs[id]=true;   ui.foco={tipo:'proc', id}; renderMain(); },
+    verTopico: ()=>{ ui.foco={tipo:'topico', id}; renderMain(); },
+    fecharFoco:()=>{ ui.foco=null; renderMain(); },
 
     /* --- guia Processos --- */
     toggleProc:()=>{ ui.openProcs[id] = !ui.openProcs[id]; ui.editProc = null; renderMain(); },
@@ -1300,14 +1757,23 @@ document.addEventListener('click', ev => {
     },
 
     novoTopico:()=>{ ui.topicForm = { id:null, title:'Novo tópico', nome:'', norm:'',
-      dimId: ui.openDimId || (dados.dimensoes[0]||{}).id || '', setores:[], desc:'' }; renderModais(); },
+      dimId: ui.openDimId || (dados.dimensoes[0]||{}).id || '', setores:[], desc:'',
+      fontes:[{pag:'',sec:'',tit:''}] }; renderModais(); },
     editTopic:()=>{
       const t = getTopico(ui.activeTopicId); if (!t) return;
       ui.topicForm = { id:t.id, title:'Editar tópico', nome:t.nome, norm:t.norm||'',
-        dimId:t.dimId, setores:[...(t.setores||[])], desc:t.desc||'' };
+        dimId:t.dimId, setores:[...(t.setores||[])], desc:t.desc||'',
+        fontes:(t.fontes||[]).length ? t.fontes.map(x=>({...x})) : [{pag:'',sec:'',tit:''}] };
       renderModais();
     },
     closeTopicForm:()=>{ ui.topicForm=null; renderModais(); },
+    addFonte:()=>{ capturaFontes(); ui.topicForm.fontes.push({pag:'',sec:'',tit:''}); renderModais(); },
+    delFonte:()=>{
+      capturaFontes();
+      ui.topicForm.fontes.splice(Number(btn.dataset.i), 1);
+      if (!ui.topicForm.fontes.length) ui.topicForm.fontes.push({pag:'',sec:'',tit:''});
+      renderModais();
+    },
     chip:()=>{
       const s = ui.topicForm.setores;
       ui.topicForm.setores = s.includes(id) ? s.filter(x=>x!==id) : [...s, id];
@@ -1317,8 +1783,10 @@ document.addEventListener('click', ev => {
       const f = ui.topicForm;
       const nome = $('#fTopNome').value.trim();
       if (!nome){ toast('Informe o nome do tópico'); return; }
+      capturaFontes();
       const data = { nome, norm:$('#fTopNorm').value.trim(), dimId:$('#fTopDim').value,
-                     setores:f.setores, desc:$('#fTopDesc').value.trim() };
+                     setores:f.setores, desc:$('#fTopDesc').value.trim(),
+                     fontes:f.fontes.filter(x=>x.pag || x.sec || x.tit) };
       if (f.id) Object.assign(getTopico(f.id), data);
       else dados.topicos.push({ id: uid('t'), perguntas: [], ...data });
       ui.openDimId = data.dimId; ui.topicForm = null;
@@ -1333,14 +1801,15 @@ document.addEventListener('click', ev => {
       persist('Tópico excluído'); renderAll();
     },
 
-    novoSetor:()=>{ ui.setorForm = { id:null, title:'Novo setor', nome:'', coord:'',
-      func:'', resp:'', sist:'', main:'', tools:'', rel:[] }; renderModais(); },
+    novoSetor:()=>{
+      ['func','resp','sist','main','tools'].forEach(k=>{ ui.tags['form:'+k] = []; });
+      ui.setorForm = { id:null, title:'Novo setor', nome:'', coord:'', rel:[] };
+      renderModais();
+    },
     editSetor:()=>{
       const s = dados.setores.find(x=>x.id===id); if (!s) return;
-      const j = k => (s[k]||[]).join('\n');
-      ui.setorForm = { id:s.id, title:'Editar setor', nome:s.nome, coord:s.coord||'',
-        func:j('func'), resp:j('resp'), sist:j('sist'), main:j('main'), tools:j('tools'),
-        rel:[...(s.rel||[])] };
+      ['func','resp','sist','main','tools'].forEach(k=>{ ui.tags['form:'+k] = [...(s[k]||[])]; });
+      ui.setorForm = { id:s.id, title:'Editar setor', nome:s.nome, coord:s.coord||'', rel:[...(s.rel||[])] };
       renderModais();
     },
     closeSetorForm:()=>{ ui.setorForm=null; renderModais(); },
@@ -1353,10 +1822,11 @@ document.addEventListener('click', ev => {
       const f = ui.setorForm;
       const nome = $('#fSetNome').value.trim();
       if (!nome){ toast('Informe o nome'); $('#fSetNome').focus(); return; }
+      commitPendentes();
       const data = { nome, coord:$('#fSetCoord').value.trim()||'—',
-        func:lines($('#fSetFunc').value), resp:lines($('#fSetResp').value),
-        sist:lines($('#fSetSist').value), main:lines($('#fSetMain').value),
-        tools:lines($('#fSetTools').value), rel:[...f.rel] };
+        func:tagsDe('form:func'), resp:tagsDe('form:resp'),
+        sist:tagsDe('form:sist'), main:tagsDe('form:main'),
+        tools:tagsDe('form:tools'), rel:[...f.rel] };
       const alvo = f.id || uid('s');
       if (f.id) Object.assign(dados.setores.find(x=>x.id===f.id), data);
       else dados.setores.push({ id: alvo, ...data });
@@ -1381,17 +1851,32 @@ document.addEventListener('click', ev => {
       renderMain();
     },
     editCampo:()=>{
+      const campo = btn.dataset.campo;
+      const cp = CAMPOS_SETOR.find(c=>c.k===campo);
+      const s  = dados.setores.find(x=>x.id===id);
+      if (cp && cp.tipo === 'lista') ui.tags.sec = [...((s&&s[campo])||[])];
       ui.openSetores[id] = true;
-      ui.editCampo = { setorId:id, campo:btn.dataset.campo };
+      ui.editCampo = { setorId:id, campo };
       renderMain();
-      const el = $('#edCampo'); if (el){ el.focus(); el.select && el.select(); }
+      const el = $('#edCampo') || $('.taginp');
+      if (el){ el.focus(); el.select && el.select(); }
+    },
+    tagDel:()=>{
+      const chave = btn.dataset.key;
+      const arr = ui.tags[chave] || [];
+      arr.splice(Number(btn.dataset.i), 1);
+      pintaTagBox(chave, true);
     },
     cancelaCampo:()=>{ ui.editCampo = null; renderMain(); },
     salvaCampo:()=>{
       const { setorId, campo } = ui.editCampo;
       const s = dados.setores.find(x=>x.id===setorId);
-      const v = $('#edCampo').value;
-      s[campo] = campo === 'coord' ? (v.trim() || '—') : lines(v);
+      if (campo === 'coord'){
+        s[campo] = ($('#edCampo').value || '').trim() || '—';
+      } else {
+        commitPendentes();
+        s[campo] = tagsDe('sec');
+      }
       ui.editCampo = null;
       persist('Setor atualizado'); renderMain();
     },
@@ -1461,6 +1946,7 @@ document.addEventListener('keydown', ev => {
     if (ui.editQ || ui.editResp){ ui.editQ=null; ui.editResp=null; renderModais(); restoreDrafts(); return; }
     if (ui.editCampo){ ui.editCampo=null; renderMain(); return; }
     if (ui.editProc){ ui.editProc=null; limpaProcVazios(); renderMain(); return; }
+    if (ui.foco){ ui.foco=null; renderMain(); return; }
     // a tela inicial de carregamento não pode ser dispensada com ESC
     const vazio = !dados.dimensoes.length && !dados.topicos.length && !dados.setores.length;
     if (ui.dadosModal){ if (!vazio){ ui.dadosModal=false; renderModais(); } return; }
@@ -1521,6 +2007,53 @@ document.addEventListener('change', e => { if (e.target.dataset && e.target.data
 window.addEventListener('beforeunload', e => {
   // localStorage já está gravado; só avisa se a escrita no disco ficou pendente
   if (fileHandle && filePerm === 'granted' && !fileSynced){ e.preventDefault(); e.returnValue = ''; }
+});
+
+/* --------------------------------------------- entrada de etiquetas (chips) */
+document.addEventListener('keydown', ev=>{
+  const el = ev.target;
+  if (!el.dataset || el.dataset.taginput === undefined) return;
+  const chave = el.dataset.taginput;
+  if (ev.key === 'Enter' || ev.key === ','){
+    ev.preventDefault(); ev.stopPropagation();
+    addTags(chave, el.value); el.value = '';
+    pintaTagBox(chave, true);
+  } else if (ev.key === 'Backspace' && !el.value){
+    const arr = ui.tags[chave] || [];
+    if (arr.length){ ev.preventDefault(); arr.pop(); pintaTagBox(chave, true); }
+  }
+}, true);
+document.addEventListener('input', ev=>{
+  const el = ev.target;
+  if (!el.dataset || el.dataset.taginput === undefined) return;
+  if (!el.value.includes(',')) return;
+  const chave  = el.dataset.taginput;
+  const partes = el.value.split(',');
+  const resto  = partes.pop();
+  addTags(chave, partes.join(','));
+  pintaTagBox(chave, true);
+  const novo = document.querySelector('[data-taginput="'+chave+'"]');
+  if (novo) novo.value = resto;
+});
+document.addEventListener('blur', ev=>{
+  const el = ev.target;
+  if (!el.dataset || el.dataset.taginput === undefined) return;
+  if ((el.value||'').trim()){ addTags(el.dataset.taginput, el.value); el.value=''; pintaTagBox(el.dataset.taginput, false); }
+}, true);
+/* clicar em qualquer parte da caixa foca o campo de digitação */
+document.addEventListener('mousedown', ev=>{
+  const box = ev.target.closest && ev.target.closest('.tagbox');
+  if (!box || ev.target.closest('[data-act]') || ev.target.classList.contains('taginp')) return;
+  ev.preventDefault();
+  const i = box.querySelector('.taginp'); if (i) i.focus();
+});
+
+/* o número de colunas depende da largura: refaz o arranjo ao redimensionar */
+let resizeTimer = null;
+window.addEventListener('resize', ()=>{
+  if (ui.page === 'mapa'){ desenhaMapa(); return; }
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(()=>{ if (ui.page === 'setores' || ui.page === 'processos') renderMain(); }, 160);
 });
 
 boot();
