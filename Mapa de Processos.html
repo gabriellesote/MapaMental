@@ -229,6 +229,46 @@ button.gitem:hover,button.tag:hover{filter:brightness(1.08);cursor:pointer}
 .modal.sm{max-width:620px}
 .mhead{padding:22px 26px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:14px}
 .mfoot{padding:16px 26px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+/* abas internas do tópico: barra clara, item ativo com sublinhado (anexo 1) */
+.tabsIn{display:flex;gap:2px;padding:6px 14px 0;background:var(--surface-2);border-bottom:1px solid var(--border);overflow-x:auto}
+.tabIn{position:relative;display:inline-flex;align-items:center;gap:7px;height:46px;padding:0 12px;border:none;background:transparent;color:var(--text-3);font-size:13px;font-weight:600;white-space:nowrap;transition:color .2s var(--ease)}
+.tabIn:hover{color:var(--text-2)}
+.tabIn.on{color:var(--text);font-weight:700}
+.tabIn::after{content:'';position:absolute;left:13px;right:13px;bottom:0;height:2.5px;border-radius:3px 3px 0 0;background:var(--text);opacity:0;transform:scaleX(.35);transition:opacity .22s var(--ease),transform .26s var(--ease)}
+.tabIn.on::after{opacity:1;transform:none}
+.tabInNum{min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--surface-3);color:var(--text-3);font-size:10.5px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;transition:background .2s var(--ease),color .2s var(--ease)}
+.tabIn.on .tabInNum{background:var(--accent);color:var(--on-accent)}
+.tabPane{animation:abre .24s var(--ease)}
+/* formulários no estilo do anexo 2: corpo neutro + cartão branco de campos */
+.mbody{padding:20px 22px 22px;background:var(--surface-2);display:flex;flex-direction:column;gap:14px}
+.mbody:last-child{border-radius:0 0 24px 24px}
+/* formulário em passos, no espírito do anexo: cabeçalho limpo, trilha numerada,
+   cartão branco único com os campos e rodapé com ação principal larga */
+.modal.form{background:var(--surface-2)}
+.modal.form .mhead{border-bottom:none;padding-bottom:14px}
+.modal.form .mfoot{border-top:none;padding:4px 22px 22px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center}
+.modal.form .mfoot .primary{width:100%;height:48px;border-radius:16px;font-size:14px}
+.modal.form .mfoot .ghost{height:48px;border-radius:16px;background:var(--surface-3);border-color:transparent;color:var(--text-2);font-size:13.5px}
+.steps{display:flex;align-items:center;gap:6px;padding:6px 22px 0;overflow-x:auto}
+.step{display:inline-flex;align-items:center;gap:9px;border:none;background:transparent;padding:0;font-size:13px;font-weight:600;color:var(--text-3);white-space:nowrap;transition:color .2s var(--ease)}
+.step:hover{color:var(--text-2)}
+.step.on{color:var(--text);font-weight:700}
+.stepN{width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:var(--surface-3);color:var(--text-3);transition:background .22s var(--ease),color .22s var(--ease)}
+.step.on .stepN{background:var(--accent);color:var(--on-accent)}
+.step.done .stepN{background:var(--surface);color:var(--accent);box-shadow:inset 0 0 0 1.5px var(--accent)}
+.stepSep{flex:1;min-width:26px;color:var(--border-2);display:flex;align-items:center}
+.stepSep svg{width:100%;height:12px}
+.fcard .fgroup{display:flex;flex-direction:column;gap:7px}
+.fcard .fgroup > .dica{margin-top:-1px}
+.obrig{color:var(--danger);font-weight:800}
+.fcard label.f{flex-direction:row;align-items:center;gap:6px}
+/* modal já aberta que só foi redesenhada: nada reanima, o esqueleto fica parado */
+.overlay.noanim,.overlay.noanim .modal,.overlay.noanim .tabPane,.overlay.noanim .confBox{animation:none}
+.fcard{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:16px}
+.mhead.big{flex-direction:column;gap:7px}
+.mheadTop{display:flex;align-items:center;gap:12px;width:100%}
+.mIco{width:34px;height:34px;border-radius:11px;display:inline-flex;align-items:center;justify-content:center;background:var(--accent);color:var(--on-accent);flex-shrink:0}
+.msub{font-size:12.5px;color:var(--text-3);font-weight:500;line-height:1.5}
 .x{width:32px;height:32px;border-radius:50%;border:none;background:var(--surface-2);color:var(--text-3);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;transition:color .2s var(--ease),background .2s var(--ease)}
 .x:hover{color:var(--text);background:var(--surface-3)}
 .mini{height:32px;padding:0 14px;border-radius:16px;border:1px solid var(--border-2);background:var(--surface);color:var(--text-2);font-size:12px;font-weight:600}
@@ -270,16 +310,20 @@ textarea.inp{height:auto;min-height:86px;padding:11px 12px;line-height:1.55;resi
     <div class="brand">Mapa de Processos</div>
     <nav>
       <button class="tab" data-act="goDim">Dimensões</button>
+      <button class="tab" data-act="goTop">Tópicos</button>
       <button class="tab" data-act="goSet">Setores</button>
       <button class="tab" data-act="goProc">Processos</button>
       <button class="tab" data-act="goMapa">Mapa</button>
     </nav>
     <div class="spacer"></div>
     <div class="hbtns">
-      <button class="pill" data-act="dados" title="Gerenciar armazenamento">
+      <button class="pill" id="statusPill" style="cursor:default">
         <span class="dot" id="statusDot"></span><span id="statusText">…</span>
       </button>
+      <button class="iconBtn" data-act="sincronizar" aria-label="Sincronizar com o dados.json" title="Sincronizar com o dados.json"></button>
+      <button class="iconBtn" data-act="salvarAgora" aria-label="Salvar agora" title="Salvar agora no navegador e no arquivo"></button>
       <button class="primary" data-act="novoTopico">Novo tópico</button>
+      <button class="iconBtn" data-act="config" aria-label="Configurações" title="Configurações"></button>
       <button class="iconBtn" id="temaBtn" data-act="tema" aria-label="Alternar tema"></button>
     </div>
   </header>
@@ -324,11 +368,18 @@ const ui = {
   topicForm: null,
   setorForm: null,
   dadosModal: false,
+  topicTab: 'info',   // aba do tópico: 'info' | 'roteiro' | 'praticas' | 'geral'
+  editPratica: null,  // id da prática de mercado em edição
+  openGeral: {},      // { chave: bool } — blocos abertos na visualização geral
+  openSetEnv: {},     // { setorId: true } — setores expandidos na aba "Setores"
+  cfg: null,          // { tab:'dados'|'json'|'excluir', json, escopo, modo, sel:{}, ok1 }
   openSetores: {},  // { setorId: true } — cards de setor expandidos
   editCampo: null,  // { setorId, campo } — edição inline de um atributo do setor
   openProcs: {},    // { respId: true } — cards de processo expandidos
   editProc: null,   // { respId, campo } — edição inline de um campo do processo
   filtroProc: '',
+  filtroTop: '',
+  grupoTop: 'dim',  // eixo da guia Tópicos: 'dim' | 'setor' | 'norm'
   grupoProc: 'dim', // eixo de agrupamento da guia Processos: 'dim' | 'setor'
   editQ: null,      // perguntaId em edição
   editResp: null,   // { qid, i } — resposta em edição
@@ -494,19 +545,36 @@ function equilibraMas(){
     const n = cols.length;
     if (n < 2) return;
     const g = parseFloat(mas.style.gap) || 18;
-    // a marcação inicial é round-robin: coluna c, posição p => card p*n + c
-    const itens = [];
-    cols.forEach((col,c)=>[...col.children].forEach((el,p)=>{ itens[p*n + c] = el; }));
-    const lista = itens.filter(Boolean);
+    // na primeira passagem a ordem é round-robin (coluna c, posição p => p*n + c);
+    // o índice fica gravado para que a função possa rodar de novo sem embaralhar
+    if (!mas.querySelector('[data-mas]'))
+      cols.forEach((col,c)=>[...col.children].forEach((el,p)=>{ el.dataset.mas = p*n + c; }));
+    const lista = [...mas.querySelectorAll('[data-mas]')]
+      .sort((a,b)=>Number(a.dataset.mas) - Number(b.dataset.mas));
     const alturas = lista.map(el=>el.getBoundingClientRect().height);
+    // layout ainda não resolvido: tenta de novo em vez de distribuir com zeros
+    if (alturas.some(x=>x < 1)){ requestAnimationFrame(equilibraMas); return; }
     const acum = new Array(n).fill(0);
+    const destino = Array.from({length:n}, ()=>[]);
     lista.forEach((el,i)=>{
       let k = 0;
       for (let j=1; j<n; j++) if (acum[j] < acum[k] - 0.5) k = j;
       acum[k] += alturas[i] + g;
-      cols[k].appendChild(el);
+      destino[k].push(el);
     });
+    // só mexe no DOM se a distribuição realmente mudou — mover um nó reinicia as
+    // animações e faz o conteúdo "tremer" a cada nova medição
+    const igual = cols.every((col,k)=>{
+      const atual = [...col.children];
+      return atual.length === destino[k].length && atual.every((el,i)=>el === destino[k][i]);
+    });
+    if (igual) return;
+    cols.forEach((col,k)=>destino[k].forEach(el=>col.appendChild(el)));
   });
+}
+/* mede só depois de o navegador desenhar o HTML novo (e as fontes chegarem) */
+function agendaMas(){
+  requestAnimationFrame(()=>requestAnimationFrame(equilibraMas));
 }
 
 /* ------------------------------------------------- diálogo de confirmação */
@@ -560,11 +628,18 @@ function idb(mode, fn){
     req.onerror = () => rej(req.error);
     req.onsuccess = () => {
       const db = req.result;
-      const tx = db.transaction('kv', mode);
-      const r  = fn(tx.objectStore('kv'));
-      tx.oncomplete = () => { db.close(); res(r && r.result); };
-      tx.onerror = () => { db.close(); rej(tx.error); };
+      try {
+        const tx = db.transaction('kv', mode);
+        const r  = fn(tx.objectStore('kv'));
+        tx.oncomplete = () => { db.close(); res(r && r.result); };
+        tx.onerror    = () => { db.close(); rej(tx.error); };
+        tx.onabort    = () => { db.close(); rej(tx.error); };
+      } catch(e){
+        // um erro síncrono aqui deixaria a promise pendente para sempre
+        db.close(); rej(e);
+      }
     };
+    req.onblocked = () => rej(new Error('IndexedDB bloqueado'));
   });
 }
 const saveHandle = h => idb('readwrite', st => st.put(h, 'dadosFile')).catch(()=>{});
@@ -626,7 +701,8 @@ async function writeToDisk(){
   if (!fileHandle) return;
   try {
     filePerm = await fileHandle.queryPermission({ mode:'readwrite' });
-    if (filePerm !== 'granted'){ renderStatus(); return; }
+    // sem permissão o arquivo fica desatualizado: não pode continuar "em dia"
+    if (filePerm !== 'granted'){ fileSynced = false; renderStatus(); return; }
     const w = await fileHandle.createWritable();
     await w.write(JSON.stringify(dados, null, 2));
     await w.close();
@@ -666,7 +742,7 @@ async function connectFile(mode){
     filePerm = await h.requestPermission({ mode:'readwrite' });
     if (filePerm !== 'granted'){ toast('Permissão de gravação negada'); return; }
     fileHandle = h;
-    await saveHandle(h);
+    saveHandle(h).catch(()=>{});   // lembrar o arquivo não pode travar a gravação
     saveLocal();
     await writeToDisk();
     renderAll();
@@ -731,6 +807,10 @@ function normalize(d){
     topicos:  (Array.isArray(d.topicos) ? d.topicos : []).map(t=>({
       id: t.id || uid('t'), nome: t.nome || '', dimId: t.dimId || '',
       norm: t.norm || '', setores: t.setores || [], desc: t.desc || '',
+      // práticas de mercado: título + descrição
+      praticas: (Array.isArray(t.praticas) ? t.praticas : []).map(p=>({
+        id: p.id || uid('mk'), titulo: p.titulo || '', desc: p.desc || ''
+      })),
       // onde a informação está de fato no normativo — uma ou várias fontes
       fontes: (Array.isArray(t.fontes) ? t.fontes
                 : (t.fpag || t.fsec || t.fsecTit ? [{ pag:t.fpag, sec:t.fsec, tit:t.fsecTit }] : []))
@@ -806,6 +886,7 @@ function renderAll(){ renderHeader(); renderMain(); renderModais(); renderStatus
 function renderHeader(){
   document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
   const sel = ui.page === 'setores'  ? '[data-act="goSet"]'
+            : ui.page === 'topicos'  ? '[data-act="goTop"]'
             : ui.page === 'processos'? '[data-act="goProc"]'
             : ui.page === 'mapa'     ? '[data-act="goMapa"]'
             : '[data-act="goDim"]';
@@ -814,27 +895,46 @@ function renderHeader(){
   const bt = $('#temaBtn');
   bt.innerHTML = escuro ? ico('sol',16) : ico('lua',16);
   bt.title = escuro ? 'Mudar para o tema claro' : 'Mudar para o tema escuro';
+  const cb = $('[data-act="config"]');
+  if (cb && !cb.innerHTML) cb.innerHTML = ico('engr',16);
 }
 
 function renderStatus(){
-  const dot = $('#statusDot'), txt = $('#statusText');
+  const dot = $('#statusDot'), txt = $('#statusText'), pill = $('#statusPill');
+  const hora = dados && dados.atualizadoEm
+    ? new Date(dados.atualizadoEm).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}) : '';
+  const quando = hora ? ` · última alteração às ${hora}` : '';
   dot.className = 'dot';
-  if (fileHandle && filePerm !== 'granted'){ dot.classList.add('warn'); txt.textContent = 'reautorizar arquivo'; }
-  else if (fileHandle && fileSynced)       { dot.classList.add('ok');   txt.textContent = 'dados.json salvo'; }
-  else if (fileHandle)                     { dot.classList.add('busy'); txt.textContent = 'gravando arquivo…'; }
-  else                                     { dot.classList.add('warn'); txt.textContent = 'só no navegador'; }
+  let tip;
+  if (fileHandle && filePerm !== 'granted'){
+    dot.classList.add('warn'); txt.textContent = 'reautorizar arquivo';
+    tip = 'O dados.json está conectado, mas o navegador precisa de um clique para autorizar a gravação. Abra Configurações › Dados e memória.' + quando;
+  } else if (fileHandle && fileSynced){
+    dot.classList.add('ok'); txt.textContent = 'navegador + dados.json';
+    tip = 'Salvo na memória do navegador e gravado automaticamente no dados.json — tudo em dia.' + quando;
+  } else if (fileHandle){
+    dot.classList.add('busy'); txt.textContent = 'gravando dados.json…';
+    tip = 'Salvo no navegador; a gravação automática no dados.json está em andamento.' + quando;
+  } else {
+    dot.classList.add('warn'); txt.textContent = 'só no navegador';
+    tip = 'Salvo apenas na memória do navegador. Conecte o dados.json em Configurações › Dados e memória para gravar em disco.' + quando;
+  }
+  if (pill) pill.title = tip;
+  const sb = $('[data-act="sincronizar"]'); if (sb && !sb.innerHTML) sb.innerHTML = ico('sync',16);
+  const vb = $('[data-act="salvarAgora"]'); if (vb && !vb.innerHTML) vb.innerHTML = ico('save',16);
 }
 
 function renderMain(){
   const m = $('#main');
   if (ui.page === 'setores')        m.innerHTML = viewSetores();
+  else if (ui.page === 'topicos')   m.innerHTML = viewTopicos();
   else if (ui.page === 'processos') m.innerHTML = viewProcessos();
   else if (ui.page === 'mapa')      m.innerHTML = viewMapa();
   else if (ui.openDimId)            m.innerHTML = viewDimensao();
   else                              m.innerHTML = viewDimGrid();
   renderFoco();
   if (ui.page === 'mapa') agendaMapa();
-  else if (ui.page === 'setores' || ui.page === 'processos') requestAnimationFrame(equilibraMas);
+  else if (ui.page === 'setores' || ui.page === 'processos' || ui.page === 'topicos') agendaMas();
 }
 
 function viewDimGrid(){
@@ -976,7 +1076,17 @@ const FORMAS = {
   olho: '<path d="M1.9 11S5 5.4 11 5.4 20.1 11 20.1 11 17 16.6 11 16.6 1.9 11 1.9 11Z"/><circle cx="11" cy="11" r="2.6"/>',
   copia:'<rect x="3.3" y="3.3" width="10.6" height="10.6" rx="3.2"/><rect x="8.1" y="8.1" width="10.6" height="10.6" rx="3.2"/>',
   alerta:'<path d="M11 3.4 1.9 18.6h18.2L11 3.4Z"/><path d="M11 9v3.6"/><path d="M11 15.4h.01"/>',
-  lixo: '<path d="M3.7 6.2h14.6M8.3 6.2V4.1h5.4v2.1M5.5 6.2l1 11.4a1.6 1.6 0 0 0 1.6 1.5h5.8a1.6 1.6 0 0 0 1.6-1.5l1-11.4"/>'
+  lixo: '<path d="M3.7 6.2h14.6M8.3 6.2V4.1h5.4v2.1M5.5 6.2l1 11.4a1.6 1.6 0 0 0 1.6 1.5h5.8a1.6 1.6 0 0 0 1.6-1.5l1-11.4"/>',
+  doc:  '<path d="M5.5 2.9h6.4l4.6 4.6v11.6H5.5V2.9Z"/><path d="M11.6 2.9v4.8h4.9"/><path d="M8.2 12h6M8.2 15.2h4.4"/>',
+  chat: '<path d="M18.3 12.6a1.9 1.9 0 0 1-1.9 1.9H8.1L4.2 18v-3.5H5.6a1.9 1.9 0 0 1-1.9-1.9V5.4A1.9 1.9 0 0 1 5.6 3.5h10.8a1.9 1.9 0 0 1 1.9 1.9v7.2Z"/>',
+  mais: '<path d="M11 4.6v12.8M4.6 11h12.8"/>',
+  caixa:'<rect x="3.4" y="6.2" width="15.2" height="12.4" rx="3"/><path d="M3.4 10.2h15.2M8.6 6.2V3.6h4.8v2.6"/>',
+  engr: '<circle cx="11" cy="11" r="2.9"/><path d="M17.4 13.4a1.5 1.5 0 0 0 .3 1.65l.06.06a1.8 1.8 0 1 1-2.55 2.55l-.06-.06a1.5 1.5 0 0 0-1.65-.3 1.5 1.5 0 0 0-.9 1.37v.17a1.8 1.8 0 1 1-3.6 0v-.09a1.5 1.5 0 0 0-.98-1.37 1.5 1.5 0 0 0-1.65.3l-.06.06A1.8 1.8 0 1 1 3.76 15.2l.06-.06a1.5 1.5 0 0 0 .3-1.65 1.5 1.5 0 0 0-1.37-.9H2.5a1.8 1.8 0 1 1 0-3.6h.09a1.5 1.5 0 0 0 1.37-.98 1.5 1.5 0 0 0-.3-1.65l-.06-.06A1.8 1.8 0 1 1 6.15 3.76l.06.06a1.5 1.5 0 0 0 1.65.3h.07a1.5 1.5 0 0 0 .9-1.37V2.5a1.8 1.8 0 1 1 3.6 0v.09a1.5 1.5 0 0 0 .9 1.37 1.5 1.5 0 0 0 1.65-.3l.06-.06a1.8 1.8 0 1 1 2.55 2.55l-.06.06a1.5 1.5 0 0 0-.3 1.65v.07a1.5 1.5 0 0 0 1.37.9h.17a1.8 1.8 0 1 1 0 3.6h-.09a1.5 1.5 0 0 0-1.37.9Z"/>',
+  db:   '<ellipse cx="11" cy="5.4" rx="7.4" ry="2.6"/><path d="M3.6 5.4v11.2c0 1.44 3.31 2.6 7.4 2.6s7.4-1.16 7.4-2.6V5.4"/><path d="M3.6 11c0 1.44 3.31 2.6 7.4 2.6s7.4-1.16 7.4-2.6"/>',
+  code: '<path d="M7.6 7 3.8 11l3.8 4M14.4 7l3.8 4-3.8 4M12.6 4.4 9.4 17.6"/>',
+  grupo:'<circle cx="8.4" cy="7.6" r="2.9"/><path d="M3.2 17.6c0-2.6 2.33-4.4 5.2-4.4s5.2 1.8 5.2 4.4"/><path d="M15.2 5.2a2.6 2.6 0 0 1 0 5M16.4 13.6c1.6.62 2.6 1.9 2.6 4"/>',
+  sync: '<path d="M18.4 9.2A7.6 7.6 0 0 0 5.1 5.9L2.6 8.2"/><path d="M2.6 4.2v4h4"/><path d="M3.6 12.8a7.6 7.6 0 0 0 13.3 3.3l2.5-2.3"/><path d="M19.4 17.8v-4h-4"/>',
+  save: '<path d="M4.4 3.6h9.9l3.7 3.7v11.1H4.4V3.6Z"/><path d="M7.3 3.6v4.7h6.5V3.6M7.3 18.4v-5.3h7.4v5.3"/>'
 };
 function ico(nome, tam, rot){
   const t = tam || 13;
@@ -1219,6 +1329,105 @@ function viewProcessos(){
     ${corpo}`;
 }
 
+/* ------------------------------------------------------------- tópicos */
+/* Visão macro de todos os tópicos, no mesmo desenho da guia Processos. */
+function cardTopicoMacro(t, modo){
+  const d  = dados.dimensoes.find(x=>x.id===t.dimId);
+  const dc = dimTile(t.dimId);
+  const nq = (t.perguntas||[]).length;
+  const nr = (t.perguntas||[]).reduce((a,p)=>a+((p.respostas||[]).length),0);
+  const np = (t.praticas||[]).length;
+  const ns = (t.setores||[]).length;
+  const meta = [
+    modo !== 'dim'  && d ? `<b>${esc(d.id)} · ${esc(d.nome)}</b>` : '',
+    modo !== 'norm' ? esc(t.norm || 'sem normativo') : '',
+    `${ns} ${ns===1?'setor':'setores'}`
+  ].filter(Boolean);
+  const barra = modo === 'setor' ? (setoresQueResponderam(t)[0] ? setorTile(setoresQueResponderam(t)[0]).fg : dc.fg) : dc.fg;
+  return `<article class="procCard" style="--barra:${barra}">
+    <button class="procHead" data-act="openTopic" data-id="${esc(t.id)}" style="width:100%">
+      <div style="flex:1;min-width:0">
+        <div class="procTit">${esc(t.nome)}</div>
+        <div class="procMeta">${meta.join('<span class="procSep">·</span>')}</div>
+        <div class="procFlag ${nq?'tem':''}" style="margin-top:4px">
+          ${nq ? `${nq} pergunta${nq>1?'s':''} · ${nr} resposta${nr===1?'':'s'}` : 'sem perguntas'}${np?` · ${np} prática${np>1?'s':''}`:''}
+        </div>
+      </div>
+      <span class="chev" style="background:transparent;margin-top:2px">${ico('chev',13)}</span>
+    </button>
+  </article>`;
+}
+
+function gruposTopico(lista, modo){
+  const grupos = [];
+  if (modo === 'setor'){
+    dados.setores.forEach(s=>{
+      const itens = lista.filter(t=>(t.setores||[]).includes(s.id));
+      if (itens.length) grupos.push({ nome:s.nome, cor:setorTile(s.id).fg, itens });
+    });
+    const orfaos = lista.filter(t=>!(t.setores||[]).some(x=>dados.setores.some(s=>s.id===x)));
+    if (orfaos.length) grupos.push({ nome:'Sem setor vinculado', cor:'var(--text-3)', itens:orfaos });
+  } else if (modo === 'norm'){
+    const vistos = [];
+    lista.forEach(t=>{ const k = (t.norm||'').trim(); if (k && !vistos.includes(k)) vistos.push(k); });
+    vistos.sort((a,b)=>a.localeCompare(b,'pt-BR'));
+    vistos.forEach(k=>{
+      const itens = lista.filter(t=>(t.norm||'').trim()===k);
+      grupos.push({ nome:k, cor:dimTile((itens[0]||{}).dimId).fg, itens });
+    });
+    const sem = lista.filter(t=>!(t.norm||'').trim());
+    if (sem.length) grupos.push({ nome:'Sem normativo', cor:'var(--text-3)', itens:sem });
+  } else {
+    dados.dimensoes.forEach(d=>{
+      const itens = lista.filter(t=>t.dimId===d.id);
+      if (itens.length) grupos.push({ nome:`${d.id} · ${d.nome}`, cor:dimTile(d.id).fg, itens });
+    });
+    const orfaos = lista.filter(t=>!dados.dimensoes.some(d=>d.id===t.dimId));
+    if (orfaos.length) grupos.push({ nome:'Sem dimensão', cor:'var(--text-3)', itens:orfaos });
+  }
+  return grupos;
+}
+
+function viewTopicos(){
+  const todos = dados.topicos;
+  const f = (ui.filtroTop||'').trim().toLowerCase();
+  const lista = !f ? todos : todos.filter(t=>
+    (t.nome+' '+(t.norm||'')+' '+(t.desc||'')+' '+(t.setores||[]).map(setorNome).join(' ')+' '+
+     (t.perguntas||[]).map(p=>p.texto).join(' '))
+      .toLowerCase().includes(f));
+  const modo = ['setor','norm'].includes(ui.grupoTop) ? ui.grupoTop : 'dim';
+  const comPerg = todos.filter(t=>(t.perguntas||[]).length).length;
+
+  const corpo = !lista.length
+    ? `<div class="empty">${todos.length ? 'Nenhum tópico corresponde à busca.' : 'Nenhum tópico cadastrado ainda.'}</div>`
+    : gruposTopico(lista, modo).map(g=>`
+        <section class="grupo">
+          <div class="grupoHead">
+            <span class="grupoPonto" style="background:${g.cor}"></span>
+            <span class="grupoNome">${esc(g.nome)}</span>
+            <span class="grupoQtd">${g.itens.length}</span>
+          </div>
+          ${masonry(g.itens.map(t=>cardTopicoMacro(t, modo)), 300, 12)}
+        </section>`).join('');
+
+  return `<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:0 0 26px 2px;flex-wrap:wrap">
+      <div>
+        <h1>Tópicos</h1>
+        <p class="sub">${comPerg} de ${todos.length} com roteiro de perguntas iniciado.</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <div class="segmented">
+          <button class="segbtn ${modo==='dim'?'on':''}" data-act="agruparTop" data-modo="dim">Dimensão</button>
+          <button class="segbtn ${modo==='setor'?'on':''}" data-act="agruparTop" data-modo="setor">Setor</button>
+          <button class="segbtn ${modo==='norm'?'on':''}" data-act="agruparTop" data-modo="norm">Normativo</button>
+        </div>
+        <input class="inp" id="filtroTop" value="${esc(ui.filtroTop||'')}" placeholder="Buscar…" style="height:38px;width:190px;border-radius:19px">
+        <button class="primary" data-act="novoTopico">+ Novo tópico</button>
+      </div>
+    </div>
+    ${corpo}`;
+}
+
 /* ------------------------------------------------------------------ mapa */
 /* Dimensão é o pivô: ramifica em setores e, dentro de cada setor, nos tópicos
    daquela dimensão. Cada botão abre e, no mesmo clique, recolhe o ramo. */
@@ -1334,12 +1543,30 @@ function desenhaMapa(){
   svg.innerHTML = d ? `<path d="${d}" style="fill:none;stroke:var(--accent);stroke-opacity:.55;stroke-width:1.6"/>` : '';
 }
 
-/* Painel de leitura do tópico, usado no foco da guia Mapa: mostra tudo,
-   sem editar nem excluir — essas ações continuam na guia Dimensões. */
-function painelTopico(t){
-  const d = dados.dimensoes.find(x=>x.id===t.dimId);
-  const c = dimTile(t.dimId);
-  const qs = (t.perguntas||[]).map((p,i)=>{
+/* Quatro abas por tópico: o que ele é, o que se pergunta, o que o mercado faz
+   e a leitura corrida de tudo isso junto. */
+const ABAS_TOPICO = ['geral','info','roteiro','praticas','setores'];
+const abaTopico = () => ABAS_TOPICO.includes(ui.topicTab) ? ui.topicTab : 'geral';
+
+function abasTopico(t){
+  const aba = abaTopico();
+  const bt = (k, icone, rot, num) =>
+    `<button class="tabIn ${aba===k?'on':''}" data-act="topicTab" data-tab="${k}">
+      ${ico(icone,15)} ${rot}${num ? `<span class="tabInNum">${num}</span>` : ''}
+    </button>`;
+  const nf = (t.fontes||[]).length;
+  return `<div class="tabsIn">
+    ${bt('geral','olho','Visão geral', 0)}
+    ${bt('info','doc','Descrição e fonte', nf>1?nf:0)}
+    ${bt('roteiro','chat','Roteiro', (t.perguntas||[]).length)}
+    ${bt('praticas','caixa','Práticas', (t.praticas||[]).length)}
+    ${bt('setores','grupo','Setores', setoresQueResponderam(t).length)}
+  </div>`;
+}
+
+/* Perguntas e respostas em leitura: usado no foco e na visualização geral. */
+function blocoQAs(t){
+  return (t.perguntas||[]).map((p,i)=>{
     const ans = (p.respostas||[]).map(r=>{
       const rc = setorTile(r.setorId);
       return `<div class="ans">
@@ -1355,6 +1582,125 @@ function painelTopico(t){
       <div style="display:flex;flex-direction:column;gap:9px;padding-left:35px">${ans}</div>
     </div>`;
   }).join('') || '<div class="empty" style="padding:26px;border-radius:16px;font-size:13px">Nenhuma pergunta cadastrada neste tópico.</div>';
+}
+
+/* Práticas de mercado: título + descrição. Editável na guia Dimensões. */
+function blocoPraticas(t, editavel){
+  const ps = t.praticas || [];
+  const itens = ps.map((p,i)=>{
+    if (editavel && ui.editPratica === p.id){
+      return `<div class="q" style="padding:14px 16px;display:flex;flex-direction:column;gap:9px">
+        <input class="inp" id="edPratTit" value="${esc(p.titulo)}" placeholder="Título da prática" style="height:36px;font-size:13.5px;font-weight:700;background:var(--surface)">
+        <textarea class="inp" id="edPratDesc" placeholder="Descrição da prática" style="min-height:104px;height:auto;padding:11px 13px;font-size:13px;line-height:1.65;resize:vertical;background:var(--surface)">${esc(p.desc||'')}</textarea>
+        <div style="display:flex;gap:8px">
+          <button class="primary" data-act="salvaPratica" data-id="${esc(p.id)}" style="height:34px;padding:0 16px;font-size:12px">Salvar</button>
+          <button class="mini" data-act="cancelaEdit">Cancelar</button>
+        </div>
+      </div>`;
+    }
+    return `<div class="q" style="padding:15px 16px;display:flex;gap:11px;align-items:flex-start">
+      <span class="qn">${i+1}</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13.5px;font-weight:700;letter-spacing:-.012em;color:var(--text)">${esc(p.titulo||'Sem título')}</div>
+        <p style="font-size:13px;line-height:1.65;color:var(--text-2);margin-top:6px;white-space:pre-wrap;text-wrap:pretty">${esc(p.desc||'')}</p>
+      </div>
+      ${editavel ? `<div style="display:flex;align-items:center;gap:4px;flex-shrink:0">
+        <button class="pen" data-act="editPratica" data-id="${esc(p.id)}" title="Editar prática" style="opacity:1">${ico('pen',12)}</button>
+        <button class="pen" data-act="delPratica" data-id="${esc(p.id)}" title="Excluir prática" style="opacity:1;color:var(--danger)">${ico('x',12)}</button>
+      </div>` : ''}
+    </div>`;
+  }).join('') || `<div class="empty" style="padding:26px;border-radius:16px;font-size:13px">Nenhuma prática de mercado registrada${editavel?' — cadastre a primeira abaixo.':'.'}</div>`;
+
+  const form = editavel ? `<div class="q" style="padding:14px 16px;display:flex;flex-direction:column;gap:9px;background:var(--surface)">
+      <input class="inp" id="novaPraticaTit" placeholder="Título da prática…" style="height:36px;font-size:13px;font-weight:600">
+      <textarea class="inp" id="novaPraticaDesc" placeholder="Descrição: como o mercado resolve isso…" style="min-height:88px;height:auto;padding:11px 13px;font-size:13px;line-height:1.65;resize:vertical"></textarea>
+      <div><button class="primary" data-act="addPratica" style="height:36px;padding:0 18px;font-size:12.5px">+ Prática</button></div>
+    </div>` : '';
+
+  return `<div style="display:flex;flex-direction:column;gap:11px">${itens}${form}</div>`;
+}
+
+/* Setores que efetivamente responderam alguma pergunta deste tópico. */
+function setoresQueResponderam(t){
+  const ids = [];
+  (t.perguntas||[]).forEach(p=>(p.respostas||[]).forEach(r=>{
+    if (r.setorId && !ids.includes(r.setorId)) ids.push(r.setorId);
+  }));
+  return ids;
+}
+
+function blocoSetoresEnv(t){
+  const ids = setoresQueResponderam(t);
+  if (!ids.length) return '<div class="empty" style="padding:26px;border-radius:16px;font-size:13px">Nenhum setor respondeu às perguntas deste tópico ainda.</div>';
+  const total = p => (t.perguntas||[]).reduce((n,q)=>n + (q.respostas||[]).filter(r=>r.setorId===p).length, 0);
+  return `<div style="display:flex;flex-direction:column;gap:11px">${ids.map(sid=>{
+    const s = dados.setores.find(x=>x.id===sid) || { id:sid, nome:setorNome(sid) };
+    const c = setorTile(sid);
+    const open = !!ui.openSetEnv[sid];
+    const fs = s.func || [];
+    const nr = total(sid);
+    return `<div class="q">
+      <button class="qhead" data-act="toggleSetEnv" data-id="${esc(sid)}" style="align-items:center;padding:13px 15px">
+        <span class="chevGiro ${open?'on':''}" style="display:inline-flex;color:var(--text-3)">${ico('chev',13,90)}</span>
+        <span class="tile" style="width:30px;height:30px;border-radius:10px;background:${c.bg};color:${c.fg};font-size:12px;flex-shrink:0">${esc((s.nome||'?').charAt(0).toUpperCase())}</span>
+        <span style="flex:1;min-width:0">
+          <span style="display:block;font-size:13.5px;font-weight:700;letter-spacing:-.012em;color:var(--text)">${esc(s.nome)}</span>
+          <span style="display:block;font-size:11.5px;color:var(--text-3);margin-top:2px">${nr} ${nr===1?'resposta':'respostas'} neste tópico · ${fs.length} ${fs.length===1?'pessoa':'pessoas'}</span>
+        </span>
+      </button>
+      ${open ? `<div class="qbody" style="background:var(--surface)">
+        <div>
+          <div class="kicker" style="font-size:10px">Gestor responsável</div>
+          <div style="font-size:13.5px;font-weight:600;color:var(--text);margin-top:5px">${esc(s.coord||'') || vazioTxt('Não informado.')}</div>
+        </div>
+        <div>
+          <div class="kicker" style="font-size:10px">Funcionários</div>
+          <div style="margin-top:7px">${fs.length
+            ? `<div class="tags">${fs.map(x=>`<span class="gitem">${esc(x)}</span>`).join('')}</div>`
+            : vazioTxt('Nenhum funcionário cadastrado.')}</div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;padding-top:2px">
+          <button class="mini" data-act="irSetorCompleto" data-id="${esc(sid)}">Ver ficha completa em Setores ${ico('chev',12)}</button>
+        </div>
+      </div>` : ''}
+    </div>`;
+  }).join('')}</div>`;
+}
+
+/* Visualização geral: os três contextos do tópico, cada um num toggle. */
+function secGeral(k, rot, meta, corpo){
+  const open = k in ui.openGeral ? !!ui.openGeral[k] : (k === 'desc');
+  return `<div class="q">
+    <button class="qhead" data-act="toggleGeral" data-sec="${k}" style="align-items:center;padding:15px 16px">
+      <span class="chevGiro ${open?'on':''}" style="display:inline-flex;color:var(--text-3)">${ico('chev',13,90)}</span>
+      <span style="flex:1;font-size:13.5px;font-weight:700;letter-spacing:-.012em;color:var(--text)">${rot}</span>
+      ${meta ? `<span class="kicker" style="font-size:10px">${esc(meta)}</span>` : ''}
+    </button>
+    ${open ? `<div class="qbody" style="background:var(--surface)">${corpo}</div>` : ''}
+  </div>`;
+}
+
+function blocoGeral(t){
+  const nf = (t.fontes||[]).length;
+  const nq = (t.perguntas||[]).length;
+  const np = (t.praticas||[]).length;
+  const info = `<p class="desc" style="font-size:14px">${esc(t.desc||'Sem descrição.')}</p>
+    ${blocoFonte(t)}
+    <div class="tags">${tagsHtml(t.setores)}</div>`;
+  return `<div style="display:flex;flex-direction:column;gap:11px">
+    ${secGeral('desc','Descrição e fonte', nf>1 ? nf+' fontes' : (nf || t.norm ? esc(t.norm||'1 fonte') : 'sem fonte'), info)}
+    ${secGeral('qa','Perguntas e respostas', nq ? nq+(nq>1?' perguntas':' pergunta') : 'sem perguntas', `<div style="display:flex;flex-direction:column;gap:10px">${blocoQAs(t)}</div>`)}
+    ${secGeral('prat','Práticas de mercado', np ? np+(np>1?' práticas':' prática') : 'sem práticas', blocoPraticas(t, false))}
+  </div>`;
+}
+
+/* Painel de leitura do tópico, usado no foco da guia Mapa: mostra tudo,
+   sem editar nem excluir — essas ações continuam na guia Dimensões. */
+function painelTopico(t){
+  const d = dados.dimensoes.find(x=>x.id===t.dimId);
+  const c = dimTile(t.dimId);
+  const qs = blocoQAs(t);
+  const aba = abaTopico();
 
   return `<article class="card" style="gap:0;padding:0;overflow:hidden">
     <div style="display:flex;align-items:flex-start;gap:14px;padding:22px 24px;border-bottom:1px solid var(--border)">
@@ -1365,15 +1711,20 @@ function painelTopico(t){
       </div>
       ${t.norm ? `<span class="norm">${esc(t.norm)}</span>` : ''}
     </div>
-    <div style="padding:22px 24px;display:flex;flex-direction:column;gap:17px;border-bottom:1px solid var(--border)">
-      <p class="desc" style="font-size:14.5px">${esc(t.desc||'Sem descrição.')}</p>
-      ${blocoFonte(t)}
-      <div class="tags">${tagsHtml(t.setores)}</div>
-    </div>
-    <div style="padding:20px 24px 24px;display:flex;flex-direction:column;gap:11px">
-      <div class="kicker" style="font-size:10.5px">Roteiro de perguntas e respostas</div>
-      ${qs}
-    </div>
+    ${abasTopico(t)}
+    ${aba === 'roteiro'
+      ? `<div class="tabPane" style="padding:20px 24px 24px;display:flex;flex-direction:column;gap:11px">${qs}</div>`
+      : aba === 'praticas'
+      ? `<div class="tabPane" style="padding:20px 24px 24px">${blocoPraticas(t, false)}</div>`
+      : aba === 'setores'
+      ? `<div class="tabPane" style="padding:20px 24px 24px">${blocoSetoresEnv(t)}</div>`
+      : aba === 'geral'
+      ? `<div class="tabPane" style="padding:20px 24px 24px">${blocoGeral(t)}</div>`
+      : `<div class="tabPane" style="padding:22px 24px 24px;display:flex;flex-direction:column;gap:17px">
+          <p class="desc" style="font-size:14.5px">${esc(t.desc||'Sem descrição.')}</p>
+          ${blocoFonte(t)}
+          <div class="tags">${tagsHtml(t.setores)}</div>
+        </div>`}
   </article>`;
 }
 
@@ -1414,18 +1765,25 @@ function renderFoco(){
 /* ------------------------------------------------------------------ modais */
 /* Recria o HTML dos modais preservando a rolagem — sem isso, adicionar uma
    pergunta ou resposta joga a modal de volta ao topo e parece que ela fechou. */
+let modaisAbertos = [];
 function renderModais(){
   const cont = $('#modais');
   const antes = [...cont.querySelectorAll('.overlay')].map(o=>o.scrollTop);
 
-  const parts = [];
-  if (ui.activeTopicId) parts.push(modalTopico());
-  if (ui.topicForm)     parts.push(modalTopicForm());
-  if (ui.setorForm)     parts.push(modalSetorForm());
-  if (ui.dadosModal)    parts.push(modalDados());
+  const parts = [], keys = [];
+  if (ui.activeTopicId){ parts.push(modalTopico()); keys.push('topico'); }
+  if (ui.topicForm)   { parts.push(modalTopicForm()); keys.push('topicForm'); }
+  if (ui.setorForm)   { parts.push(modalSetorForm()); keys.push('setorForm'); }
+  if (ui.cfg)         { parts.push(modalConfig()); keys.push('cfg'); }
+  if (ui.dadosModal)  { parts.push(modalDados()); keys.push('dados'); }
   cont.innerHTML = parts.join('');
 
-  cont.querySelectorAll('.overlay').forEach((o,i)=>{ if (antes[i]) o.scrollTop = antes[i]; });
+  // a animação de entrada só vale para modal que acabou de abrir
+  cont.querySelectorAll('.overlay').forEach((o,i)=>{
+    if (modaisAbertos.includes(keys[i])) o.classList.add('noanim');
+    if (antes[i]) o.scrollTop = antes[i];
+  });
+  modaisAbertos = keys;
 }
 
 function focar(sel){
@@ -1438,6 +1796,7 @@ function modalTopico(){
   if (!t){ ui.activeTopicId = null; return ''; }
   const d = dados.dimensoes.find(x=>x.id===t.dimId);
   const c = dimTile(t.dimId);
+  const aba = abaTopico();
   const opts = dados.setores.map(s=>`<option value="${esc(s.id)}">${esc(s.nome)}</option>`).join('');
 
   const qs = (t.perguntas||[]).map((p,i)=>{
@@ -1509,73 +1868,129 @@ function modalTopico(){
           <button class="x" data-act="closeTopic" title="Fechar">${ico('x',13)}</button>
         </div>
       </div>
-      <div style="padding:24px 26px 10px;display:flex;flex-direction:column;gap:18px">
-        <p class="desc">${esc(t.desc||'Sem descrição.')}</p>
-        ${blocoFonte(t)}
-        <div class="tags">${tagsHtml(t.setores)}</div>
-      </div>
-      <div style="padding:22px 26px 26px">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:10px">
-          <div class="kicker" style="font-size:10.5px">Roteiro de perguntas</div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:10px">${qs}</div>
-        <div class="ansrow" style="margin-top:12px">
-          <input class="inp" id="novaPergunta" placeholder="Nova pergunta…" style="flex:1;min-width:200px;height:36px;font-size:13px">
-          <button class="primary" data-act="addQ" style="height:36px;padding:0 18px;font-size:12.5px">+ Pergunta</button>
-        </div>
-      </div>
+      ${abasTopico(t)}
+      ${aba === 'roteiro'
+        ? `<div class="tabPane" style="padding:22px 26px 26px">
+            <div style="display:flex;flex-direction:column;gap:10px">${qs}</div>
+            <div class="ansrow" style="margin-top:12px">
+              <input class="inp" id="novaPergunta" placeholder="Nova pergunta…" style="flex:1;min-width:200px;height:36px;font-size:13px">
+              <button class="primary" data-act="addQ" style="height:36px;padding:0 18px;font-size:12.5px">+ Pergunta</button>
+            </div>
+          </div>`
+        : aba === 'praticas'
+        ? `<div class="tabPane" style="padding:22px 26px 26px">${blocoPraticas(t, true)}</div>`
+        : aba === 'setores'
+        ? `<div class="tabPane" style="padding:22px 26px 26px">${blocoSetoresEnv(t)}</div>`
+        : aba === 'geral'
+        ? `<div class="tabPane" style="padding:22px 26px 26px">${blocoGeral(t)}</div>`
+        : `<div class="tabPane" style="padding:24px 26px 26px;display:flex;flex-direction:column;gap:18px">
+            <p class="desc">${esc(t.desc||'Sem descrição.')}</p>
+            ${blocoFonte(t)}
+            <div class="tags">${tagsHtml(t.setores)}</div>
+          </div>`}
     </div>
   </div>`;
 }
+
+/* seta entre passos da trilha */
+function setaPasso(){
+  return '<span class="stepSep"><svg viewBox="0 0 48 12" fill="none" stroke="currentColor" stroke-width="1.6" '
+    + 'stroke-linecap="round" stroke-linejoin="round" preserveAspectRatio="none" aria-hidden="true">'
+    + '<path d="M0 6h42M38 2.5 42 6l-4 3.5"/></svg></span>';
+}
+/* trilha numerada: cada passo é clicável, o atual fica em destaque */
+function trilha(passos, atual, acao){
+  return '<div class="steps">' + passos.map((p,i)=>
+    `<button class="step ${i===atual?'on':(i<atual?'done':'')}" data-act="${acao}" data-step="${i}">
+        <span class="stepN">${String(i+1).padStart(2,'0')}</span>${esc(p)}
+      </button>` + (i < passos.length-1 ? setaPasso() : '')
+  ).join('') + '</div>';
+}
+/* rodapé: voltar/cancelar à esquerda, ação principal larga à direita */
+function rodapePassos(cfg){
+  const ultimo = cfg.passo >= cfg.total - 1;
+  return `<div class="mfoot">
+    <button class="ghost" data-act="${cfg.passo === 0 ? cfg.fechar : cfg.voltar}">${cfg.passo === 0 ? 'Cancelar' : 'Voltar'}</button>
+    <button class="primary" data-act="${ultimo ? cfg.salvar : cfg.avancar}">${ultimo ? cfg.rotuloSalvar : 'Próximo passo'} 
+      ${ultimo ? '' : ico('chev',14)}</button>
+  </div>`;
+}
+
+const PASSOS_TOPICO = ['Identificação','Fontes','Setores','Descrição'];
 
 function modalTopicForm(){
   const f = ui.topicForm;
+  const passo = Math.min(f.step || 0, PASSOS_TOPICO.length - 1);
   const dimOpts = dados.dimensoes.map(d=>
     `<option value="${esc(d.id)}" ${d.id===f.dimId?'selected':''}>${esc(d.id)} — ${esc(d.nome)}</option>`).join('');
+
+  let corpo;
+  if (passo === 0){
+    corpo = `<div class="fgroup">
+        <label class="f" for="fTopNome">Nome do tópico <span class="obrig">*</span></label>
+        <input class="inp" id="fTopNome" value="${esc(f.nome)}" placeholder="Ex: Qualidade dos dados">
+        <span class="dica">Um nome curto e claro, como ele aparece na lista da dimensão.</span>
+      </div>
+      <div class="fgroup">
+        <label class="f" for="fTopNorm">Normativo</label>
+        <input class="inp" id="fTopNorm" value="${esc(f.norm)}" placeholder="Ex: MP0123">
+        <span class="dica">Código do documento oficial de onde o tópico vem.</span>
+      </div>
+      <div class="fgroup">
+        <label class="f" for="fTopDim">Dimensão</label>
+        <select class="inp" id="fTopDim">${dimOpts}</select>
+        <span class="dica">Dimensão de qualidade da informação a que este tópico pertence.</span>
+      </div>`;
+  } else if (passo === 1){
+    corpo = `<div class="fgroup">
+        <label class="f">Fontes oficiais no normativo</label>
+        ${f.fontes.map((x,i)=>`<div class="fonteForm">
+          <div class="row3">
+            <label class="f" style="gap:5px">${i===0?'<span class="fonteRot">Página</span>':''}
+              <input class="inp" id="fF${i}p" value="${esc(x.pag)}" placeholder="Ex: 12"></label>
+            <label class="f" style="gap:5px">${i===0?'<span class="fonteRot">Seção</span>':''}
+              <input class="inp" id="fF${i}s" value="${esc(x.sec)}" placeholder="Ex: 4.2"></label>
+            <label class="f" style="gap:5px">${i===0?'<span class="fonteRot">Título da seção</span>':''}
+              <input class="inp" id="fF${i}t" value="${esc(x.tit)}" placeholder="Ex: Divulgação de informações"></label>
+          </div>
+          <button class="pen" data-act="delFonte" data-i="${i}" title="Remover esta fonte" style="opacity:1;height:38px;width:32px;border-radius:11px">${ico('x',11)}</button>
+        </div>`).join('')}
+        <div><button class="mini" data-act="addFonte">+ Adicionar fonte</button></div>
+        <span class="dica">Uma linha por página/seção do normativo. Todas aparecem ao ler o tópico.</span>
+      </div>`;
+  } else if (passo === 2){
+    corpo = `<div class="fgroup">
+        <label class="f">Setores envolvidos</label>
+        <div class="tags" id="chipsSetores">${chipsHtml(f.setores)}</div>
+        <span class="dica">Clique para marcar os setores que respondem por este tópico.</span>
+      </div>`;
+  } else {
+    corpo = `<div class="fgroup">
+        <label class="f" for="fTopDesc">Descrição</label>
+        <textarea class="inp" id="fTopDesc" placeholder="Descreva o tópico…">${esc(f.desc)}</textarea>
+        <span class="dica">O texto que abre a aba “Descrição e fonte” do tópico.</span>
+      </div>`;
+  }
+
   return `<div class="overlay" style="z-index:300" data-act="closeTopicForm">
-    <div class="modal sm" data-stop>
-      <div class="mhead" style="align-items:center;justify-content:space-between">
-        <h2 style="font-size:19px;font-weight:800;letter-spacing:-.02em">${esc(f.title)}</h2>
-        <button class="x" data-act="closeTopicForm" title="Fechar">${ico('x',13)}</button>
-      </div>
-      <div style="padding:22px 26px;display:flex;flex-direction:column;gap:16px">
-        <div class="row2">
-          <label class="f">Nome do tópico
-            <input class="inp" id="fTopNome" value="${esc(f.nome)}" placeholder="Ex: Qualidade dos dados"></label>
-          <label class="f">Normativo
-            <input class="inp" id="fTopNorm" value="${esc(f.norm)}" placeholder="MP0123"></label>
+    <div class="modal sm form" data-stop>
+      <div class="mhead big">
+        <div class="mheadTop">
+          <span class="mIco">${ico(f.id?'pen':'mais',17)}</span>
+          <h2 style="font-size:19px;font-weight:800;letter-spacing:-.02em;flex:1">${esc(f.title)}</h2>
+          <button class="x" data-act="closeTopicForm" title="Fechar">${ico('x',13)}</button>
         </div>
-        <label class="f">Dimensão
-          <select class="inp" id="fTopDim">${dimOpts}</select></label>
-        <div class="f">Fontes oficiais no normativo
-          ${f.fontes.map((x,i)=>`<div class="fonteForm">
-            <div class="row3">
-              <label class="f" style="gap:5px">${i===0?'<span class="fonteRot">Página</span>':''}
-                <input class="inp" id="fF${i}p" value="${esc(x.pag)}" placeholder="Ex: 12"></label>
-              <label class="f" style="gap:5px">${i===0?'<span class="fonteRot">Seção</span>':''}
-                <input class="inp" id="fF${i}s" value="${esc(x.sec)}" placeholder="Ex: 4.2"></label>
-              <label class="f" style="gap:5px">${i===0?'<span class="fonteRot">Título da seção</span>':''}
-                <input class="inp" id="fF${i}t" value="${esc(x.tit)}" placeholder="Ex: Divulgação de informações"></label>
-            </div>
-            <button class="pen" data-act="delFonte" data-i="${i}" title="Remover esta fonte" style="opacity:1;height:38px;width:32px;border-radius:11px">${ico('x',11)}</button>
-          </div>`).join('')}
-          <div><button class="mini" data-act="addFonte">+ Adicionar fonte</button></div>
-          <span class="dica">Uma linha por página/seção do normativo. Todas aparecem ao ler o tópico.</span>
-        </div>
-        <div class="f">Setores envolvidos
-          <div class="tags" id="chipsSetores">${chipsHtml(f.setores)}</div>
-        </div>
-        <label class="f">Descrição
-          <textarea class="inp" id="fTopDesc" placeholder="Descreva o tópico…">${esc(f.desc)}</textarea></label>
+        <p class="msub">Tópico temático de uma dimensão: identificação, fontes no normativo, setores e descrição.</p>
       </div>
-      <div class="mfoot">
-        <button class="ghost" data-act="closeTopicForm" style="background:var(--surface)">Cancelar</button>
-        <button class="primary" data-act="saveTopic">Salvar</button>
+      ${trilha(PASSOS_TOPICO, passo, 'topicStep')}
+      <div class="mbody">
+        <div class="fcard">${corpo}</div>
       </div>
+      ${rodapePassos({ passo, total:PASSOS_TOPICO.length, fechar:'closeTopicForm', voltar:'topicVoltar',
+                        avancar:'topicAvancar', salvar:'saveTopic', rotuloSalvar:'Salvar tópico' })}
     </div>
   </div>`;
 }
-
 function chipsRelHtml(selfId, sel){
   const outros = dados.setores.filter(s=>s.id!==selfId);
   if (!outros.length) return '<span style="font-size:12px;color:var(--text-3)">Nenhum outro setor cadastrado.</span>';
@@ -1589,12 +2004,37 @@ function chipsRelHtml(selfId, sel){
 
 /* guarda o que já foi digitado nas linhas de fonte antes de recriar a modal */
 function capturaFontes(){
-  const f = ui.topicForm; if (!f) return;
+  const f = ui.topicForm; if (!f || !$('#fF0p')) return;
   f.fontes = (f.fontes||[]).map((x,i)=>({
-    pag: (($('#fF'+i+'p')||{}).value || '').trim(),
-    sec: (($('#fF'+i+'s')||{}).value || '').trim(),
-    tit: (($('#fF'+i+'t')||{}).value || '').trim()
+    pag: (($('#fF'+i+'p')||{ value:x.pag }).value || '').trim(),
+    sec: (($('#fF'+i+'s')||{ value:x.sec }).value || '').trim(),
+    tit: (($('#fF'+i+'t')||{ value:x.tit }).value || '').trim()
   }));
+}
+
+/* passos: o que está fora da tela vive no estado, então cada troca de passo
+   grava antes o que estiver visível */
+function capturaTopicForm(){
+  const f = ui.topicForm; if (!f) return;
+  const v = sel => { const el = $(sel); return el ? el.value : null; };
+  const n = v('#fTopNome'); if (n !== null) f.nome = n;
+  const nm = v('#fTopNorm'); if (nm !== null) f.norm = nm;
+  const dm = v('#fTopDim');  if (dm !== null) f.dimId = dm;
+  const ds = v('#fTopDesc'); if (ds !== null) f.desc = ds;
+  capturaFontes();
+}
+function capturaSetorForm(){
+  const f = ui.setorForm; if (!f) return;
+  const v = sel => { const el = $(sel); return el ? el.value : null; };
+  const n = v('#fSetNome');  if (n !== null) f.nome = n;
+  const c = v('#fSetCoord'); if (c !== null) f.coord = c;
+  if (typeof commitPendentes === 'function') commitPendentes();
+}
+function vaiPasso(alvo, chave, total){
+  const f = ui[chave]; if (!f) return;
+  (chave === 'topicForm' ? capturaTopicForm : capturaSetorForm)();
+  f.step = Math.max(0, Math.min(alvo, total - 1));
+  renderModais();
 }
 
 function chipsHtml(sel){
@@ -1606,40 +2046,234 @@ function chipsHtml(sel){
   }).join('');
 }
 
+const PASSOS_SETOR = ['Identificação','Equipe','Sistemas','Relações'];
+
 function modalSetorForm(){
   const f = ui.setorForm;
-  return `<div class="overlay" style="z-index:300" data-act="closeSetorForm">
-    <div class="modal sm" data-stop>
-      <div class="mhead" style="align-items:center;justify-content:space-between">
-        <h2 style="font-size:19px;font-weight:800;letter-spacing:-.02em">${esc(f.title)}</h2>
-        <button class="x" data-act="closeSetorForm" title="Fechar">${ico('x',13)}</button>
+  const passo = Math.min(f.step || 0, PASSOS_SETOR.length - 1);
+
+  let corpo;
+  if (passo === 0){
+    corpo = `<div class="fgroup">
+        <label class="f" for="fSetNome">Nome do setor <span class="obrig">*</span></label>
+        <input class="inp" id="fSetNome" value="${esc(f.nome)}" placeholder="Ex: TI">
+        <span class="dica">Como o setor é chamado no dia a dia da organização.</span>
       </div>
-      <div style="padding:22px 26px;display:flex;flex-direction:column;gap:16px">
-        <div class="row2e">
-          <label class="f">Nome do setor<input class="inp" id="fSetNome" value="${esc(f.nome)}" placeholder="Ex: TI"></label>
-          <label class="f">Coordenador(a)<input class="inp" id="fSetCoord" value="${esc(f.coord)}" placeholder="Nome"></label>
-        </div>
-        <div class="f">Funcionários (separe por vírgula)${tagBox('form:func','Ex: Dev 1, Dev 2, DBA')}</div>
-        <div class="f">Responsabilidades (separe por vírgula)${tagBox('form:resp','Ex: Infraestrutura, Suporte técnico')}</div>
-        <div class="f">Sistemas (separe por vírgula)${tagBox('form:sist','Ex: SAP, Protheus')}</div>
-        <div class="f">Mainframe (separe por vírgula)${tagBox('form:main','Ex: AS/400')}</div>
-        <div class="f">Ferramentas (separe por vírgula)${tagBox('form:tools','Ex: JIRA, GitHub, AWS')}</div>
+      <div class="fgroup">
+        <label class="f" for="fSetCoord">Coordenador(a)</label>
+        <input class="inp" id="fSetCoord" value="${esc(f.coord)}" placeholder="Nome de quem coordena">
+        <span class="dica">Pessoa responsável por responder pelo setor.</span>
+      </div>`;
+  } else if (passo === 1){
+    corpo = `<div class="fgroup">
+        <label class="f">Funcionários</label>
+        ${tagBox('form:func','Ex: Dev 1, Dev 2, DBA')}
         <span class="dica">Digite e use vírgula (ou Enter) para criar cada etiqueta.</span>
-        <div class="f">Setores relacionados
-          <div class="tags" id="chipsRel">${chipsRelHtml(f.id, f.rel)}</div>
+      </div>
+      <div class="fgroup">
+        <label class="f">Responsabilidades</label>
+        ${tagBox('form:resp','Ex: Infraestrutura, Suporte técnico')}
+        <span class="dica">O que este setor entrega ou controla.</span>
+      </div>`;
+  } else if (passo === 2){
+    corpo = `<div class="fgroup">
+        <label class="f">Sistemas</label>
+        ${tagBox('form:sist','Ex: SAP, Protheus')}
+      </div>
+      <div class="fgroup">
+        <label class="f">Mainframe</label>
+        ${tagBox('form:main','Ex: AS/400')}
+      </div>
+      <div class="fgroup">
+        <label class="f">Ferramentas</label>
+        ${tagBox('form:tools','Ex: JIRA, GitHub, AWS')}
+        <span class="dica">Uma etiqueta por sistema ou ferramenta usada pelo setor.</span>
+      </div>`;
+  } else {
+    corpo = `<div class="fgroup">
+        <label class="f">Setores relacionados</label>
+        <div class="tags" id="chipsRel">${chipsRelHtml(f.id, f.rel)}</div>
+        <span class="dica">Setores com quem este troca informação com frequência.</span>
+      </div>
+      ${f.id ? `<div class="fgroup">
+        <span class="f" style="flex-direction:row;align-items:center;gap:8px">Tópicos Temáticos e Dimensões <span class="autoSelo">automático</span></span>
+        <span class="note">Preenchidos sozinhos: marque este setor no formulário de um tópico e a dimensão desse tópico entra aqui.</span>
+      </div>` : ''}
+      ${f.id ? '<div><button class="mini danger" data-act="delSetor">Excluir setor</button></div>' : ''}`;
+  }
+
+  return `<div class="overlay" style="z-index:300" data-act="closeSetorForm">
+    <div class="modal sm form" data-stop>
+      <div class="mhead big">
+        <div class="mheadTop">
+          <span class="mIco">${ico(f.id?'pen':'mais',17)}</span>
+          <h2 style="font-size:19px;font-weight:800;letter-spacing:-.02em;flex:1">${esc(f.title)}</h2>
+          <button class="x" data-act="closeSetorForm" title="Fechar">${ico('x',13)}</button>
         </div>
-        ${f.id ? `<div class="f" style="gap:8px">
-          <span>Tópicos Temáticos e Dimensões <span class="autoSelo">automático</span></span>
-          <span class="note">Preenchidos sozinhos: marque este setor no formulário de um tópico e a dimensão desse tópico entra aqui.</span>
-        </div>` : ''}
+        <p class="msub">Quem é o setor, quem trabalha nele e com quais sistemas e ferramentas ele opera.</p>
       </div>
-      <div class="mfoot">
-        ${f.id ? '<button class="ghost" data-act="delSetor" style="margin-right:auto;background:var(--surface);color:var(--danger)">Excluir setor</button>' : ''}
-        <button class="ghost" data-act="closeSetorForm" style="background:var(--surface)">Cancelar</button>
-        <button class="primary" data-act="saveSetor">Salvar</button>
+      ${trilha(PASSOS_SETOR, passo, 'setorStep')}
+      <div class="mbody">
+        <div class="fcard">${corpo}</div>
       </div>
+      ${rodapePassos({ passo, total:PASSOS_SETOR.length, fechar:'closeSetorForm', voltar:'setorVoltar',
+                        avancar:'setorAvancar', salvar:'saveSetor', rotuloSalvar:'Salvar setor' })}
     </div>
   </div>`;
+}
+/* --------------------------------------------------------- configurações */
+const CFG_ESC = [
+  { k:'setores',   rot:'Setores',       hint:'Remove o setor, suas respostas nos tópicos e os processos derivados delas.' },
+  { k:'topicos',   rot:'Tópicos',       hint:'Remove o tópico inteiro: perguntas, respostas, práticas e processos.' },
+  { k:'processos', rot:'Processos',     hint:'Apaga narrativa e recursos preenchidos. As respostas de origem permanecem.' },
+  { k:'tudo',      rot:'Excluir TUDO',  hint:'Zera dimensões, setores, tópicos, práticas e processos deste arquivo.' }
+];
+const CFG_TABS = ['dados','json','excluir'];
+
+function cfgItens(esc_){
+  if (esc_ === 'setores')   return dados.setores.map(s=>({ id:s.id, rot:s.nome || s.id,
+    meta:`${(s.func||[]).length} pessoas · ${topicosDoSetor(s.id).length} tópicos` }));
+  if (esc_ === 'topicos')   return dados.topicos.map(t=>({ id:t.id, rot:t.nome || t.id,
+    meta:`Dimensão ${t.dimId} · ${(t.perguntas||[]).length} perguntas` }));
+  if (esc_ === 'processos') return listaProcessos().filter(p=>p.extra).map(p=>({ id:p.respId,
+    rot:(p.extra.titulo||'').trim() || p.pergunta.texto, meta:`${setorNome(p.setorId)} · ${p.topico.nome}` }));
+  return [];
+}
+
+function cfgLinhaSel(it, marcado){
+  return `<button data-act="cfgSel" data-id="${esc(it.id)}" style="display:flex;align-items:center;gap:11px;width:100%;text-align:left;padding:10px 12px;border-radius:11px;border:1px solid ${marcado?'var(--danger)':'var(--border)'};background:var(--surface);color:inherit">
+    <span style="width:17px;height:17px;flex-shrink:0;border-radius:5px;border:1.6px solid ${marcado?'var(--danger)':'var(--border-2)'};background:${marcado?'var(--danger)':'transparent'};display:inline-flex;align-items:center;justify-content:center;color:#fff">${marcado?ico('chev',10):''}</span>
+    <span style="flex:1;min-width:0">
+      <span style="display:block;font-size:13px;font-weight:600;color:var(--text)">${esc(it.rot)}</span>
+      <span style="display:block;font-size:11.5px;color:var(--text-3);margin-top:2px">${esc(it.meta)}</span>
+    </span>
+  </button>`;
+}
+
+function modalConfig(){
+  const c = ui.cfg;
+  const tab = CFG_TABS.includes(c.tab) ? c.tab : 'dados';
+  let bk = [];
+  try { bk = JSON.parse(localStorage.getItem(LS_BACKUPS) || '[]'); } catch(e){}
+
+  const abas = `<div class="tabsIn">${[
+    ['dados','db','Dados e memória'],['json','code','Editor do JSON'],['excluir','lixo','Excluir dados']
+  ].map(([k,i,r])=>`<button class="tabIn ${tab===k?'on':''}" data-act="cfgTab" data-tab="${k}">${ico(i,15)} ${r}</button>`).join('')}</div>`;
+
+  let corpo = '';
+  if (tab === 'dados'){
+    const est = fileHandle && filePerm !== 'granted'
+      ? `<p class="note" style="color:var(--warn)">O <span class="mono">dados.json</span> está conectado, mas o navegador exige um clique para reautorizar a gravação nesta sessão.</p>
+         <div><button class="primary" data-act="reautorizar">Reautorizar gravação</button></div>`
+      : fileHandle
+      ? `<p class="note">Arquivo conectado — toda alteração é gravada no <span class="mono">dados.json</span>${fileSynced?' (em dia).':' — gravação pendente.'}</p>`
+      : `<p class="note">As alterações estão salvas apenas <b>na memória do navegador</b>. Conecte o <span class="mono">dados.json</span> para gravar também em disco a cada mudança.</p>`;
+    const bkHtml = bk.map((b,i)=>`<div style="display:flex;align-items:center;gap:10px;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
+        <span style="font-size:12.5px;color:var(--text-2)">${new Date(b.em).toLocaleString('pt-BR')}</span>
+        <button class="mini" data-act="restore" data-i="${i}">Restaurar</button>
+      </div>`).join('') || '<div style="font-size:12.5px;color:var(--text-3)">Nenhum backup ainda.</div>';
+    corpo = `<div class="fcard" style="gap:18px">
+      ${est}
+      <div class="tags">
+        <button class="primary" data-act="conectar">Conectar dados.json</button>
+        <button class="ghost" data-act="importar" style="background:var(--surface)">Importar JSON</button>
+        <button class="ghost" data-act="criarArquivo" style="background:var(--surface)">Criar novo arquivo</button>
+        <button class="ghost" data-act="baixar" style="background:var(--surface)">Baixar dados.json</button>
+      </div>
+      <div>
+        <div class="kicker" style="margin-bottom:8px">Backups automáticos (últimos ${MAX_BACKUPS})</div>
+        ${bkHtml}
+      </div>
+      <div>
+        <div class="kicker" style="margin-bottom:8px">Memória do navegador</div>
+        <span class="dica">Apaga a cópia local (localStorage) sem tocar no arquivo em disco.</span>
+        <div style="margin-top:9px"><button class="ghost" data-act="limpar" style="background:var(--surface);color:var(--danger)">Apagar dados do navegador</button></div>
+      </div>
+    </div>`;
+  } else if (tab === 'json'){
+    const txt = c.json != null ? c.json : JSON.stringify(dados, null, 2);
+    corpo = `<div class="fcard" style="gap:12px">
+      <div>
+        <label class="f" for="cfgJson">JSON completo</label>
+        <span class="dica">Edite vários registros de uma vez e aplique tudo junto. O conteúdo é validado antes de substituir os dados.</span>
+      </div>
+      <textarea class="inp mono" id="cfgJson" spellcheck="false" style="min-height:340px;height:auto;padding:13px 14px;font-size:12.5px;line-height:1.6;resize:vertical;white-space:pre;overflow-wrap:normal;overflow-x:auto">${esc(txt)}</textarea>
+      ${c.jsonErr ? `<div class="note" style="color:var(--danger)">${esc(c.jsonErr)}</div>` : ''}
+      <div class="tags">
+        <button class="primary" data-act="cfgJsonAplicar">Aplicar alterações</button>
+        <button class="ghost" data-act="cfgJsonFormatar" style="background:var(--surface)">Formatar</button>
+        <button class="ghost" data-act="cfgJsonReverter" style="background:var(--surface)">Descartar edições</button>
+      </div>
+    </div>`;
+  } else {
+    const escopo = c.escopo || 'setores';
+    const tudo = escopo === 'tudo';
+    const modo = tudo ? 'todos' : (c.modo || 'todos');
+    const itens = tudo ? [] : cfgItens(escopo);
+    const sel = c.sel || {};
+    const nsel = itens.filter(i=>sel[i.id]).length;
+    const info = (CFG_ESC.find(x=>x.k===escopo)||{}).hint || '';
+    const lista = tudo ? '' : (modo === 'alguns'
+      ? `<div style="display:flex;flex-direction:column;gap:7px;max-height:260px;overflow:auto;padding-right:2px">
+          ${itens.map(i=>cfgLinhaSel(i, !!sel[i.id])).join('') || vazioTxt('Nada cadastrado neste escopo.')}
+        </div>`
+      : `<div class="note">Serão excluídos <b>${itens.length}</b> registros — tudo o que existe neste escopo.</div>`);
+
+    const podeIr = tudo ? (c.ok1 && (c.palavra||'').trim().toUpperCase() === 'EXCLUIR TUDO')
+                        : (c.ok1 && (modo === 'todos' ? itens.length : nsel));
+    corpo = `<div class="fcard" style="gap:16px">
+      <div>
+        <div class="kicker" style="margin-bottom:9px">1. O que excluir</div>
+        <div class="tags">${CFG_ESC.map(e=>`<button class="mini ${e.k==='tudo'?'danger':''}" data-act="cfgEscopo" data-k="${e.k}"
+          style="${escopo===e.k?`border-color:var(--danger);color:var(--danger);background:var(--surface)`:''}">${e.rot}</button>`).join('')}</div>
+        <span class="dica" style="display:block;margin-top:9px">${info}</span>
+      </div>
+      ${tudo ? '' : `<div>
+        <div class="kicker" style="margin-bottom:9px">2. Quanto excluir</div>
+        <div class="tags">
+          <button class="mini" data-act="cfgModo" data-k="todos" style="${modo==='todos'?'border-color:var(--danger);color:var(--danger)':''}">Todos</button>
+          <button class="mini" data-act="cfgModo" data-k="alguns" style="${modo==='alguns'?'border-color:var(--danger);color:var(--danger)':''}">Escolher alguns${nsel?` (${nsel})`:''}</button>
+        </div>
+        <div style="margin-top:11px">${lista}</div>
+      </div>`}
+      <div>
+        <div class="kicker" style="margin-bottom:9px">${tudo?'2':'3'}. Confirmação dupla</div>
+        ${cfgLinhaSel({ id:'__ok', rot:'Entendo que a exclusão é definitiva', meta:'Sem desfazer — só um backup pode recuperar.' }, !!c.ok1).replace('data-act="cfgSel" data-id="__ok"','data-act="cfgOk1"')}
+        ${tudo ? `<div style="margin-top:11px">
+          <label class="f" for="cfgPalavra">Digite <span class="mono">EXCLUIR TUDO</span> para liberar o botão</label>
+          <input class="inp mono" id="cfgPalavra" value="${esc(c.palavra||'')}" placeholder="EXCLUIR TUDO" style="margin-top:8px">
+        </div>` : ''}
+      </div>
+      <div style="display:flex;justify-content:flex-end;border-top:1px solid var(--border);padding-top:14px">
+        <button class="primary" data-act="cfgExcluir" ${podeIr?'':'disabled'}
+          style="background:var(--danger);border-color:var(--danger);${podeIr?'':'opacity:.45;pointer-events:none'}">
+          ${tudo ? 'Excluir tudo definitivamente' : 'Excluir selecionados'}
+        </button>
+      </div>
+    </div>`;
+  }
+
+  return `<div class="overlay" style="z-index:390" data-act="closeCfg">
+    <div class="modal" data-stop>
+      <div class="mhead big">
+        <div class="mheadTop">
+          <span class="mIco">${ico('engr',17)}</span>
+          <h2 style="font-size:19px;font-weight:800;letter-spacing:-.02em;flex:1">Configurações</h2>
+          <button class="x" data-act="closeCfg" title="Fechar">${ico('x',13)}</button>
+        </div>
+        <p class="msub">Armazenamento, edição em massa do JSON e exclusão controlada de dados.</p>
+      </div>
+      ${abas}
+      <div class="mbody tabPane">${corpo}</div>
+    </div>
+  </div>`;
+}
+
+/* Guarda o que est\u00e1 digitado nos campos das configura\u00e7\u00f5es antes de re-renderizar. */
+function capturaCfg(){
+  if (!ui.cfg) return;
+  const ta = $('#cfgJson');   if (ta) ui.cfg.json = ta.value;
+  const pw = $('#cfgPalavra'); if (pw) ui.cfg.palavra = pw.value;
 }
 
 function modalDados(){
@@ -1669,11 +2303,16 @@ function modalDados(){
 
   return `<div class="overlay" style="z-index:400" ${vazio?'':'data-act="closeDados"'}>
     <div class="modal sm" data-stop>
-      <div class="mhead" style="align-items:center;justify-content:space-between">
-        <h2 style="font-size:19px;font-weight:800;letter-spacing:-.02em">${vazio?'Carregar dados':'Dados e backup'}</h2>
-        ${vazio?'':'<button class="x" data-act="closeDados" title="Fechar">'+ico('x',13)+'</button>'}
+      <div class="mhead big">
+        <div class="mheadTop">
+          <span class="mIco">${ico('caixa',17)}</span>
+          <h2 style="font-size:19px;font-weight:800;letter-spacing:-.02em;flex:1">${vazio?'Carregar dados':'Dados e backup'}</h2>
+          ${vazio?'':'<button class="x" data-act="closeDados" title="Fechar">'+ico('x',13)+'</button>'}
+        </div>
+        <p class="msub">Conecte o arquivo <span class="mono">dados.json</span> para que tudo seja gravado sozinho a cada alteração.</p>
       </div>
-      <div style="padding:22px 26px;display:flex;flex-direction:column;gap:18px">
+      <div class="mbody">
+       <div class="fcard" style="gap:18px">
         ${estado}${fsWarn}
         <div class="tags">
           <button class="primary" data-act="conectar">Conectar dados.json</button>
@@ -1689,6 +2328,7 @@ function modalDados(){
           <div class="kicker" style="margin-bottom:8px">Zona de risco</div>
           <button class="ghost" data-act="limpar" style="background:var(--surface);color:var(--danger)">Apagar dados do navegador</button>
         </div>`}
+       </div>
       </div>
     </div>
   </div>`;
@@ -1707,6 +2347,80 @@ document.addEventListener('click', ev => {
   const A = {
     goDim:  ()=>{ ui.page='dimensoes'; ui.openDimId=null; ui.activeTopicId=null; renderAll(); },
     goSet:  ()=>{ ui.page='setores'; ui.openDimId=null; ui.activeTopicId=null; renderAll(); },
+    goTop:  ()=>{ ui.page='topicos'; ui.openDimId=null; ui.activeTopicId=null; renderAll(); },
+    agruparTop:()=>{ ui.grupoTop = btn.dataset.modo; renderMain(); },
+    sincronizar: async ()=>{
+      if (!fileHandle){ toast('Nenhum dados.json conectado — conecte em Configurações'); return; }
+      try {
+        filePerm = await fileHandle.queryPermission({ mode:'readwrite' });
+        if (filePerm !== 'granted') filePerm = await fileHandle.requestPermission({ mode:'readwrite' });
+        if (filePerm !== 'granted'){ toast('Permissão de gravação negada'); renderStatus(); return; }
+        const inc  = JSON.parse(await (await fileHandle.getFile()).text());
+        const incT = Date.parse((inc && inc.atualizadoEm) || 0) || 0;
+        const locT = Date.parse(dados.atualizadoEm || 0) || 0;
+        if (incT > locT && Array.isArray(inc.dimensoes)){
+          const ok = await pedeConfirma({ titulo:'O arquivo está mais novo',
+            texto:'O dados.json em disco foi alterado depois desta aba. Carregar a versão do arquivo? O que estiver só aqui será substituído.',
+            rotulo:'Carregar do arquivo' });
+          if (ok){
+            dados = normalize(inc);
+            ui.openDimId=null; ui.activeTopicId=null; ui.foco=null;
+            applyTheme(); saveLocal(); fileSynced = true; renderAll();
+            toast('Dados carregados do dados.json'); return;
+          }
+        }
+        clearTimeout(writeTimer);
+        await writeToDisk();
+        toast(fileSynced ? 'Sincronizado com o dados.json' : 'Não foi possível gravar o arquivo');
+      } catch(e){ console.error(e); toast('Não foi possível sincronizar'); }
+    },
+    /* Salva nos DOIS destinos: memória do navegador e arquivo dados.json.
+       O clique é um gesto do usuário, então dá para pedir o arquivo ou
+       reautorizar a gravação aqui mesmo, sem mandar ninguém para outra tela. */
+    salvarAgora: async ()=>{
+      saveLocal();                 // navegador: sempre, e é instantâneo
+      clearTimeout(writeTimer);    // a gravação agendada vira esta, imediata
+
+      // arquivo conectado mas sem permissão nesta sessão: pede na hora
+      if (fileHandle && filePerm !== 'granted'){
+        try { filePerm = await fileHandle.requestPermission({ mode:'readwrite' }); } catch(e){}
+      }
+
+      // nenhum arquivo conectado ainda: escolhe o destino e passa a gravar sozinho
+      if (!fileHandle){
+        if (!FS_OK){
+          renderStatus();
+          toast('Salvo no navegador — este navegador não grava em arquivo');
+          return;
+        }
+        try {
+          const h = await window.showSaveFilePicker({
+            suggestedName: 'dados.json',
+            types:[{ description:'JSON', accept:{ 'application/json':['.json'] } }]
+          });
+          filePerm = await h.requestPermission({ mode:'readwrite' });
+          if (filePerm !== 'granted'){
+            renderStatus(); toast('Salvo no navegador — gravação no arquivo negada');
+            return;
+          }
+          fileHandle = h;
+          // lembrar o arquivo é desejável, mas não pode atrasar nem impedir a
+          // gravação: se o IndexedDB falhar, ainda assim gravamos agora
+          saveHandle(h).catch(()=>{});
+        } catch(e){
+          if (!e || e.name !== 'AbortError') console.error(e);
+          renderStatus();
+          toast('Salvo no navegador — nenhum arquivo escolhido');
+          return;
+        }
+      }
+
+      await writeToDisk();
+      renderStatus();
+      toast(fileSynced
+        ? 'Salvo no navegador e no dados.json'
+        : 'Salvo no navegador — falha ao gravar o arquivo');
+    },
     goProc: ()=>{ ui.page='processos'; ui.openDimId=null; ui.activeTopicId=null; ui.editProc=null; renderAll(); },
     goMapa: ()=>{ ui.page='mapa'; ui.openDimId=null; ui.activeTopicId=null; ui.foco=null; renderAll(); },
 
@@ -1764,8 +2478,46 @@ document.addEventListener('click', ev => {
     tema:   ()=>{ dados.tema = dados.tema==='dark'?'light':'dark'; applyTheme(); persist(); renderAll(); },
     openDim:()=>{ ui.openDimId=id; renderMain(); },
     backGrid:()=>{ ui.openDimId=null; renderMain(); },
-    openTopic:()=>{ ui.activeTopicId=id; ui.editQ=null; ui.editResp=null; renderModais(); },
-    closeTopic:()=>{ ui.activeTopicId=null; ui.editQ=null; ui.editResp=null; renderModais(); },
+    openTopic:()=>{ ui.activeTopicId=id; ui.editQ=null; ui.editResp=null; ui.editPratica=null; ui.topicTab='geral'; renderModais(); },
+    topicTab:()=>{ ui.topicTab = ABAS_TOPICO.includes(btn.dataset.tab) ? btn.dataset.tab : 'geral';
+      ui.editPratica=null; renderModais(); renderFoco(); },
+    toggleSetEnv:()=>{ ui.openSetEnv[id] = !ui.openSetEnv[id]; renderModais(); renderFoco(); },
+    irSetorCompleto:()=>{
+      ui.activeTopicId=null; ui.foco=null; ui.editQ=null; ui.editResp=null; ui.editPratica=null;
+      ui.page='setores'; ui.openSetores[id]=true; ui.editCampo=null;
+      renderAll();
+      document.querySelector(`[data-act="toggleSetor"][data-id="${id}"]`)?.scrollIntoView({behavior:'smooth',block:'center'});
+    },
+    toggleGeral:()=>{ const k = btn.dataset.sec;
+      const atual = k in ui.openGeral ? !!ui.openGeral[k] : (k === 'desc');
+      ui.openGeral[k] = !atual; renderModais(); renderFoco(); },
+    addPratica:()=>{
+      const it = $('#novaPraticaTit'), ide = $('#novaPraticaDesc');
+      const tit = (it.value||'').trim(), ds = (ide.value||'').trim();
+      if (!tit){ toast('Informe o título da prática'); it.focus(); return; }
+      const t = getTopico(ui.activeTopicId);
+      if (!t.praticas) t.praticas = [];
+      t.praticas.push({ id: uid('mk'), titulo: tit, desc: ds });
+      persist('Prática adicionada'); renderModais(); focar('#novaPraticaTit');
+    },
+    editPratica:()=>{ ui.editPratica = id; ui.editQ = null; ui.editResp = null; renderModais(); focar('#edPratTit'); },
+    salvaPratica:()=>{
+      const tit = ($('#edPratTit').value||'').trim();
+      if (!tit){ toast('O título não pode ficar vazio'); return; }
+      const p = (getTopico(ui.activeTopicId).praticas||[]).find(x=>x.id===id);
+      if (p){ p.titulo = tit; p.desc = ($('#edPratDesc').value||'').trim(); }
+      ui.editPratica = null;
+      persist('Prática atualizada'); renderModais();
+    },
+    delPratica:async ()=>{
+      const ok = await pedeConfirma({ titulo:'Excluir esta prática?',
+        texto:'O título e a descrição da prática de mercado serão removidos deste tópico.', rotulo:'Excluir' });
+      if (!ok) return;
+      const t = getTopico(ui.activeTopicId);
+      t.praticas = (t.praticas||[]).filter(x=>x.id!==id);
+      persist('Prática excluída'); renderModais();
+    },
+    closeTopic:()=>{ ui.activeTopicId=null; ui.editQ=null; ui.editResp=null; ui.editPratica=null; renderModais(); },
 
     toggleQ:()=>{ captureDrafts(); ui.openQ[id]=!ui.openQ[id]; renderModais(); restoreDrafts(); },
     saveResp:()=>{
@@ -1825,7 +2577,7 @@ document.addEventListener('click', ev => {
       ui.editResp = null;
       persist('Resposta atualizada'); renderModais(); restoreDrafts();
     },
-    cancelaEdit:()=>{ ui.editQ = null; ui.editResp = null; renderModais(); restoreDrafts(); },
+    cancelaEdit:()=>{ ui.editQ = null; ui.editResp = null; ui.editPratica = null; renderModais(); restoreDrafts(); },
     addQ:()=>{
       const inp = $('#novaPergunta');
       const txt = (inp.value||'').trim();
@@ -1848,15 +2600,24 @@ document.addEventListener('click', ev => {
 
     novoTopico:()=>{ ui.topicForm = { id:null, title:'Novo tópico', nome:'', norm:'',
       dimId: ui.openDimId || (dados.dimensoes[0]||{}).id || '', setores:[], desc:'',
-      fontes:[{pag:'',sec:'',tit:''}] }; renderModais(); },
+      fontes:[{pag:'',sec:'',tit:''}], step:0 }; renderModais(); },
     editTopic:()=>{
       const t = getTopico(ui.activeTopicId); if (!t) return;
       ui.topicForm = { id:t.id, title:'Editar tópico', nome:t.nome, norm:t.norm||'',
         dimId:t.dimId, setores:[...(t.setores||[])], desc:t.desc||'',
-        fontes:(t.fontes||[]).length ? t.fontes.map(x=>({...x})) : [{pag:'',sec:'',tit:''}] };
+        fontes:(t.fontes||[]).length ? t.fontes.map(x=>({...x})) : [{pag:'',sec:'',tit:''}], step:0 };
       renderModais();
     },
     closeTopicForm:()=>{ ui.topicForm=null; renderModais(); },
+    topicStep:()=>{ vaiPasso(Number(btn.dataset.step), 'topicForm', PASSOS_TOPICO.length); },
+    topicAvancar:()=>{
+      capturaTopicForm();
+      if ((ui.topicForm.step||0) === 0 && !(ui.topicForm.nome||'').trim()){
+        toast('Informe o nome do tópico'); focar('#fTopNome'); return;
+      }
+      vaiPasso((ui.topicForm.step||0) + 1, 'topicForm', PASSOS_TOPICO.length);
+    },
+    topicVoltar:()=>{ vaiPasso((ui.topicForm.step||0) - 1, 'topicForm', PASSOS_TOPICO.length); },
     addFonte:()=>{ capturaFontes(); ui.topicForm.fontes.push({pag:'',sec:'',tit:''}); renderModais(); },
     delFonte:()=>{
       capturaFontes();
@@ -1871,11 +2632,11 @@ document.addEventListener('click', ev => {
     },
     saveTopic:()=>{
       const f = ui.topicForm;
-      const nome = $('#fTopNome').value.trim();
-      if (!nome){ toast('Informe o nome do tópico'); return; }
-      capturaFontes();
-      const data = { nome, norm:$('#fTopNorm').value.trim(), dimId:$('#fTopDim').value,
-                     setores:f.setores, desc:$('#fTopDesc').value.trim(),
+      capturaTopicForm();
+      const nome = (f.nome||'').trim();
+      if (!nome){ toast('Informe o nome do tópico'); f.step = 0; renderModais(); focar('#fTopNome'); return; }
+      const data = { nome, norm:(f.norm||'').trim(), dimId:f.dimId,
+                     setores:f.setores, desc:(f.desc||'').trim(),
                      fontes:f.fontes.filter(x=>x.pag || x.sec || x.tit) };
       if (f.id) Object.assign(getTopico(f.id), data);
       else dados.topicos.push({ id: uid('t'), perguntas: [], ...data });
@@ -1895,16 +2656,25 @@ document.addEventListener('click', ev => {
 
     novoSetor:()=>{
       ['func','resp','sist','main','tools'].forEach(k=>{ ui.tags['form:'+k] = []; });
-      ui.setorForm = { id:null, title:'Novo setor', nome:'', coord:'', rel:[] };
+      ui.setorForm = { id:null, title:'Novo setor', nome:'', coord:'', rel:[], step:0 };
       renderModais();
     },
     editSetor:()=>{
       const s = dados.setores.find(x=>x.id===id); if (!s) return;
       ['func','resp','sist','main','tools'].forEach(k=>{ ui.tags['form:'+k] = [...(s[k]||[])]; });
-      ui.setorForm = { id:s.id, title:'Editar setor', nome:s.nome, coord:s.coord||'', rel:[...(s.rel||[])] };
+      ui.setorForm = { id:s.id, title:'Editar setor', nome:s.nome, coord:s.coord||'', rel:[...(s.rel||[])], step:0 };
       renderModais();
     },
     closeSetorForm:()=>{ ui.setorForm=null; renderModais(); },
+    setorStep:()=>{ vaiPasso(Number(btn.dataset.step), 'setorForm', PASSOS_SETOR.length); },
+    setorAvancar:()=>{
+      capturaSetorForm();
+      if ((ui.setorForm.step||0) === 0 && !(ui.setorForm.nome||'').trim()){
+        toast('Informe o nome do setor'); focar('#fSetNome'); return;
+      }
+      vaiPasso((ui.setorForm.step||0) + 1, 'setorForm', PASSOS_SETOR.length);
+    },
+    setorVoltar:()=>{ vaiPasso((ui.setorForm.step||0) - 1, 'setorForm', PASSOS_SETOR.length); },
     chipRel:()=>{
       const r = ui.setorForm.rel;
       ui.setorForm.rel = r.includes(id) ? r.filter(x=>x!==id) : [...r, id];
@@ -1912,10 +2682,10 @@ document.addEventListener('click', ev => {
     },
     saveSetor:()=>{
       const f = ui.setorForm;
-      const nome = $('#fSetNome').value.trim();
-      if (!nome){ toast('Informe o nome'); $('#fSetNome').focus(); return; }
-      commitPendentes();
-      const data = { nome, coord:$('#fSetCoord').value.trim()||'—',
+      capturaSetorForm();
+      const nome = (f.nome||'').trim();
+      if (!nome){ toast('Informe o nome'); f.step = 0; renderModais(); focar('#fSetNome'); return; }
+      const data = { nome, coord:(f.coord||'').trim()||'—',
         func:tagsDe('form:func'), resp:tagsDe('form:resp'),
         sist:tagsDe('form:sist'), main:tagsDe('form:main'),
         tools:tagsDe('form:tools'), rel:[...f.rel] };
@@ -1988,6 +2758,81 @@ document.addEventListener('click', ev => {
     irDim:()=>{ ui.page='dimensoes'; ui.openDimId=id; ui.activeTopicId=null; renderAll(); },
 
     dados:()=>{ ui.dadosModal=true; renderModais(); },
+
+    /* --- configurações --- */
+    config:()=>{ ui.cfg = { tab:'dados', json:null, jsonErr:'', escopo:'setores', modo:'todos', sel:{}, ok1:false, palavra:'' }; renderModais(); },
+    closeCfg:()=>{ ui.cfg=null; renderModais(); },
+    cfgTab:()=>{ capturaCfg(); ui.cfg.tab = CFG_TABS.includes(btn.dataset.tab) ? btn.dataset.tab : 'dados';
+      ui.cfg.jsonErr=''; renderModais(); },
+    cfgJsonFormatar:()=>{
+      capturaCfg();
+      try { ui.cfg.json = JSON.stringify(JSON.parse(ui.cfg.json), null, 2); ui.cfg.jsonErr=''; }
+      catch(e){ ui.cfg.jsonErr = 'JSON inválido: ' + e.message; }
+      renderModais();
+    },
+    cfgJsonReverter:()=>{ ui.cfg.json=null; ui.cfg.jsonErr=''; renderModais(); toast('Edições descartadas'); },
+    cfgJsonAplicar:async ()=>{
+      capturaCfg();
+      let novo;
+      try { novo = JSON.parse(ui.cfg.json); }
+      catch(e){ ui.cfg.jsonErr = 'JSON inválido: ' + e.message; renderModais(); return; }
+      if (!novo || !Array.isArray(novo.dimensoes)){
+        ui.cfg.jsonErr = 'O JSON precisa ter a lista “dimensoes”.'; renderModais(); return;
+      }
+      const ok = await pedeConfirma({ titulo:'Aplicar este JSON?',
+        texto:'Todos os dados atuais são substituídos pelo conteúdo do editor. Um backup automático da versão atual já existe.',
+        rotulo:'Aplicar' });
+      if (!ok) return;
+      dados = normalize(novo);
+      ui.openDimId=null; ui.activeTopicId=null; ui.foco=null; ui.editCampo=null; ui.editProc=null;
+      ui.cfg.json=null; ui.cfg.jsonErr='';
+      applyTheme(); persist('JSON aplicado'); renderAll();
+    },
+    cfgEscopo:()=>{ capturaCfg(); ui.cfg.escopo = btn.dataset.k; ui.cfg.sel={}; ui.cfg.ok1=false; ui.cfg.palavra=''; renderModais(); },
+    cfgModo:()=>{ capturaCfg(); ui.cfg.modo = btn.dataset.k; renderModais(); },
+    cfgSel:()=>{ capturaCfg(); ui.cfg.sel[id] = !ui.cfg.sel[id]; renderModais(); },
+    cfgOk1:()=>{ capturaCfg(); ui.cfg.ok1 = !ui.cfg.ok1; renderModais(); },
+    cfgExcluir:async ()=>{
+      capturaCfg();
+      const c = ui.cfg, escopo = c.escopo, tudo = escopo === 'tudo';
+      if (!c.ok1){ toast('Marque a confirmação'); return; }
+      if (tudo && (c.palavra||'').trim().toUpperCase() !== 'EXCLUIR TUDO'){
+        toast('Digite EXCLUIR TUDO para liberar'); focar('#cfgPalavra'); return;
+      }
+      const itens = tudo ? [] : cfgItens(escopo);
+      const alvos = tudo ? [] : (c.modo === 'alguns' ? itens.filter(i=>c.sel[i.id]) : itens);
+      if (!tudo && !alvos.length){ toast('Nada selecionado'); return; }
+      const rot = (CFG_ESC.find(x=>x.k===escopo)||{}).rot;
+      const ok = await pedeConfirma({
+        titulo: tudo ? 'Excluir TUDO?' : `Excluir ${alvos.length} ${rot.toLowerCase()}?`,
+        texto: (CFG_ESC.find(x=>x.k===escopo)||{}).hint + ' Esta ação não pode ser desfeita.',
+        rotulo: tudo ? 'Excluir tudo' : 'Excluir'
+      });
+      if (!ok) return;
+      if (tudo){
+        dados = normalize({ dimensoes:[], setores:[], topicos:[], processos:[], tema:dados.tema });
+      } else if (escopo === 'setores'){
+        const ids = new Set(alvos.map(a=>a.id));
+        dados.setores = dados.setores.filter(s=>!ids.has(s.id));
+        dados.setores.forEach(s=>{ s.rel = (s.rel||[]).filter(x=>!ids.has(x)); });
+        dados.topicos.forEach(t=>{
+          t.setores = (t.setores||[]).filter(x=>!ids.has(x));
+          (t.perguntas||[]).forEach(p=>{ p.respostas = (p.respostas||[]).filter(r=>!ids.has(r.setorId)); });
+        });
+      } else if (escopo === 'topicos'){
+        const ids = new Set(alvos.map(a=>a.id));
+        dados.topicos = dados.topicos.filter(t=>!ids.has(t.id));
+      } else {
+        const ids = new Set(alvos.map(a=>a.id));
+        dados.processos = (dados.processos||[]).filter(e=>!ids.has(e.respId));
+      }
+      limpaProcVazios();
+      ui.openDimId=null; ui.activeTopicId=null; ui.foco=null; ui.editCampo=null; ui.editProc=null;
+      ui.cfg.sel={}; ui.cfg.ok1=false; ui.cfg.palavra=''; ui.cfg.json=null;
+      persist(tudo ? 'Todos os dados excluídos' : 'Registros excluídos');
+      renderAll();
+    },
+
     closeDados:()=>{ ui.dadosModal=false; renderModais(); },
     conectar:()=>connectFile('abrir'),
     criarArquivo:()=>connectFile('novo'),
@@ -2050,6 +2895,7 @@ document.addEventListener('keydown', ev => {
     // a tela inicial de carregamento não pode ser dispensada com ESC
     const vazio = !dados.dimensoes.length && !dados.topicos.length && !dados.setores.length;
     if (ui.dadosModal){ if (!vazio){ ui.dadosModal=false; renderModais(); } return; }
+    if (ui.cfg){ ui.cfg=null; renderModais(); return; }
     if (ui.topicForm){ ui.topicForm=null; renderModais(); return; }
     if (ui.setorForm){ ui.setorForm=null; renderModais(); return; }
     if (ui.activeTopicId){ ui.activeTopicId=null; renderModais(); return; }
@@ -2100,7 +2946,25 @@ document.addEventListener('input', e => {
   if (novo){ novo.focus(); novo.setSelectionRange(pos, pos); }
 });
 
+document.addEventListener('input', e => {
+  if (e.target.id !== 'filtroTop') return;
+  ui.filtroTop = e.target.value;
+  const pos = e.target.selectionStart;
+  renderMain();
+  const novo = $('#filtroTop');
+  if (novo){ novo.focus(); novo.setSelectionRange(pos, pos); }
+});
+
 document.addEventListener('input',  e => { if (e.target.dataset && e.target.dataset.draft) captureDrafts(); });
+/* a palavra de seguran\u00e7a libera o bot\u00e3o na hora, sem perder o foco do campo */
+document.addEventListener('input', e => {
+  if (e.target.id !== 'cfgPalavra' || !ui.cfg) return;
+  ui.cfg.palavra = e.target.value;
+  const pos = e.target.selectionStart;
+  renderModais();
+  const novo = $('#cfgPalavra');
+  if (novo){ novo.focus(); novo.setSelectionRange(pos, pos); }
+});
 document.addEventListener('change', e => { if (e.target.dataset && e.target.dataset.draft) captureDrafts(); });
 
 /* aviso se houver alteração ainda não gravada no arquivo */
