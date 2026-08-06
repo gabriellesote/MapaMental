@@ -557,14 +557,59 @@ function menuHtml(){
 /* ------------------------------------------------------------------ */
 /* Render — apresentação                                               */
 /* ------------------------------------------------------------------ */
+/* a animação de entrada da seção só pode rodar quando a seção muda de fato —
+   fora disso um render() qualquer (dock, troca de dimensão) a reiniciaria */
+let animarEntrada = true;
+function animSecao(){ return (S.dir>0?'kfSecUp':'kfSecDown')+' .72s cubic-bezier(.16,.9,.24,1) both'; }
 function anim(i){
-  if(S.section!==i) return 'none';
-  return (S.dir>0?'kfSecUp':'kfSecDown')+' .72s cubic-bezier(.16,.9,.24,1) both';
+  if(!animarEntrada || S.section!==i) return 'none';
+  return animSecao();
+}
+
+/* conteúdo interno do balão da dimensão — trocado sozinho, sem recriar o balão */
+function painelPresent(dim){
+  const n=dim.topicos.length;
+  return `<div class="blob" style="top:-140px;right:-90px;width:380px;height:380px;filter:blur(70px)"></div>
+    <div style="position:relative;flex:none;padding:30px 36px 22px;border-bottom:1px solid var(--gline)">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
+        <span class="romchip mono" style="min-width:38px;height:28px;padding:0 10px;font-size:11.5px">${dim.roman}</span>
+        <span style="font-size:clamp(26px,2.3vw,36px);font-weight:700;letter-spacing:-.04em;line-height:1">${esc(dim.nome)}</span>
+        <span style="flex:1;height:1px;background:var(--gline)"></span>
+        <span class="mono" style="font-size:11px;color:var(--muted)">${n===1?'1 tópico':n+' tópicos'}</span>
+      </div>
+      <div style="font-size:14px;line-height:1.66;color:var(--fg2);max-width:1000px;text-wrap:pretty">${esc(dim.descricao)}</div>
+    </div>
+    <div data-scrollable="1" style="position:relative;flex:1;min-height:0;overflow:auto;padding:22px 36px 30px">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px;align-items:start">
+        ${dim.topicos.map(t=>`<div class="ptcard">
+          <div style="font-size:16px;font-weight:600;letter-spacing:-.02em;line-height:1.3;margin-bottom:9px;text-wrap:pretty">${esc(t.titulo)}</div>
+          <div style="font-size:13px;line-height:1.62;color:var(--fg2);text-wrap:pretty">${esc(t.descricao)}</div>
+          <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:15px">
+            <span class="tag norm mono">${esc(t.normativo)}</span>
+            <span class="tag"><em>Owner</em>${esc(t.owner)}</span>
+            <span class="tag"><em>Setor</em>${esc(t.setor)}</span>
+          </div>
+        </div>`).join('')}
+        ${n===0?'<div class="emptybox">Nenhum tópico mapeado nesta dimensão.</div>':''}
+      </div>
+    </div>`;
+}
+
+/* troca de dimensão na apresentação: atualiza só a lista e o balão */
+function pintarDimensao(){
+  const dim=dimDe(S.selected); if(!dim) return;
+  const i=idxDe(dim.id);
+  document.querySelectorAll('#scroller [data-act="selecionar"]').forEach(el=>{
+    el.classList.toggle('on', el.dataset.dim===dim.id);
+  });
+  const p=$('#ppanel');
+  if(p){ p.style.setProperty('--a', ACCENTS[i%12]); p.innerHTML=painelPresent(dim); }
+  const pos=$('#dimpos'); if(pos) pos.textContent=(i+1)+' / 12 · use ← →';
 }
 
 function viewPresent(){
   const d=S.data, dim=dimDe(S.selected)||d.dimensoes[0];
-  const i=idxDe(dim.id), a=ACCENTS[Math.max(0,i)%12], n=dim.topicos.length;
+  const i=idxDe(dim.id), a=ACCENTS[Math.max(0,i)%12];
   const secs=[['01','Abertura'],['02','Dimensões'],['03','Encerramento']];
   return `
   <div class="present">
@@ -608,7 +653,7 @@ function viewPresent(){
         <div style="display:flex;align-items:center;gap:16px;margin-bottom:26px;flex:none">
           <span class="mono" style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)">As 12 dimensões</span>
           <span style="flex:1;height:1px;background:var(--gline)"></span>
-          <span class="mono" style="font-size:11px;color:var(--muted)">${(i+1)} / 12 · use ← →</span>
+          <span class="mono" id="dimpos" style="font-size:11px;color:var(--muted)">${(i+1)} / 12 · use ← →</span>
         </div>
         <div style="flex:1;min-height:0;display:grid;grid-template-columns:300px minmax(0,1fr);gap:30px">
           <div data-scrollable="1" style="min-height:0;overflow:auto;padding-right:6px;display:flex;flex-direction:column;gap:3px">
@@ -618,32 +663,7 @@ function viewPresent(){
               <span class="ct mono">${x.topicos.length}</span>
             </div>`).join('')}
           </div>
-          <div class="dimpanel" style="--a:${a};min-height:0;display:flex;flex-direction:column;border-radius:30px">
-            <div class="blob" style="top:-140px;right:-90px;width:380px;height:380px;filter:blur(70px)"></div>
-            <div style="position:relative;flex:none;padding:30px 36px 22px;border-bottom:1px solid var(--gline)">
-              <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
-                <span class="romchip mono" style="min-width:38px;height:28px;padding:0 10px;font-size:11.5px">${dim.roman}</span>
-                <span style="font-size:clamp(26px,2.3vw,36px);font-weight:700;letter-spacing:-.04em;line-height:1">${esc(dim.nome)}</span>
-                <span style="flex:1;height:1px;background:var(--gline)"></span>
-                <span class="mono" style="font-size:11px;color:var(--muted)">${n===1?'1 tópico':n+' tópicos'}</span>
-              </div>
-              <div style="font-size:14px;line-height:1.66;color:var(--fg2);max-width:1000px;text-wrap:pretty">${esc(dim.descricao)}</div>
-            </div>
-            <div data-scrollable="1" style="position:relative;flex:1;min-height:0;overflow:auto;padding:22px 36px 30px">
-              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px;align-items:start">
-                ${dim.topicos.map(t=>`<div class="ptcard">
-                  <div style="font-size:16px;font-weight:600;letter-spacing:-.02em;line-height:1.3;margin-bottom:9px;text-wrap:pretty">${esc(t.titulo)}</div>
-                  <div style="font-size:13px;line-height:1.62;color:var(--fg2);text-wrap:pretty">${esc(t.descricao)}</div>
-                  <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:15px">
-                    <span class="tag norm mono">${esc(t.normativo)}</span>
-                    <span class="tag"><em>Owner</em>${esc(t.owner)}</span>
-                    <span class="tag"><em>Setor</em>${esc(t.setor)}</span>
-                  </div>
-                </div>`).join('')}
-                ${n===0?'<div class="emptybox">Nenhum tópico mapeado nesta dimensão.</div>':''}
-              </div>
-            </div>
-          </div>
+          <div class="dimpanel" id="ppanel" style="--a:${a};min-height:0;display:flex;flex-direction:column;border-radius:30px">${painelPresent(dim)}</div>
         </div>
       </section>
 
@@ -775,8 +795,15 @@ function render(){
     const novo = $('#scroller');
     if(novo && topo) novo.scrollTop = topo;
     ligarScroller();
+    animarEntrada = false;
   }
   pintarToast();
+}
+
+/* dock: mostrar/esconder sem redesenhar a apresentação inteira */
+function pintarDock(){
+  const d=document.querySelector('.dock'); if(d) d.classList.toggle('on', S.dockOpen);
+  const h=document.querySelector('.dockhint'); if(h) h.style.opacity = S.dockOpen?0:1;
 }
 
 /* troca de seção: sem recriar o DOM, só reaplica animação e realça o dock */
@@ -785,7 +812,7 @@ function pintarSecao(){
   const secoes=el.children;
   for(let i=0;i<secoes.length;i++){
     const sec=secoes[i];
-    if(i===S.section){ sec.style.animation='none'; void sec.offsetWidth; sec.style.animation=anim(i); }
+    if(i===S.section){ sec.style.animation='none'; void sec.offsetWidth; sec.style.animation=animSecao(); }
     else sec.style.animation='none';
   }
   document.querySelectorAll('[data-act="ir"]').forEach((b,i)=>b.classList.toggle('on', i===S.section));
@@ -1010,12 +1037,16 @@ document.addEventListener('click',(ev)=>{
       commit('Configuração salva para apresentação', false);
       gravarArquivo(true);
       S.mode='present'; S.section=0; S.dir=1; S.menuOpen=false; boundEl=null;
+      animarEntrada=true;
       render();
       setTimeout(()=>{ const el=$('#scroller'); if(el) el.scrollTop=0; },60);
       break;
     case 'sair': S.mode='config'; S.dockOpen=false; boundEl=null; render(); break;
     case 'ir': irSecao(parseInt(alvo.dataset.sec,10)); break;
-    case 'selecionar': S.selected=alvo.dataset.dim; render(); break;
+    case 'selecionar':
+      S.selected=alvo.dataset.dim;
+      if(S.mode==='present') pintarDimensao(); else render();
+      break;
     case 'lock': {
       const id=alvo.dataset.dim;
       S.unlocked[id]=!S.unlocked[id]; render(); break;
@@ -1106,14 +1137,14 @@ document.addEventListener('mouseover',(ev)=>{
   if(S.mode!=='present') return;
   if(ev.target.closest('#dockzone')){
     clearTimeout(tDock);
-    if(!S.dockOpen){ S.dockOpen=true; render(); }
+    if(!S.dockOpen){ S.dockOpen=true; pintarDock(); }
   }
 });
 document.addEventListener('mouseout',(ev)=>{
   if(S.mode!=='present' || !S.dockOpen) return;
   if(ev.target.closest('#dockzone') && !(ev.relatedTarget && ev.relatedTarget.closest && ev.relatedTarget.closest('#dockzone'))){
     clearTimeout(tDock);
-    tDock=setTimeout(()=>{ S.dockOpen=false; render(); },300);
+    tDock=setTimeout(()=>{ S.dockOpen=false; pintarDock(); },300);
   }
 });
 
@@ -1130,7 +1161,7 @@ document.addEventListener('keydown',(e)=>{
   if((e.key==='ArrowRight'||e.key==='ArrowLeft') && S.section===1){
     const ds=S.data.dimensoes, i=idxDe(S.selected);
     const n=(i+(e.key==='ArrowRight'?1:-1)+ds.length)%ds.length;
-    S.selected=ds[n].id; render();
+    S.selected=ds[n].id; pintarDimensao();
   }
 });
 
