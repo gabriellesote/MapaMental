@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kickoff — Qualidade da Informação nas 12 Dimensões</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0e12;--bg2:#0e1319;--panel:#131a22;--panel2:#182129;--line:#243039;--line2:#2f3d49;--fg:#e9eef3;--fg2:#b8c5d0;--muted:#7d8b98;--brand:#3f6fe4;--brandfg:#ffffff;--shadow:0 30px 80px rgba(0,0,0,.55);--glass:rgba(255,255,255,.045);--glass2:rgba(255,255,255,.075);--gline:rgba(255,255,255,.10);--gline2:rgba(255,255,255,.18)}
+:root[data-theme="light"]{--bg:#dfe3e9;--bg2:#d8dde4;--panel:#eef1f5;--panel2:#e7ebf1;--line:#ccd3dc;--line2:#bac3ce;--fg:#1c242c;--fg2:#48555f;--muted:#6d7a86;--brand:#1626FF;--brandfg:#ffffff;--shadow:0 26px 60px rgba(20,32,45,.14);--glass:rgba(252,253,255,.42);--glass2:rgba(250,252,255,.62);--gline:rgba(20,32,45,.10);--gline2:rgba(20,32,45,.17)}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font-family:'IBM Plex Sans',system-ui,-apple-system,Segoe UI,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--brand);text-decoration:none}
+a:hover{color:var(--fg)}
+input,textarea,select,button{font-family:inherit}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--brand)}
+.mono{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Consolas,monospace}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:var(--line2);border-radius:8px}
+::-webkit-scrollbar-track{background:transparent}
+@keyframes kfIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes kfPop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes kfFade{from{opacity:0}to{opacity:1}}
+@keyframes kfPulse{0%,100%{opacity:.25}50%{opacity:.9}}
+@keyframes kfBreathe{0%,100%{transform:scaleY(.5);opacity:.3}50%{transform:scaleY(1);opacity:.85}}
+@keyframes kfRise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes kfSecUp{from{opacity:0;transform:translateY(58px)}to{opacity:1;transform:none}}
+@keyframes kfSecDown{from{opacity:0;transform:translateY(-58px)}to{opacity:1;transform:none}}
+@keyframes kfHalo{0%,100%{transform:translate3d(0,0,0) scale(1);opacity:.75}50%{transform:translate3d(3%,-3%,0) scale(1.08);opacity:1}}
+@keyframes kfHalo2{0%,100%{transform:translate3d(0,0,0) scale(1.05);opacity:.6}50%{transform:translate3d(-4%,3%,0) scale(.95);opacity:.9}}
+@keyframes kfRing{0%{transform:scale(.85);opacity:.55}100%{transform:scale(1.35);opacity:0}}
+
+.wrap{position:relative;min-height:100vh;overflow:hidden;background:var(--bg)}
+.halo{position:fixed;inset:-14%;pointer-events:none;z-index:0}
+.halo1{background:radial-gradient(760px 560px at 76% 2%, color-mix(in oklab, oklch(.5 .17 270) 42%, transparent), transparent 66%),radial-gradient(560px 440px at 12% 92%, color-mix(in oklab, color-mix(in oklab, #1626FF 70%, white) 26%, transparent), transparent 64%);filter:blur(22px);animation:kfHalo 30s ease-in-out infinite}
+.halo2{background:radial-gradient(640px 480px at 22% 12%, color-mix(in oklab, oklch(.42 .16 265) 40%, transparent), transparent 62%),radial-gradient(700px 520px at 88% 78%, color-mix(in oklab, color-mix(in oklab, #1626FF 82%, white) 24%, transparent), transparent 64%);filter:blur(30px);animation:kfHalo2 38s ease-in-out infinite}
+
+/* ---------- topo ---------- */
+.topbar{position:sticky;top:0;z-index:40;border-bottom:1px solid var(--gline);background:color-mix(in oklab, var(--bg) 76%, transparent);backdrop-filter:blur(22px)}
+.topbar-in{max-width:1600px;margin:0 auto;padding:14px 34px;display:flex;align-items:center;gap:14px}
+.kicker{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.syncpill{display:flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;border:1px solid var(--gline);background:var(--glass);font-size:12px;color:var(--fg2);cursor:default}
+.dot{width:7px;height:7px;flex:none;border-radius:50%}
+.iconbtn{width:38px;height:38px;flex:none;border-radius:50%;border:1px solid var(--gline);background:var(--glass);color:var(--fg2);cursor:pointer;font-size:14px;transition:color .25s ease,border-color .25s ease}
+.iconbtn:hover{color:var(--fg);border-color:var(--gline2)}
+.cta{display:flex;align-items:center;gap:9px;height:38px;padding:0 6px 0 17px;border-radius:999px;border:0;background:var(--brand);color:var(--brandfg);font-size:12.5px;font-weight:600;line-height:1;white-space:nowrap;cursor:pointer;box-shadow:0 10px 28px color-mix(in oklab, var(--brand) 34%, transparent);transition:transform .25s cubic-bezier(.2,.9,.25,1)}
+.cta:hover{transform:translateY(-2px)}
+.cta i{width:26px;height:26px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.2);font-size:12px;font-style:normal}
+.ghostbtn{display:flex;align-items:center;gap:9px;height:36px;padding:0 6px 0 15px;border-radius:999px;border:1px solid var(--gline2);background:var(--glass2);color:var(--fg);font-size:12.5px;line-height:1;cursor:pointer;transition:transform .25s cubic-bezier(.2,.9,.25,1)}
+.ghostbtn:hover{transform:translateY(-2px)}
+.ghostbtn i{width:24px;height:24px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--brand);color:var(--brandfg);font-size:14px;line-height:1;font-style:normal}
+
+.menu{position:absolute;right:0;top:48px;width:326px;border-radius:20px;border:1px solid var(--line2);background:var(--panel2);backdrop-filter:blur(30px);box-shadow:var(--shadow);padding:8px;animation:kfPop .2s cubic-bezier(.16,.9,.24,1);z-index:60;max-height:74vh;overflow:auto}
+.menu-lbl{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);padding:10px 12px 6px}
+.menu-txt{padding:0 12px 10px;font-size:11.5px;color:var(--muted);line-height:1.5}
+.menu-item{display:flex;width:100%;gap:10px;align-items:center;padding:10px 12px;border:0;border-radius:12px;background:transparent;color:var(--fg);font-size:13px;cursor:pointer;text-align:left;transition:background .2s ease}
+.menu-item:hover{background:var(--glass)}
+.menu-item em{color:var(--muted);font-style:normal;width:16px;text-align:center;flex:none}
+.sep{height:1px;background:var(--gline);margin:8px 4px}
+
+/* ---------- cartões / formulários ---------- */
+.shell{position:relative;z-index:10}
+.page{max-width:1600px;margin:0 auto;padding:38px 34px 100px}
+.glass{border-radius:26px;border:1px solid var(--gline);background:var(--glass);backdrop-filter:blur(22px);box-shadow:var(--shadow)}
+.sec-lbl{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.lab{display:flex;flex-direction:column;gap:7px;font-size:11.5px;color:var(--muted)}
+.inp{width:100%;min-width:0;padding:12px 14px;border-radius:14px;border:1px solid var(--gline2);background:var(--panel);color:var(--fg);font-size:13.5px}
+textarea.inp{color:var(--fg2);line-height:1.65;resize:vertical}
+.inp.big{padding:13px 15px;font-size:22px;font-weight:700;letter-spacing:-.03em}
+.inp.mid{padding:12px 15px;font-size:17px;font-weight:600;letter-spacing:-.02em}
+.stat{font-size:34px;font-weight:700;letter-spacing:-.04em;line-height:1}
+.stat-cap{margin-top:6px;font-size:11.5px;color:var(--muted)}
+
+.dimrow{position:relative;display:flex;align-items:center;gap:12px;padding:11px 13px;border:1px solid var(--gline);border-radius:14px;background:transparent;cursor:pointer;overflow:hidden;transition:transform .3s cubic-bezier(.2,.9,.25,1),border-color .3s ease,background .3s ease}
+.dimrow:hover{transform:translateX(4px);border-color:var(--a)}
+.dimrow.on{border-color:color-mix(in oklab, var(--a) 45%, var(--gline));background:color-mix(in oklab, var(--a) 16%, transparent)}
+.dimrow .rail{position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--a);opacity:0;transition:opacity .3s ease}
+.dimrow.on .rail{opacity:1}
+.dimrow .rom{font-size:10.5px;width:26px;flex:none;color:var(--a)}
+.dimrow .nm{font-size:14px;letter-spacing:-.012em;flex:1;min-width:0;font-weight:400;color:var(--fg2);transition:color .34s ease}
+.dimrow.on .nm{font-weight:600;color:var(--fg)}
+.dimrow .ct{font-size:10.5px;color:var(--muted)}
+.dimrow .chip{width:20px;height:20px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;background:color-mix(in oklab, var(--a) 16%, transparent)}
+.dimrow .chip i{width:6px;height:6px;border-radius:50%;background:var(--a);opacity:.35;transition:opacity .3s ease}
+.dimrow.on .chip i{opacity:1}
+
+.dimpanel{position:relative;border:1px solid var(--gline);border-radius:28px;background:linear-gradient(165deg, color-mix(in oklab, var(--a) 13%, transparent), var(--glass) 46%);backdrop-filter:blur(24px);box-shadow:var(--shadow);overflow:hidden;animation:kfIn .32s cubic-bezier(.16,.9,.24,1)}
+.dimpanel .blob{position:absolute;top:-120px;right:-80px;width:340px;height:340px;border-radius:50%;background:color-mix(in oklab, var(--a) 16%, transparent);filter:blur(60px);pointer-events:none}
+.romchip{display:flex;align-items:center;justify-content:center;min-width:36px;height:26px;padding:0 9px;border-radius:999px;border:1px solid var(--a);font-size:11px;line-height:1;color:var(--a);flex:none}
+.lockbtn{flex:none;display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;border:1px solid var(--gline2);background:var(--glass);color:var(--muted);font-size:12px;cursor:pointer;transition:transform .25s ease}
+.lockbtn:hover{transform:translateY(-2px)}
+.lockbtn.on{border-color:var(--a);background:color-mix(in oklab, var(--a) 16%, transparent);color:var(--a)}
+.topicgrid{position:relative;padding:22px 32px 30px;display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:14px;align-items:start}
+.tcard{border:1px solid var(--gline);border-radius:20px;background:var(--glass);padding:18px 20px;display:flex;flex-direction:column;gap:10px;transition:border-color .3s ease}
+.tcard:hover{border-color:var(--a)}
+.tinp{width:100%;min-width:0;padding:9px 12px;border-radius:12px;border:1px solid var(--gline2);background:var(--panel);color:var(--fg);font-size:14.5px;font-weight:600}
+.tarea{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--gline2);background:var(--panel);color:var(--fg2);font-size:13px;line-height:1.55;resize:vertical}
+.tmeta{width:100%;min-width:0;padding:9px 11px;border-radius:11px;border:1px solid var(--gline2);background:var(--panel);color:var(--fg);font-size:12px}
+.tmeta.norm{color:var(--a);font-size:11.5px}
+.tsel{flex:1;min-width:0;padding:8px 10px;border-radius:11px;border:1px solid var(--gline);background:transparent;color:var(--muted);font-size:11.5px}
+.delbtn{padding:8px 14px;border-radius:999px;border:1px solid #7a2b32;background:transparent;color:#e2707a;font-size:11.5px;cursor:pointer}
+.delbtn:hover{background:color-mix(in oklab,#e2707a 14%,transparent)}
+.emptybox{border:1px dashed var(--gline2);border-radius:20px;padding:26px;color:var(--muted);font-size:13px}
+.emptybox.click{cursor:pointer;transition:border-color .3s ease,color .3s ease}
+.emptybox.click:hover{border-color:var(--a);color:var(--fg2)}
+
+/* ---------- apresentação ---------- */
+.present{position:fixed;inset:0;z-index:30;animation:kfFade .5s ease-out}
+.dockzone{position:fixed;top:0;right:0;width:130px;height:100vh;z-index:60;display:flex;align-items:center;justify-content:flex-end}
+.dockhint{position:absolute;right:0;top:50%;margin-top:-34px;width:2px;height:68px;border-radius:2px;background:var(--gline2);transition:opacity .5s ease;animation:kfBreathe 4.2s ease-in-out infinite;pointer-events:none}
+.dock{margin-right:18px;display:flex;flex-direction:column;align-items:center;gap:10px;padding:12px 10px;border-radius:999px;border:1px solid var(--gline);background:var(--glass2);backdrop-filter:blur(26px);box-shadow:var(--shadow);opacity:0;transform:translateX(20px);pointer-events:none;transition:opacity .35s ease,transform .5s cubic-bezier(.16,.9,.24,1)}
+.dock.on{opacity:1;transform:translateX(0);pointer-events:auto}
+.dockbtn{width:30px;height:30px;border-radius:50%;border:1px solid transparent;background:transparent;color:var(--muted);font-size:10px;line-height:1;cursor:pointer;transition:color .3s ease,border-color .3s ease}
+.dockbtn:hover{color:var(--fg);border-color:var(--gline2)}
+.dockbtn.on{color:var(--fg);border-color:var(--gline2)}
+#scroller{height:100vh;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
+#scroller::-webkit-scrollbar{display:none}
+.pcard{position:relative;min-width:172px;padding:26px 28px;border-radius:26px;border:1px solid var(--gline2);background:linear-gradient(150deg, var(--glass2), var(--glass) 58%);backdrop-filter:blur(26px);box-shadow:var(--shadow);overflow:hidden}
+.pcard .b{position:absolute;top:-60px;right:-40px;width:150px;height:150px;border-radius:50%;filter:blur(34px);pointer-events:none}
+.pcard .n{position:relative;font-size:44px;font-weight:700;letter-spacing:-.05em;line-height:1}
+.pcard .c{position:relative;margin-top:10px;font-size:11.5px;letter-spacing:.02em;color:var(--fg2)}
+.ptcard{border:1px solid var(--gline);border-left:2px solid var(--a);border-radius:20px;background:var(--glass);padding:20px 22px;transition:transform .3s cubic-bezier(.2,.9,.25,1),background .3s ease,border-color .3s ease}
+.ptcard:hover{transform:translateY(-4px);background:var(--glass2);border-color:var(--a)}
+.tag{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;border:1px solid var(--gline);font-size:11.5px;color:var(--fg2)}
+.tag em{color:var(--muted);font-style:normal}
+.tag.norm{background:color-mix(in oklab, var(--a) 16%, transparent);border-color:color-mix(in oklab, var(--a) 45%, var(--gline));font-size:10.5px;color:var(--a)}
+
+/* ---------- modais ---------- */
+.ovl{position:fixed;inset:0;z-index:80;background:rgba(4,7,10,.7);backdrop-filter:blur(10px);display:flex;align-items:flex-start;justify-content:center;padding:56px 24px;overflow:auto;animation:kfFade .18s ease-out}
+.modal{width:100%;background:var(--glass2);backdrop-filter:blur(30px);border:1px solid var(--gline2);border-radius:28px;box-shadow:var(--shadow);padding:28px 30px;animation:kfPop .24s cubic-bezier(.16,.9,.24,1)}
+.modal h3{margin:0 0 6px;font-size:22px;font-weight:700;letter-spacing:-.03em}
+.modal .sub{font-size:13px;color:var(--muted);margin-bottom:20px}
+.minp{width:100%;padding:12px 13px;border-radius:14px;border:1px solid var(--gline2);background:var(--panel2);color:var(--fg);font-size:13.5px;resize:vertical;line-height:1.55}
+.mbtn{padding:12px 19px;border-radius:999px;border:1px solid var(--gline2);background:transparent;color:var(--fg2);font-size:13px;cursor:pointer}
+.mbtn.pri{padding:12px 24px;border:0;background:var(--brand);color:var(--brandfg);font-weight:600}
+.mbtn.dang{border-color:#7a2b32;background:#7a2b32;color:#ffe9eb;font-weight:600}
+.hrow{display:flex;align-items:center;gap:14px;padding:14px 17px;border:1px solid var(--gline);border-radius:16px;background:var(--glass)}
+.errbox{margin-top:12px;padding:10px 14px;border-radius:12px;border:1px solid #7a2b32;color:#e2707a;font-size:12.5px}
+.toast{position:fixed;left:50%;bottom:32px;transform:translateX(-50%);z-index:90;padding:13px 22px;border-radius:999px;border:1px solid var(--gline2);background:var(--glass2);backdrop-filter:blur(20px);color:var(--fg);font-size:13px;box-shadow:var(--shadow);animation:kfIn .22s ease-out}
+
+@media (max-width:1180px){
+  .page{padding:26px 18px 80px}
+  .topbar-in{padding:12px 18px;flex-wrap:wrap}
+  .grid-top{grid-template-columns:minmax(0,1fr)!important}
+  .grid-dims{grid-template-columns:minmax(0,1fr)!important}
+  .grid-dims>.side{position:static!important}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+"use strict";
+/* ============================================================
+   KickOff — Apresentação das 12 Dimensões
+   HTML único e offline. Persistência em três camadas:
+     1. localStorage  (sempre)
+     2. kickoff.json  (File System Access API — gravação automática)
+     3. ./kickoff.json ao lado do HTML (leitura inicial, via fetch)
+   ============================================================ */
+
+const ACCENTS = ['oklch(.68 .13 255)','oklch(.68 .13 165)','oklch(.68 .13 65)','oklch(.68 .13 300)','oklch(.68 .13 25)','oklch(.68 .13 200)','oklch(.68 .13 130)','oklch(.68 .13 340)','oklch(.68 .13 95)','oklch(.68 .13 275)','oklch(.68 .13 185)','oklch(.68 .13 45)'];
+const ROMAN = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
+
+const DIMENSOES = [
+ ['Acessibilidade','condições que permitam aos usuários obter informações, incluindo a indicação clara do local de disponibilização, a forma de realizar eventual demanda, os prazos e outras características relevantes de acesso, assegurado tratamento especial às pessoas com deficiência;'],
+ ['Acurácia','medida em que a informação fornecida reflete a realidade de maneira precisa e confiável, de acordo com a metodologia utilizada;'],
+ ['Adaptabilidade','capacidade de gerar informações em formato que atenda às diversas demandas por informações, incluindo as não periodicamente reportadas, bem como as decorrentes de mudanças regulamentares previstas, inclusive em situações adversas ou de crise;'],
+ ['Clareza','apresentação das informações de forma concisa, permitindo a fácil compreensão e atendendo às necessidades do usuário;'],
+ ['Comparabilidade','capacidade de possibilitar ao usuário identificar e compreender semelhanças e diferenças entre informações, seja em diferentes períodos ou entre diferentes áreas geográficas ou domínios não geográficos;'],
+ ['Completude','capacidade de a informação atender integralmente os aspectos requeridos, com dados completos;'],
+ ['Confiabilidade','ausência de desvio relevante nos dados revisados em relação ao seu valor inicial;'],
+ ['Consistência','medida em que as informações referentes ao mesmo evento ou fato estão padronizadas e livres de contradições, mesmo quando geradas por diferentes fontes ou métodos;'],
+ ['Integridade','propriedade pela qual se assegura que a informação é autêntica e que não foi modificada de maneira não autorizada ou acidental;'],
+ ['Rastreabilidade','condições que permitam rastrear a informação desde a origem até a sua disponibilização ao usuário final;'],
+ ['Relevância','capacidade de fornecer informações úteis, que possam influenciar a tomada de decisões pelos usuários; e'],
+ ['Tempestividade','fornecimento das informações em tempo hábil, no prazo estabelecido, observado um curto intervalo de tempo entre os fatos relatados e a data da prestação da informação, de modo a não comprometer sua utilidade aos usuários.']
+];
+
+const TOPICOS = [
+ [['Canal único de solicitação de informações','Consolidar em um só ponto de entrada os pedidos hoje espalhados por e-mail, chamado e planilha.','NORM-014/2025','A. Ribeiro','Atendimento'],['Padrão de acessibilidade digital dos relatórios','Revisar contraste, leitura por leitor de tela e alternativas textuais nos relatórios publicados.','POL-DAD-03','C. Menezes','Comunicação']],
+ [['Régua de conferência dos indicadores','Definir amostragem e tolerância aceitável na conferência mensal dos números divulgados.','NORM-021/2025','R. Tavares','Controladoria'],['Documentação das metodologias de cálculo','Registrar fórmula, fonte e premissas de cada indicador em ficha técnica versionada.','IN 07/2026','L. Barreto','Planejamento']],
+ [['Modelo de resposta a demandas não periódicas','Template e fluxo para atender pedidos fora do calendário regulatório em até 5 dias úteis.','NORM-014/2025','P. Andrade','Riscos'],['Plano de contingência de reporte em crise','Como manter o reporte quando houver indisponibilidade de sistema ou evento adverso.','POL-CONT-02','M. Fontes','TI · Dados']],
+ [['Guia de redação dos relatórios','Padronizar linguagem, glossário e limite de extensão dos textos entregues ao usuário final.','POL-DAD-03','C. Menezes','Comunicação'],['Revisão dos rótulos de tabelas e gráficos','Eliminar siglas internas e nomes de campo de sistema nas peças publicadas.','IN 07/2026','L. Barreto','Planejamento']],
+ [['Série histórica mínima obrigatória','Garantir 24 meses comparáveis em todo indicador publicado, com nota de quebra de série.','NORM-021/2025','R. Tavares','Controladoria'],['Chave única de segmentação','Unificar os cortes por região, produto e canal usados por áreas diferentes.','POL-DAD-05','J. Siqueira','TI · Dados']],
+ [['Inventário de campos obrigatórios por reporte','Mapear campo a campo o que é exigido e onde há preenchimento parcial hoje.','NORM-030/2026','P. Andrade','Riscos'],['Tratamento de lacunas e não respostas','Regra única para campo ausente: estimar, sinalizar ou bloquear a publicação.','IN 07/2026','L. Barreto','Planejamento']],
+ [['Monitoramento de reprocessamentos','Acompanhar variação entre o dado inicial e o dado revisado, com limite de alerta.','NORM-021/2025','R. Tavares','Controladoria'],['Critério de republicação','Quando uma correção exige nova divulgação e comunicação ao usuário.','POL-DAD-03','A. Ribeiro','Atendimento']],
+ [['Dicionário corporativo de dados','Definição única de cliente, produto e data-base entre os sistemas de origem.','POL-DAD-05','J. Siqueira','TI · Dados'],['Conciliação entre fontes','Rotina de batimento entre o data warehouse e os sistemas transacionais.','NORM-030/2026','M. Fontes','TI · Dados']],
+ [['Controle de acesso e trilha de alteração','Quem pode alterar base e relatório, e como toda alteração fica registrada.','POL-SEG-01','D. Nogueira','Segurança da Informação'],['Assinatura e versionamento das entregas','Selar o arquivo publicado para detectar modificação posterior não autorizada.','POL-SEG-04','D. Nogueira','Segurança da Informação']],
+ [['Linhagem ponta a ponta dos indicadores','Do sistema de origem até o número publicado, com todas as transformações registradas.','NORM-030/2026','J. Siqueira','TI · Dados'],['Registro de responsáveis por etapa','Identificar quem gerou, revisou e aprovou cada entrega de informação.','POL-DAD-05','P. Andrade','Riscos']],
+ [['Revisão do portfólio de relatórios','Descontinuar entregas sem uso comprovado e reforçar as que apoiam decisão.','IN 07/2026','L. Barreto','Planejamento'],['Pesquisa de utilidade com usuários','Ouvir áreas usuárias sobre o que falta e o que sobra nas informações recebidas.','POL-DAD-03','C. Menezes','Comunicação']],
+ [['Calendário oficial de divulgação','Prazos por entrega, com responsável e janela de fechamento acordada.','NORM-014/2025','R. Tavares','Controladoria'],['Alerta de risco de atraso','Sinalização automática quando uma etapa passa do prazo intermediário.','NORM-030/2026','M. Fontes','TI · Dados']]
+];
+
+const FIM_TITULO = 'Obrigada pela atenção';
+const FIM_MENSAGEM = 'A partir daqui o trabalho é de cada owner com a sua dimensão. Dúvidas, ajustes e novos tópicos podem ser trazidos a qualquer momento.';
+
+function defaultData(){
+  return {
+    meta:{
+      titulo:'Kickoff — Qualidade da Informação nas 12 Dimensões',
+      descricao:'Alinhamento inicial do mapa de tópicos por dimensão: o que já está consolidado, qual normativo endereça cada ponto e com quem precisamos conversar. Os dados abaixo são fictícios e servem de estrutura para o preenchimento real.',
+      setor:'Superintendência de Governança de Dados',
+      data:'12 de agosto de 2026',
+      fimTitulo:FIM_TITULO,
+      fimMensagem:FIM_MENSAGEM
+    },
+    dimensoes: DIMENSOES.map(function(d,i){
+      return {
+        id:'d'+(i+1), roman:ROMAN[i], nome:d[0], descricao:d[1],
+        topicos:(TOPICOS[i]||[]).map(function(t,j){
+          return {id:'d'+(i+1)+'-t'+(j+1), titulo:t[0], descricao:t[1], normativo:t[2], owner:t[3], setor:t[4]};
+        })
+      };
+    })
+  };
+}
+
+const LS_DATA='kickoff.dim.data.v1', LS_HIST='kickoff.dim.hist.v1', LS_UI='kickoff.dim.ui.v1';
+const ARQUIVO_PADRAO='kickoff.json';
+
+/* ------------------------------------------------------------------ */
+/* Estado                                                              */
+/* ------------------------------------------------------------------ */
+const S = {
+  data: defaultData(),
+  history: [],
+  theme:'dark', mode:'config',
+  menuOpen:false, dockOpen:false, modal:null,
+  selected:'d1', unlocked:{}, section:0, dir:1,
+  form:null, jsonText:'', jsonError:'',
+  confirmar:null,
+  logo:null, logoVisible:true, logoSize:34,
+  fileName:'', fileState:'none', lastSync:'', toastMsg:''
+};
+
+let fileHandle = null;
+let tSave=null, tHist=null, tToast=null, tDock=null, tLock=null, raf=null, locked=false, boundEl=null;
+
+/* ------------------------------------------------------------------ */
+/* Utilidades                                                          */
+/* ------------------------------------------------------------------ */
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const $ = sel => document.querySelector(sel);
+const agora = () => { const d=new Date(); return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); };
+const clone = o => JSON.parse(JSON.stringify(o));
+const dimDe = id => S.data.dimensoes.find(d=>d.id===id);
+const idxDe = id => S.data.dimensoes.findIndex(d=>d.id===id);
+const accentDe = id => ACCENTS[Math.max(0,idxDe(id))%12];
+const totalTopicos = () => S.data.dimensoes.reduce((a,d)=>a+d.topicos.length,0);
+
+function contatos(){
+  const m={};
+  S.data.dimensoes.forEach(d=>d.topicos.forEach(t=>{
+    const k=t.owner||'a definir';
+    if(!m[k]) m[k]={owner:k, setor:t.setor||'—', dims:[]};
+    if(m[k].dims.indexOf(d.nome)<0) m[k].dims.push(d.nome);
+  }));
+  return Object.keys(m).sort().map(k=>m[k]);
+}
+
+function toast(msg){
+  S.toastMsg=msg; pintarToast();
+  clearTimeout(tToast); tToast=setTimeout(()=>{ S.toastMsg=''; pintarToast(); },2600);
+}
+function pintarToast(){
+  const old=$('#toast'); if(old) old.remove();
+  if(!S.toastMsg) return;
+  const el=document.createElement('div');
+  el.id='toast'; el.className='toast'; el.textContent=S.toastMsg;
+  document.body.appendChild(el);
+}
+
+/* ------------------------------------------------------------------ */
+/* Persistência                                                        */
+/* ------------------------------------------------------------------ */
+function payload(d){ return {versao:2, atualizadoEm:new Date().toISOString(), meta:d.meta, dimensoes:d.dimensoes}; }
+
+function salvarUI(patch){
+  let ui={}; try{ ui=JSON.parse(localStorage.getItem(LS_UI)||'{}'); }catch(e){}
+  Object.assign(ui,patch);
+  try{ localStorage.setItem(LS_UI, JSON.stringify(ui)); }catch(e){}
+}
+
+function salvarLocal(){
+  try{ localStorage.setItem(LS_DATA, JSON.stringify(S.data)); }catch(e){}
+}
+
+function registrarHistorico(nota){
+  S.history = [{ts:Date.now(), who:'Você', what:nota, snapshot:JSON.stringify(S.data)}].concat(S.history).slice(0,40);
+  try{ localStorage.setItem(LS_HIST, JSON.stringify(S.history)); }catch(e){}
+}
+
+/* commit = alteração estrutural: grava tudo e redesenha */
+function commit(nota, redesenhar){
+  salvarLocal();
+  registrarHistorico(nota);
+  clearTimeout(tSave); tSave=setTimeout(()=>gravarArquivo(true),700);
+  if(redesenhar!==false) render();
+}
+
+/* patch = digitação: grava com atraso, sem redesenhar */
+function patch(nota){
+  salvarLocal();
+  clearTimeout(tSave); tSave=setTimeout(()=>gravarArquivo(true),900);
+  clearTimeout(tHist); tHist=setTimeout(()=>{ registrarHistorico(nota); },1800);
+}
+
+/* --- IndexedDB guarda o handle do arquivo entre sessões --- */
+function idb(){
+  return new Promise((res,rej)=>{
+    const r=indexedDB.open('kickoff-fs',1);
+    r.onupgradeneeded=()=>{ r.result.createObjectStore('h'); };
+    r.onsuccess=()=>res(r.result);
+    r.onerror=()=>rej(r.error);
+  });
+}
+async function idbPut(v){ try{ const db=await idb(); db.transaction('h','readwrite').objectStore('h').put(v,'file'); }catch(e){} }
+async function idbGet(){
+  try{
+    const db=await idb();
+    return await new Promise(res=>{ const q=db.transaction('h','readonly').objectStore('h').get('file'); q.onsuccess=()=>res(q.result); q.onerror=()=>res(null); });
+  }catch(e){ return null; }
+}
+
+async function restaurarHandle(){
+  const h=await idbGet(); if(!h) return;
+  fileHandle=h;
+  let perm='prompt';
+  try{ perm=await h.queryPermission({mode:'readwrite'}); }catch(e){}
+  S.fileName=h.name; S.fileState = perm==='granted' ? 'ok' : 'reauth';
+  render();
+}
+
+async function gravarArquivo(silencioso){
+  if(!fileHandle){
+    S.lastSync='salvo no navegador · '+agora();
+    salvarUI({lastSync:'salvo no navegador'});
+    pintarSync(); return;
+  }
+  try{
+    let perm=await fileHandle.queryPermission({mode:'readwrite'});
+    if(perm!=='granted') perm=await fileHandle.requestPermission({mode:'readwrite'});
+    if(perm!=='granted'){ S.fileState='reauth'; pintarSync(); return; }
+    const w=await fileHandle.createWritable();
+    await w.write(JSON.stringify(payload(S.data),null,2));
+    await w.close();
+    S.fileState='ok'; S.lastSync='gravado em '+fileHandle.name+' · '+agora();
+    salvarUI({lastSync:S.lastSync});
+    pintarSync();
+    if(!silencioso) toast('Arquivo sincronizado.');
+  }catch(e){
+    S.fileState='error'; pintarSync();
+    if(!silencioso) toast('Falha ao gravar: '+e.message);
+  }
+}
+
+const SYNC = {
+  none :{color:'oklch(.72 .13 95)',  label:'somente navegador', detail:'Os dados estão salvos no localStorage deste navegador. Autorize o arquivo '+ARQUIVO_PADRAO+' para que toda alteração seja gravada em disco automaticamente.'},
+  ok   :{color:'oklch(.72 .14 155)', label:'sincronizado'},
+  reauth:{color:'oklch(.72 .15 65)', label:'reautorizar'},
+  error:{color:'oklch(.65 .17 25)',  label:'falha ao gravar', detail:'Não foi possível gravar no arquivo. Reautorize ou selecione outro destino.'}
+};
+function syncInfo(){
+  const s=Object.assign({}, SYNC[S.fileState]||SYNC.none);
+  if(S.fileState==='ok')     s.detail='Gravação automática ativa em '+S.fileName+'. '+(S.lastSync||'');
+  if(S.fileState==='reauth') s.detail='O navegador precisa que você reautorize o acesso a '+S.fileName+' nesta sessão.';
+  return s;
+}
+function pintarSync(){
+  const p=$('#syncpill'); if(!p) return;
+  const s=syncInfo();
+  p.innerHTML='<span class="dot" style="background:'+s.color+'"></span>'+esc(s.label);
+  p.title=s.detail||'';
+  const d=$('#syncdetail'); if(d) d.textContent=s.detail||'';
+}
+
+/* ------------------------------------------------------------------ */
+/* Logomarca                                                           */
+/* ------------------------------------------------------------------ */
+function logoHtml(h){
+  if(!S.logo || !S.logoVisible) return '';
+  return '<img src="'+esc(S.logo)+'" alt="Logomarca" style="height:'+h+'px;width:auto;object-fit:contain;display:block;opacity:.94">';
+}
+
+/* ------------------------------------------------------------------ */
+/* Render — configuração                                               */
+/* ------------------------------------------------------------------ */
+function viewConfig(){
+  const d=S.data, s=syncInfo();
+  return `
+  <div class="shell">
+    <div class="topbar"><div class="topbar-in">
+      ${logoHtml(28)}
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <div class="kicker">Configuração</div>
+        <div style="font-size:14px;font-weight:600;letter-spacing:-.02em">Mapa das 12 dimensões</div>
+      </div>
+      <div style="flex:1"></div>
+      <div class="syncpill" id="syncpill" title="${esc(s.detail||'')}"><span class="dot" style="background:${s.color}"></span>${esc(s.label)}</div>
+      <button class="iconbtn" data-act="tema" title="Tema">${S.theme==='dark'?'☀':'☾'}</button>
+      <div style="position:relative">
+        <button class="iconbtn" data-act="menu" title="Configurações">⚙</button>
+        ${S.menuOpen?menuHtml():''}
+      </div>
+      <button class="cta" data-act="apresentar">Salvar e apresentar<i>▶</i></button>
+    </div></div>
+
+    <div class="page">
+      <div class="grid-top" style="display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:22px;align-items:start">
+        <div class="glass" style="padding:26px 28px">
+          <div class="sec-lbl" style="margin-bottom:18px">Identificação da apresentação</div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <label class="lab">Título
+              <input class="inp big" data-field="meta.titulo" data-fkey="m-tit" value="${esc(d.meta.titulo)}">
+            </label>
+            <label class="lab">Descrição
+              <textarea class="inp" rows="3" data-field="meta.descricao" data-fkey="m-desc">${esc(d.meta.descricao)}</textarea>
+            </label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <label class="lab">Setor responsável
+                <input class="inp" data-field="meta.setor" data-fkey="m-set" value="${esc(d.meta.setor)}">
+              </label>
+              <label class="lab">Data
+                <input class="inp" data-field="meta.data" data-fkey="m-dat" value="${esc(d.meta.data)}">
+              </label>
+            </div>
+            <div class="sep" style="margin:6px 0"></div>
+            <div class="sec-lbl">Seção final</div>
+            <label class="lab">Título do encerramento
+              <input class="inp mid" data-field="meta.fimTitulo" data-fkey="m-ft" value="${esc(d.meta.fimTitulo||FIM_TITULO)}">
+            </label>
+            <label class="lab">Mensagem de encerramento
+              <textarea class="inp" rows="3" data-field="meta.fimMensagem" data-fkey="m-fm">${esc(d.meta.fimMensagem||FIM_MENSAGEM)}</textarea>
+            </label>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="glass" style="padding:24px 26px">
+            <div class="sec-lbl" style="margin-bottom:16px">Resumo</div>
+            <div style="display:flex;align-items:flex-end;gap:22px">
+              <div><div class="stat">12</div><div class="stat-cap">dimensões</div></div>
+              <div><div class="stat">${totalTopicos()}</div><div class="stat-cap">tópicos</div></div>
+              <div><div class="stat">${contatos().length}</div><div class="stat-cap">owners</div></div>
+            </div>
+          </div>
+          <div class="glass" style="padding:24px 26px">
+            <div class="sec-lbl" style="margin-bottom:14px">Logomarca</div>
+            <div style="display:flex;align-items:center;gap:16px">
+              <div style="flex:1;min-width:0">${S.logo?logoHtml(Math.min(S.logoSize,48)):'<span style="font-size:12.5px;color:var(--muted)">Nenhuma logomarca enviada</span>'}</div>
+              <button data-act="logo" style="padding:9px 15px;border-radius:999px;border:1px solid var(--gline2);background:var(--glass2);color:var(--fg);font-size:12px;cursor:pointer;white-space:nowrap">${S.logo?'Trocar':'Enviar PNG'}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:34px;display:flex;align-items:center;gap:14px">
+        <div class="sec-lbl">Conteúdo por dimensão</div>
+        <div style="flex:1;height:1px;background:var(--gline)"></div>
+        <button class="ghostbtn" data-act="novo">Novo tópico<i>+</i></button>
+      </div>
+
+      <div class="grid-dims" style="margin-top:18px;display:grid;grid-template-columns:330px minmax(0,1fr);gap:26px;align-items:start">
+        <div class="side glass" style="position:sticky;top:96px;padding:12px;border-radius:24px;display:flex;flex-direction:column;gap:4px">
+          ${S.data.dimensoes.map((dim,i)=>dimRow(dim,i)).join('')}
+        </div>
+        <div style="display:flex;flex-direction:column;gap:20px;min-width:0">
+          ${painelDimensao()}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function dimRow(dim,i){
+  const on = S.selected===dim.id;
+  return `<div class="dimrow${on?' on':''}" style="--a:${ACCENTS[i%12]}" data-act="selecionar" data-dim="${dim.id}">
+    <span class="rail"></span>
+    <span class="rom mono">${dim.roman}</span>
+    <span class="nm" data-nm="${dim.id}">${esc(dim.nome)}</span>
+    <span class="ct mono">${dim.topicos.length}</span>
+    <span class="chip"><i></i></span>
+  </div>`;
+}
+
+function painelDimensao(){
+  const dim=dimDe(S.selected); if(!dim) return '';
+  const i=idxDe(dim.id), a=ACCENTS[i%12], aberta=!!S.unlocked[dim.id];
+  const n=dim.topicos.length;
+  const opcoes=v=>S.data.dimensoes.map(x=>`<option value="${x.id}"${x.id===v?' selected':''}>${esc(x.roman+' — '+x.nome)}</option>`).join('');
+  return `<div class="dimpanel" style="--a:${a}">
+    <div class="blob"></div>
+    <div style="position:relative;padding:28px 32px 22px;border-bottom:1px solid var(--gline)">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <span class="romchip mono">${dim.roman}</span>
+        ${aberta
+          ? `<input class="inp" style="flex:1;padding:8px 11px;border-radius:12px;font-size:21px;font-weight:600;letter-spacing:-.03em" data-field="dim.nome" data-dim="${dim.id}" data-fkey="dn-${dim.id}" value="${esc(dim.nome)}">`
+          : `<span style="font-size:26px;font-weight:700;letter-spacing:-.035em">${esc(dim.nome)}</span>`}
+        <span style="flex:1;height:1px;background:var(--gline)"></span>
+        <span class="mono" style="font-size:11px;color:var(--muted)">${n===1?'1 tópico':n+' tópicos'}</span>
+        <button class="lockbtn${aberta?' on':''}" data-act="lock" data-dim="${dim.id}" title="Travar/destravar a dimensão">${aberta?'🔓 Destravada':'🔒 Travada'}</button>
+      </div>
+      ${aberta
+        ? `<textarea class="inp" rows="3" style="padding:11px 13px;font-size:13px;line-height:1.6" data-field="dim.descricao" data-dim="${dim.id}" data-fkey="dd-${dim.id}">${esc(dim.descricao)}</textarea>`
+        : `<div style="font-size:13.5px;line-height:1.68;color:var(--fg2);max-width:940px;text-wrap:pretty">${esc(dim.descricao)}</div>`}
+    </div>
+    <div class="topicgrid">
+      ${dim.topicos.map(t=>`
+        <div class="tcard">
+          <input class="tinp" placeholder="Título do tópico" data-field="top.titulo" data-dim="${dim.id}" data-top="${t.id}" data-fkey="t-${t.id}-tit" value="${esc(t.titulo)}">
+          <textarea class="tarea" rows="3" placeholder="Descrição" data-field="top.descricao" data-dim="${dim.id}" data-top="${t.id}" data-fkey="t-${t.id}-desc">${esc(t.descricao)}</textarea>
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+            <input class="tmeta norm mono" placeholder="Normativo" data-field="top.normativo" data-dim="${dim.id}" data-top="${t.id}" data-fkey="t-${t.id}-norm" value="${esc(t.normativo)}">
+            <input class="tmeta" placeholder="Owner" data-field="top.owner" data-dim="${dim.id}" data-top="${t.id}" data-fkey="t-${t.id}-own" value="${esc(t.owner)}">
+            <input class="tmeta" style="color:var(--fg2)" placeholder="Setor" data-field="top.setor" data-dim="${dim.id}" data-top="${t.id}" data-fkey="t-${t.id}-set" value="${esc(t.setor)}">
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;padding-top:4px">
+            <select class="tsel" data-act="mover" data-dim="${dim.id}" data-top="${t.id}">${opcoes(dim.id)}</select>
+            <button class="delbtn" data-act="excluir" data-dim="${dim.id}" data-top="${t.id}">Excluir</button>
+          </div>
+        </div>`).join('')}
+      ${n===0?`<div class="emptybox click" data-act="novo">Nenhum tópico nesta dimensão. Clique para adicionar.</div>`:''}
+    </div>
+  </div>`;
+}
+
+function menuHtml(){
+  const s=syncInfo();
+  return `<div class="menu" id="menu">
+    <div class="menu-lbl">Dados</div>
+    <div class="menu-txt" id="syncdetail">${esc(s.detail||'')}</div>
+    <button class="menu-item" data-act="conectar"><em>⛁</em>${S.fileState==='none'?'Autorizar arquivo JSON (auto-save)':'Trocar / reautorizar arquivo'}</button>
+    <button class="menu-item" data-act="carregar"><em>↧</em>Carregar de um JSON</button>
+    <button class="menu-item" data-act="baixar"><em>↥</em>Baixar cópia do JSON</button>
+    <button class="menu-item" data-act="json"><em>{ }</em>Editar JSON</button>
+    <button class="menu-item" data-act="historico"><em>⟲</em>Histórico de alterações</button>
+    <div class="sep"></div>
+    <div class="menu-lbl">Logomarca</div>
+    <button class="menu-item" data-act="logo"><em>▤</em>${S.logo?'Trocar logomarca':'Enviar PNG'}</button>
+    ${S.logo?`<div style="padding:6px 12px 12px">
+      <div style="display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-bottom:6px"><span>Tamanho</span><span class="mono">${S.logoSize}px</span></div>
+      <input type="range" min="18" max="90" step="2" value="${S.logoSize}" data-act="logoSize" style="width:100%;accent-color:var(--brand)">
+      <div style="display:flex;gap:6px;margin-top:12px">
+        <button data-act="logoShow" style="flex:1;padding:8px 4px;border-radius:10px;border:1px solid var(--gline2);background:${S.logoVisible?'color-mix(in oklab, var(--brand) 80%, transparent)':'transparent'};color:var(--fg);font-size:11.5px;cursor:pointer">Visível</button>
+        <button data-act="logoHide" style="flex:1;padding:8px 4px;border-radius:10px;border:1px solid var(--gline2);background:${S.logoVisible?'transparent':'color-mix(in oklab, var(--brand) 80%, transparent)'};color:var(--fg);font-size:11.5px;cursor:pointer">Oculta</button>
+      </div>
+      <button data-act="logoRemove" style="margin-top:10px;width:100%;padding:8px;border-radius:10px;border:1px solid var(--gline);background:transparent;color:var(--muted);font-size:12px;cursor:pointer">Remover logomarca</button>
+    </div>`:''}
+  </div>`;
+}
+
+/* ------------------------------------------------------------------ */
+/* Render — apresentação                                               */
+/* ------------------------------------------------------------------ */
+function anim(i){
+  if(S.section!==i) return 'none';
+  return (S.dir>0?'kfSecUp':'kfSecDown')+' .72s cubic-bezier(.16,.9,.24,1) both';
+}
+
+function viewPresent(){
+  const d=S.data, dim=dimDe(S.selected)||d.dimensoes[0];
+  const i=idxDe(dim.id), a=ACCENTS[Math.max(0,i)%12], n=dim.topicos.length;
+  const secs=[['01','Abertura'],['02','Dimensões'],['03','Encerramento']];
+  return `
+  <div class="present">
+    <div class="dockzone" id="dockzone">
+      <div class="dockhint" style="opacity:${S.dockOpen?0:1}"></div>
+      <div class="dock${S.dockOpen?' on':''}">
+        ${secs.map((x,k)=>`<button class="dockbtn${S.section===k?' on':''}" data-act="ir" data-sec="${k}" title="${x[1]}"><span class="mono">${x[0]}</span></button>`).join('')}
+        <span style="width:16px;height:1px;background:var(--gline)"></span>
+        <button class="dockbtn" data-act="sair" title="Encerrar apresentação">✕</button>
+      </div>
+    </div>
+
+    <div id="scroller">
+      <section data-scrollable="1" style="height:100vh;display:flex;flex-direction:column;justify-content:center;padding:clamp(32px,5vh,64px) clamp(40px,7vw,120px);position:relative;overflow:auto">
+        <div style="max-width:1180px;animation:${anim(0)}">
+          ${S.logo&&S.logoVisible?`<div style="margin-bottom:clamp(18px,3vh,34px)">${logoHtml(S.logoSize)}</div>`:''}
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:clamp(16px,3vh,30px);flex-wrap:wrap">
+            <span style="width:9px;height:9px;border-radius:50%;background:var(--brand)"></span>
+            <span class="mono" style="font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--fg2)">Kickoff</span>
+            <span style="width:120px;height:1px;background:var(--gline2)"></span>
+            <span class="mono" style="font-size:12px;letter-spacing:.14em;color:var(--muted)">${esc(d.meta.data)}</span>
+          </div>
+          <h1 style="margin:0 0 clamp(18px,3vh,30px);font-size:clamp(38px,5.2vw,86px);line-height:1;letter-spacing:-.05em;font-weight:700;max-width:16ch;text-wrap:balance">${esc(d.meta.titulo)}</h1>
+          <p style="margin:0;max-width:680px;font-size:clamp(15px,1.25vw,18px);line-height:1.7;color:var(--fg2);text-wrap:pretty">${esc(d.meta.descricao)}</p>
+          <div style="margin-top:clamp(24px,4vh,46px);display:flex;flex-wrap:wrap;gap:16px">
+            <div class="pcard"><span class="b" style="background:color-mix(in oklab, oklch(.58 .17 275) 40%, transparent)"></span><div class="n">12</div><div class="c">dimensões de qualidade</div></div>
+            <div class="pcard"><span class="b" style="background:color-mix(in oklab, color-mix(in oklab, #1626FF 74%, white) 34%, transparent)"></span><div class="n">${totalTopicos()}</div><div class="c">tópicos mapeados</div></div>
+            <div class="pcard" style="max-width:310px;display:flex;flex-direction:column;justify-content:space-between">
+              <span class="b" style="top:auto;right:auto;bottom:-70px;left:-30px;width:170px;height:170px;background:color-mix(in oklab, oklch(.5 .17 270) 40%, transparent);filter:blur(38px)"></span>
+              <div class="sec-lbl" style="position:relative">Apresentado por</div>
+              <div style="position:relative;margin-top:16px;font-size:15.5px;font-weight:500;line-height:1.4;text-wrap:pretty">${esc(d.meta.setor)}</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:clamp(22px,4vh,44px);flex:none;display:flex;align-items:center;gap:12px;color:var(--muted);font-size:11px;letter-spacing:.16em;text-transform:uppercase;animation:kfPulse 3.4s ease-in-out infinite">
+          <span style="width:22px;height:1px;background:var(--gline2)"></span>role para começar
+        </div>
+      </section>
+
+      <section style="height:100vh;display:flex;flex-direction:column;padding:clamp(36px,5vh,64px) clamp(40px,7vw,120px) clamp(32px,5vh,56px);overflow:hidden;user-select:none;animation:${anim(1)}">
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:26px;flex:none">
+          <span class="mono" style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)">As 12 dimensões</span>
+          <span style="flex:1;height:1px;background:var(--gline)"></span>
+          <span class="mono" style="font-size:11px;color:var(--muted)">${(i+1)} / 12 · use ← →</span>
+        </div>
+        <div style="flex:1;min-height:0;display:grid;grid-template-columns:300px minmax(0,1fr);gap:30px">
+          <div data-scrollable="1" style="min-height:0;overflow:auto;padding-right:6px;display:flex;flex-direction:column;gap:3px">
+            ${S.data.dimensoes.map((x,k)=>`<div class="dimrow${S.selected===x.id?' on':''}" style="--a:${ACCENTS[k%12]}" data-act="selecionar" data-dim="${x.id}">
+              <span class="rail"></span><span class="rom mono">${x.roman}</span>
+              <span class="nm" style="font-size:14.5px">${esc(x.nome)}</span>
+              <span class="ct mono">${x.topicos.length}</span>
+            </div>`).join('')}
+          </div>
+          <div class="dimpanel" style="--a:${a};min-height:0;display:flex;flex-direction:column;border-radius:30px">
+            <div class="blob" style="top:-140px;right:-90px;width:380px;height:380px;filter:blur(70px)"></div>
+            <div style="position:relative;flex:none;padding:30px 36px 22px;border-bottom:1px solid var(--gline)">
+              <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
+                <span class="romchip mono" style="min-width:38px;height:28px;padding:0 10px;font-size:11.5px">${dim.roman}</span>
+                <span style="font-size:clamp(26px,2.3vw,36px);font-weight:700;letter-spacing:-.04em;line-height:1">${esc(dim.nome)}</span>
+                <span style="flex:1;height:1px;background:var(--gline)"></span>
+                <span class="mono" style="font-size:11px;color:var(--muted)">${n===1?'1 tópico':n+' tópicos'}</span>
+              </div>
+              <div style="font-size:14px;line-height:1.66;color:var(--fg2);max-width:1000px;text-wrap:pretty">${esc(dim.descricao)}</div>
+            </div>
+            <div data-scrollable="1" style="position:relative;flex:1;min-height:0;overflow:auto;padding:22px 36px 30px">
+              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px;align-items:start">
+                ${dim.topicos.map(t=>`<div class="ptcard">
+                  <div style="font-size:16px;font-weight:600;letter-spacing:-.02em;line-height:1.3;margin-bottom:9px;text-wrap:pretty">${esc(t.titulo)}</div>
+                  <div style="font-size:13px;line-height:1.62;color:var(--fg2);text-wrap:pretty">${esc(t.descricao)}</div>
+                  <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:15px">
+                    <span class="tag norm mono">${esc(t.normativo)}</span>
+                    <span class="tag"><em>Owner</em>${esc(t.owner)}</span>
+                    <span class="tag"><em>Setor</em>${esc(t.setor)}</span>
+                  </div>
+                </div>`).join('')}
+                ${n===0?'<div class="emptybox">Nenhum tópico mapeado nesta dimensão.</div>':''}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section data-scrollable="1" style="height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:clamp(36px,5vh,64px) clamp(40px,7vw,120px);overflow:hidden;position:relative;animation:${anim(2)}">
+        <div style="position:absolute;inset:0;overflow:hidden;pointer-events:none;display:flex;align-items:center;justify-content:center">
+          <div style="position:absolute;width:min(78vh,860px);height:min(78vh,860px);border-radius:50%;border:1px solid color-mix(in oklab, #1626FF 26%, transparent);animation:kfRing 7s ease-out infinite"></div>
+          <div style="position:absolute;width:min(78vh,860px);height:min(78vh,860px);border-radius:50%;border:1px solid color-mix(in oklab, #1626FF 26%, transparent);animation:kfRing 7s ease-out 2.4s infinite"></div>
+          <div style="position:absolute;width:min(78vh,860px);height:min(78vh,860px);border-radius:50%;border:1px solid color-mix(in oklab, #1626FF 26%, transparent);animation:kfRing 7s ease-out 4.8s infinite"></div>
+          <div style="position:absolute;width:min(62vh,680px);height:min(62vh,680px);border-radius:50%;background:radial-gradient(circle, color-mix(in oklab, #1626FF 24%, transparent), transparent 70%);filter:blur(46px);animation:kfHalo 16s ease-in-out infinite"></div>
+        </div>
+        <div style="position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;max-width:900px">
+          ${S.logo&&S.logoVisible?`<div style="margin-bottom:clamp(18px,3vh,34px);animation:kfRise .9s cubic-bezier(.16,.9,.24,1) both">${logoHtml(S.logoSize)}</div>`:''}
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:26px;animation:kfRise .9s cubic-bezier(.16,.9,.24,1) .1s both">
+            <span style="width:44px;height:1px;background:color-mix(in oklab, #1626FF 34%, transparent)"></span>
+            <span class="mono" style="font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:color-mix(in oklab, #1626FF 34%, var(--fg2))">Encerramento</span>
+            <span style="width:44px;height:1px;background:color-mix(in oklab, #1626FF 34%, transparent)"></span>
+          </div>
+          <h2 style="margin:0 0 clamp(16px,3vh,26px);padding-bottom:.12em;font-size:clamp(40px,5.6vw,96px);line-height:1.16;letter-spacing:-.055em;font-weight:700;background:linear-gradient(120deg, var(--fg) 20%, color-mix(in oklab, #1626FF 38%, var(--fg)) 50%, var(--fg) 82%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:kfRise 1s cubic-bezier(.16,.9,.24,1) .18s both">${esc(d.meta.fimTitulo||FIM_TITULO)}</h2>
+          <p style="margin:0;max-width:560px;font-size:clamp(14px,1.15vw,17px);line-height:1.72;color:var(--fg2);text-wrap:pretty;animation:kfRise 1s cubic-bezier(.16,.9,.24,1) .3s both">${esc(d.meta.fimMensagem||FIM_MENSAGEM)}</p>
+          <div style="margin-top:clamp(24px,4vh,44px);padding:16px 26px;border-radius:999px;border:1px solid color-mix(in oklab, #1626FF 24%, var(--gline2));background:var(--glass2);backdrop-filter:blur(26px);box-shadow:var(--shadow);display:flex;align-items:center;gap:16px;animation:kfRise 1s cubic-bezier(.16,.9,.24,1) .42s both">
+            <span style="width:7px;height:7px;border-radius:50%;background:color-mix(in oklab, #1626FF 62%, var(--fg2));animation:kfPulse 3s ease-in-out infinite"></span>
+            <span style="font-size:13.5px;font-weight:500">${esc(d.meta.setor)}</span>
+            <span style="width:1px;height:16px;background:var(--gline)"></span>
+            <span class="mono" style="font-size:12px;color:var(--muted)">${esc(d.meta.data)}</span>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>`;
+}
+
+/* ------------------------------------------------------------------ */
+/* Render — modais                                                     */
+/* ------------------------------------------------------------------ */
+function viewModal(){
+  if(S.modal==='topic'){
+    const f=S.form||{dimId:'d1',titulo:'',descricao:'',normativo:'',owner:'',setor:''};
+    const op=S.data.dimensoes.map(x=>`<option value="${x.id}"${x.id===f.dimId?' selected':''}>${esc(x.roman+' — '+x.nome)}</option>`).join('');
+    return `<div class="ovl" data-act="fundo"><div class="modal" data-modal="1" style="max-width:640px;padding:30px 32px">
+      <h3>Adicionar novo tópico</h3>
+      <div class="sub">Tópicos são vinculados a uma das 12 dimensões e etiquetados por normativo e owner.</div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <label class="lab" style="font-size:12px">Dimensão<select class="minp" data-form="dimId">${op}</select></label>
+        <label class="lab" style="font-size:12px">Título do tópico<input class="minp" data-form="titulo" data-fkey="f-tit" placeholder="Ex.: Trilha de auditoria dos extratos" value="${esc(f.titulo)}"></label>
+        <label class="lab" style="font-size:12px">Descrição breve<textarea class="minp" rows="3" data-form="descricao" data-fkey="f-desc" placeholder="Uma ou duas linhas sobre o que precisa ser conversado.">${esc(f.descricao)}</textarea></label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <label class="lab" style="font-size:12px">Normativo<input class="minp mono" data-form="normativo" data-fkey="f-norm" placeholder="NORM-000/2026" value="${esc(f.normativo)}"></label>
+          <label class="lab" style="font-size:12px">Owner<input class="minp" data-form="owner" data-fkey="f-own" placeholder="Nome do responsável" value="${esc(f.owner)}"></label>
+        </div>
+        <label class="lab" style="font-size:12px">Setor / área<input class="minp" data-form="setor" data-fkey="f-set" placeholder="Ex.: Controladoria" value="${esc(f.setor)}"></label>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:26px">
+        <button class="mbtn" data-act="fechar">Cancelar</button>
+        <button class="mbtn pri" data-act="salvarTopico">Salvar tópico</button>
+      </div>
+    </div></div>`;
+  }
+
+  if(S.modal==='json'){
+    return `<div class="ovl" data-act="fundo"><div class="modal" data-modal="1" style="max-width:900px">
+      <h3>Editar JSON</h3>
+      <div class="sub">Ao salvar, o conteúdo é validado, gravado no localStorage e sincronizado com o arquivo autorizado.</div>
+      <textarea id="jsonArea" rows="20" spellcheck="false" style="width:100%;padding:16px;border-radius:16px;border:1px solid var(--gline2);background:var(--bg2);color:var(--fg2);font-family:'IBM Plex Mono',monospace;font-size:12.5px;line-height:1.6;resize:vertical">${esc(S.jsonText)}</textarea>
+      ${S.jsonError?`<div class="errbox mono">${esc(S.jsonError)}</div>`:''}
+      <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:20px">
+        <button class="mbtn" data-act="fechar">Cancelar</button>
+        <button class="mbtn pri" data-act="salvarJson">Salvar JSON</button>
+      </div>
+    </div></div>`;
+  }
+
+  if(S.modal==='history'){
+    return `<div class="ovl" data-act="fundo"><div class="modal" data-modal="1" style="max-width:720px">
+      <h3>Histórico de alterações</h3>
+      <div class="sub">Últimas 40 alterações salvas neste navegador.</div>
+      <div style="display:flex;flex-direction:column;gap:8px;max-height:52vh;overflow:auto">
+        ${S.history.map((h,k)=>`<div class="hrow">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13.5px;font-weight:500">${esc(h.what)}</div>
+            <div class="mono" style="font-size:11.5px;color:var(--muted);margin-top:4px">${esc(new Date(h.ts).toLocaleString('pt-BR'))} · ${esc(h.who)}</div>
+          </div>
+          <button data-act="restaurar" data-i="${k}" style="padding:8px 15px;border-radius:999px;border:1px solid var(--gline2);background:var(--panel);color:var(--fg);font-size:12px;cursor:pointer">Restaurar</button>
+        </div>`).join('')}
+        ${S.history.length===0?'<div class="emptybox" style="border-radius:16px;padding:20px">Nenhuma alteração registrada ainda.</div>':''}
+      </div>
+      <div style="display:flex;justify-content:flex-end;margin-top:20px">
+        <button class="mbtn" data-act="fechar">Fechar</button>
+      </div>
+    </div></div>`;
+  }
+
+  if(S.confirmar){
+    const c=S.confirmar;
+    return `<div class="ovl" data-act="fundo" style="align-items:center"><div class="modal" data-modal="1" style="max-width:460px">
+      <h3>${esc(c.titulo)}</h3>
+      <div class="sub" style="margin-bottom:22px;line-height:1.6">${esc(c.texto)}</div>
+      <div style="display:flex;justify-content:flex-end;gap:10px">
+        <button class="mbtn" data-act="fechar">Cancelar</button>
+        <button class="mbtn dang" data-act="confirmarOk">${esc(c.ok||'Confirmar')}</button>
+      </div>
+    </div></div>`;
+  }
+  return '';
+}
+
+/* ------------------------------------------------------------------ */
+/* Render principal                                                    */
+/* ------------------------------------------------------------------ */
+function render(){
+  const foco = document.activeElement;
+  const fkey = foco && foco.dataset ? foco.dataset.fkey : null;
+  const selStart = foco && typeof foco.selectionStart==='number' ? foco.selectionStart : null;
+  const selEnd   = foco && typeof foco.selectionEnd==='number' ? foco.selectionEnd : null;
+
+  $('#app').innerHTML =
+    '<div class="wrap"><div class="halo halo1"></div><div class="halo halo2"></div>' +
+    (S.mode==='present' ? viewPresent() : viewConfig()) +
+    viewModal() +
+    '</div>';
+
+  if(fkey){
+    const el = document.querySelector('[data-fkey="'+fkey+'"]');
+    if(el){ el.focus(); try{ if(selStart!==null) el.setSelectionRange(selStart,selEnd); }catch(e){} }
+  }
+  if(S.mode==='present') ligarScroller();
+  pintarToast();
+}
+
+/* ------------------------------------------------------------------ */
+/* Apresentação: rolagem por seção                                     */
+/* ------------------------------------------------------------------ */
+function ligarScroller(){
+  const el=$('#scroller'); if(!el || el===boundEl) return;
+  boundEl=el;
+  el.addEventListener('scroll',()=>{
+    if(locked) return;
+    const n=Math.round(el.scrollTop/el.clientHeight);
+    if(n!==S.section){ S.dir = n>S.section?1:-1; S.section=n; render(); }
+  },{passive:true});
+  el.addEventListener('wheel',(e)=>{
+    if(S.modal||S.confirmar) return;
+    const inner=e.target.closest('[data-scrollable]');
+    if(inner && inner.scrollHeight>inner.clientHeight+2){
+      const noTopo=inner.scrollTop<=0;
+      const noFim=inner.scrollTop+inner.clientHeight>=inner.scrollHeight-1;
+      if((e.deltaY<0 && !noTopo)||(e.deltaY>0 && !noFim)) return;
+    }
+    e.preventDefault();
+    if(locked || Math.abs(e.deltaY)<6) return;
+    irSecao(S.section + (e.deltaY>0?1:-1));
+  },{passive:false});
+}
+
+function irSecao(i){
+  const el=$('#scroller'); if(!el) return;
+  const n=Math.max(0,Math.min(2,i));
+  if(n===S.section) return;
+  locked=true; clearTimeout(tLock); tLock=setTimeout(()=>{ locked=false; },820);
+  S.dir = n>S.section?1:-1; S.section=n;
+  animarPara(n*el.clientHeight);
+  render();
+}
+
+function animarPara(alvo){
+  const el=$('#scroller'); if(!el) return;
+  cancelAnimationFrame(raf);
+  const ini=el.scrollTop, delta=alvo-ini, t0=performance.now(), dur=760;
+  const ease=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+  const tick=t=>{
+    const p=Math.min(1,(t-t0)/dur);
+    el.scrollTop=ini+delta*ease(p);
+    if(p<1) raf=requestAnimationFrame(tick);
+  };
+  raf=requestAnimationFrame(tick);
+}
+
+/* ------------------------------------------------------------------ */
+/* Ações                                                               */
+/* ------------------------------------------------------------------ */
+function fecharModal(){ S.modal=null; S.confirmar=null; S.jsonError=''; render(); }
+
+function pedirConfirmacao(titulo,texto,ok,acao){
+  S.confirmar={titulo:titulo,texto:texto,ok:ok,acao:acao};
+  S.menuOpen=false; render();
+}
+
+function novoTopico(){
+  S.modal='topic'; S.menuOpen=false;
+  S.form={dimId:S.selected||'d1',titulo:'',descricao:'',normativo:'',owner:'',setor:''};
+  render();
+}
+
+function salvarTopico(){
+  const f=S.form||{};
+  if(!f.titulo||!f.titulo.trim()){ toast('Informe o título do tópico.'); return; }
+  const alvo=dimDe(f.dimId); if(!alvo) return;
+  alvo.topicos.push({
+    id:f.dimId+'-t'+Date.now(),
+    titulo:f.titulo, descricao:f.descricao,
+    normativo:f.normativo||'—', owner:f.owner||'a definir', setor:f.setor||'a definir'
+  });
+  S.modal=null; S.selected=f.dimId;
+  commit('Tópico adicionado: '+f.titulo);
+  toast('Tópico salvo.');
+}
+
+function moverTopico(dimId,topId,alvoId){
+  if(dimId===alvoId) return;
+  const de=dimDe(dimId), para=dimDe(alvoId); if(!de||!para) return;
+  const t=de.topicos.find(x=>x.id===topId); if(!t) return;
+  de.topicos=de.topicos.filter(x=>x.id!==topId);
+  para.topicos.push(t);
+  commit('Tópico movido: '+t.titulo);
+  toast('Tópico movido.');
+}
+
+function excluirTopico(dimId,topId){
+  const d=dimDe(dimId); if(!d) return;
+  const t=d.topicos.find(x=>x.id===topId); if(!t) return;
+  pedirConfirmacao('Excluir tópico','Excluir o tópico “'+t.titulo+'”? Esta ação não pode ser desfeita — mas a versão anterior fica no histórico.','Excluir',()=>{
+    const dd=dimDe(dimId);
+    dd.topicos=dd.topicos.filter(x=>x.id!==topId);
+    S.confirmar=null;
+    commit('Tópico excluído: '+t.titulo);
+    toast('Tópico excluído.');
+  });
+}
+
+function abrirJson(){
+  S.modal='json'; S.menuOpen=false; S.jsonError='';
+  S.jsonText=JSON.stringify(payload(S.data),null,2);
+  render();
+}
+
+function salvarJson(){
+  const area=$('#jsonArea'); if(area) S.jsonText=area.value;
+  try{
+    const p=JSON.parse(S.jsonText);
+    if(!p.dimensoes || !Array.isArray(p.dimensoes)) throw new Error('campo "dimensoes" ausente ou inválido');
+    const meta=p.meta||S.data.meta;
+    if(!meta.fimTitulo) meta.fimTitulo=FIM_TITULO;
+    if(!meta.fimMensagem) meta.fimMensagem=FIM_MENSAGEM;
+    S.data={meta:meta, dimensoes:p.dimensoes};
+    if(!dimDe(S.selected)) S.selected=S.data.dimensoes[0]?S.data.dimensoes[0].id:'d1';
+    S.modal=null; S.jsonError='';
+    commit('JSON editado manualmente');
+    toast('JSON salvo.');
+  }catch(err){
+    S.jsonError='JSON inválido — '+err.message;
+    render();
+  }
+}
+
+function restaurarVersao(i){
+  const h=S.history[i]; if(!h) return;
+  S.data=JSON.parse(h.snapshot);
+  if(!dimDe(S.selected)) S.selected=S.data.dimensoes[0].id;
+  S.modal=null;
+  commit('Versão restaurada');
+  toast('Versão restaurada.');
+}
+
+async function conectarArquivo(){
+  S.menuOpen=false; render();
+  if(!window.showSaveFilePicker){ toast('Navegador sem File System Access — use “Baixar cópia do JSON”.'); return; }
+  try{
+    const h=await window.showSaveFilePicker({suggestedName:ARQUIVO_PADRAO, types:[{description:'JSON',accept:{'application/json':['.json']}}]});
+    fileHandle=h; await idbPut(h);
+    S.fileName=h.name; S.fileState='ok';
+    await gravarArquivo(false);
+    render();
+  }catch(e){}
+}
+
+async function carregarArquivo(){
+  S.menuOpen=false; render();
+  if(!window.showOpenFilePicker){ toast('Navegador sem File System Access.'); return; }
+  try{
+    const [h]=await window.showOpenFilePicker({types:[{description:'JSON',accept:{'application/json':['.json']}}]});
+    const f=await h.getFile();
+    const p=JSON.parse(await f.text());
+    if(!p.dimensoes) throw new Error('estrutura inválida');
+    fileHandle=h; await idbPut(h);
+    const meta=p.meta||S.data.meta;
+    if(!meta.fimTitulo) meta.fimTitulo=FIM_TITULO;
+    if(!meta.fimMensagem) meta.fimMensagem=FIM_MENSAGEM;
+    S.data={meta:meta, dimensoes:p.dimensoes};
+    if(!dimDe(S.selected)) S.selected=S.data.dimensoes[0].id;
+    S.fileName=h.name; S.fileState='ok';
+    commit('Dados carregados de '+h.name);
+    toast('Dados carregados de '+h.name);
+  }catch(e){ if(e && e.message) toast('Não foi possível carregar: '+e.message); }
+}
+
+function baixarJson(){
+  const blob=new Blob([JSON.stringify(payload(S.data),null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download=ARQUIVO_PADRAO; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+  S.menuOpen=false; render();
+  toast(ARQUIVO_PADRAO+' baixado.');
+}
+
+function escolherLogo(){
+  S.menuOpen=false; render();
+  const inp=document.createElement('input');
+  inp.type='file'; inp.accept='image/png,image/svg+xml,image/jpeg';
+  inp.onchange=()=>{
+    const f=inp.files[0]; if(!f) return;
+    const r=new FileReader();
+    r.onload=()=>{
+      S.logo=r.result; S.logoVisible=true;
+      salvarUI({logo:S.logo, logoVisible:true});
+      render(); toast('Logomarca aplicada.');
+    };
+    r.readAsDataURL(f);
+  };
+  inp.click();
+}
+
+/* ------------------------------------------------------------------ */
+/* Eventos                                                             */
+/* ------------------------------------------------------------------ */
+document.addEventListener('click',(ev)=>{
+  const alvo=ev.target.closest('[data-act]');
+
+  // fecha o menu ao clicar fora
+  if(S.menuOpen && !ev.target.closest('#menu') && !(alvo && alvo.dataset.act==='menu')){
+    S.menuOpen=false; render();
+  }
+  if(!alvo) return;
+  const act=alvo.dataset.act;
+  if(act==='logoSize') return;              // tratado no input
+  if(act==='mover') return;                 // tratado no change
+  if(act==='fundo' && ev.target.closest('[data-modal]')) return;
+
+  switch(act){
+    case 'menu': S.menuOpen=!S.menuOpen; render(); break;
+    case 'tema': {
+      S.theme = S.theme==='dark'?'light':'dark';
+      document.documentElement.dataset.theme=S.theme;
+      salvarUI({theme:S.theme}); render(); break;
+    }
+    case 'apresentar':
+      commit('Configuração salva para apresentação', false);
+      gravarArquivo(true);
+      S.mode='present'; S.section=0; S.dir=1; S.menuOpen=false; boundEl=null;
+      render();
+      setTimeout(()=>{ const el=$('#scroller'); if(el) el.scrollTop=0; },60);
+      break;
+    case 'sair': S.mode='config'; S.dockOpen=false; boundEl=null; render(); break;
+    case 'ir': irSecao(parseInt(alvo.dataset.sec,10)); break;
+    case 'selecionar': S.selected=alvo.dataset.dim; render(); break;
+    case 'lock': {
+      const id=alvo.dataset.dim;
+      S.unlocked[id]=!S.unlocked[id]; render(); break;
+    }
+    case 'novo': novoTopico(); break;
+    case 'excluir': excluirTopico(alvo.dataset.dim, alvo.dataset.top); break;
+    case 'salvarTopico': salvarTopico(); break;
+    case 'json': abrirJson(); break;
+    case 'salvarJson': salvarJson(); break;
+    case 'historico': S.modal='history'; S.menuOpen=false; render(); break;
+    case 'restaurar': restaurarVersao(parseInt(alvo.dataset.i,10)); break;
+    case 'conectar': conectarArquivo(); break;
+    case 'carregar': carregarArquivo(); break;
+    case 'baixar': baixarJson(); break;
+    case 'logo': escolherLogo(); break;
+    case 'logoShow': S.logoVisible=true; salvarUI({logoVisible:true}); render(); break;
+    case 'logoHide': S.logoVisible=false; salvarUI({logoVisible:false}); render(); break;
+    case 'logoRemove': S.logo=null; salvarUI({logo:null}); S.menuOpen=false; render(); break;
+    case 'confirmarOk': { const a=S.confirmar&&S.confirmar.acao; S.confirmar=null; if(a) a(); else render(); break; }
+    case 'fechar': fecharModal(); break;
+    case 'fundo': fecharModal(); break;
+  }
+});
+
+/* digitação nos campos */
+document.addEventListener('input',(ev)=>{
+  const el=ev.target;
+
+  if(el.dataset && el.dataset.act==='logoSize'){
+    S.logoSize=parseInt(el.value,10);
+    salvarUI({logoSize:S.logoSize});
+    const lbl=el.previousElementSibling && el.previousElementSibling.querySelector('.mono');
+    if(lbl) lbl.textContent=S.logoSize+'px';
+    return;
+  }
+
+  if(el.id==='jsonArea'){ S.jsonText=el.value; return; }
+
+  if(el.dataset && el.dataset.form){
+    if(!S.form) S.form={dimId:S.selected||'d1',titulo:'',descricao:'',normativo:'',owner:'',setor:''};
+    S.form[el.dataset.form]=el.value;
+    return;
+  }
+
+  const campo = el.dataset ? el.dataset.field : null;
+  if(!campo) return;
+  const v=el.value;
+
+  if(campo.startsWith('meta.')){
+    const k=campo.slice(5);
+    S.data.meta[k]=v;
+    patch('Campo alterado: '+k);
+    return;
+  }
+  if(campo.startsWith('dim.')){
+    const d=dimDe(el.dataset.dim); if(!d) return;
+    const k=campo.slice(4);
+    d[k]=v;
+    if(k==='nome'){ const m=document.querySelector('[data-nm="'+d.id+'"]'); if(m) m.textContent=v; }
+    patch(k==='nome'?'Dimensão renomeada: '+v:'Descrição da dimensão '+d.roman+' alterada');
+    return;
+  }
+  if(campo.startsWith('top.')){
+    const d=dimDe(el.dataset.dim); if(!d) return;
+    const t=d.topicos.find(x=>x.id===el.dataset.top); if(!t) return;
+    const k=campo.slice(4);
+    t[k]=v;
+    patch('Tópico alterado: '+(t.titulo||'sem título'));
+    return;
+  }
+});
+
+/* selects */
+document.addEventListener('change',(ev)=>{
+  const el=ev.target;
+  if(el.dataset && el.dataset.act==='mover'){
+    moverTopico(el.dataset.dim, el.dataset.top, el.value);
+    return;
+  }
+  if(el.dataset && el.dataset.form==='dimId'){
+    if(!S.form) S.form={dimId:'d1',titulo:'',descricao:'',normativo:'',owner:'',setor:''};
+    S.form.dimId=el.value;
+  }
+});
+
+/* dock da apresentação */
+document.addEventListener('mouseover',(ev)=>{
+  if(S.mode!=='present') return;
+  if(ev.target.closest('#dockzone')){
+    clearTimeout(tDock);
+    if(!S.dockOpen){ S.dockOpen=true; render(); }
+  }
+});
+document.addEventListener('mouseout',(ev)=>{
+  if(S.mode!=='present' || !S.dockOpen) return;
+  if(ev.target.closest('#dockzone') && !(ev.relatedTarget && ev.relatedTarget.closest && ev.relatedTarget.closest('#dockzone'))){
+    clearTimeout(tDock);
+    tDock=setTimeout(()=>{ S.dockOpen=false; render(); },300);
+  }
+});
+
+/* teclado */
+document.addEventListener('keydown',(e)=>{
+  if(e.key==='Escape'){
+    if(S.modal||S.confirmar){ fecharModal(); }
+    else if(S.mode==='present'){ S.mode='config'; S.dockOpen=false; boundEl=null; render(); }
+    return;
+  }
+  if(S.mode!=='present' || S.modal || S.confirmar) return;
+  if(e.key==='ArrowDown'||e.key==='PageDown'||e.key===' '){ e.preventDefault(); irSecao(S.section+1); }
+  if(e.key==='ArrowUp'||e.key==='PageUp'){ e.preventDefault(); irSecao(S.section-1); }
+  if((e.key==='ArrowRight'||e.key==='ArrowLeft') && S.section===1){
+    const ds=S.data.dimensoes, i=idxDe(S.selected);
+    const n=(i+(e.key==='ArrowRight'?1:-1)+ds.length)%ds.length;
+    S.selected=ds[n].id; render();
+  }
+});
+
+window.addEventListener('beforeunload',()=>{ salvarLocal(); });
+
+/* ------------------------------------------------------------------ */
+/* Carga inicial                                                       */
+/* ------------------------------------------------------------------ */
+function normalizar(d){
+  if(!d || !Array.isArray(d.dimensoes)) return null;
+  if(!d.meta) d.meta=defaultData().meta;
+  if(!d.meta.fimTitulo) d.meta.fimTitulo=FIM_TITULO;
+  if(!d.meta.fimMensagem) d.meta.fimMensagem=FIM_MENSAGEM;
+  d.dimensoes.forEach((dim,i)=>{
+    if(!dim.id) dim.id='d'+(i+1);
+    if(!dim.roman) dim.roman=ROMAN[i]||String(i+1);
+    if(!Array.isArray(dim.topicos)) dim.topicos=[];
+    dim.topicos.forEach((t,j)=>{ if(!t.id) t.id=dim.id+'-t'+(j+1); });
+  });
+  return {meta:d.meta, dimensoes:d.dimensoes};
+}
+
+async function iniciar(){
+  let ui={};
+  try{ ui=JSON.parse(localStorage.getItem(LS_UI)||'{}'); }catch(e){}
+  S.theme = ui.theme||'dark';
+  document.documentElement.dataset.theme=S.theme;
+  S.logo = ui.logo||null;
+  S.logoVisible = ui.logoVisible!==false;
+  S.logoSize = ui.logoSize||34;
+
+  try{ S.history=JSON.parse(localStorage.getItem(LS_HIST)||'[]'); }catch(e){}
+
+  let carregado=null;
+  try{
+    const raw=localStorage.getItem(LS_DATA);
+    if(raw) carregado=normalizar(JSON.parse(raw));
+  }catch(e){}
+
+  // sem nada no navegador: tenta o kickoff.json ao lado do HTML
+  if(!carregado){
+    try{
+      const r=await fetch('./'+ARQUIVO_PADRAO,{cache:'no-store'});
+      if(r.ok) carregado=normalizar(await r.json());
+    }catch(e){}
+  }
+
+  if(carregado){
+    S.data=carregado;
+    S.lastSync=ui.lastSync||'restaurado do navegador';
+  }
+  if(!dimDe(S.selected)) S.selected=S.data.dimensoes[0].id;
+
+  render();
+  restaurarHandle();
+}
+
+iniciar();
+</script>
+</body>
+</html>

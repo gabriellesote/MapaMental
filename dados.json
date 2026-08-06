@@ -1,6 +1,6 @@
 {
   "versao": 1,
-  "atualizadoEm": "2026-07-28T03:52:26.485Z",
+  "atualizadoEm": "2026-08-03T16:15:38.073Z",
   "tema": "dark",
   "dimensoes": [
     {
@@ -207,7 +207,7 @@
   "topicos": [
     {
       "id": "t1",
-      "nome": "Canais de atendimento",
+      "nome": "Canais de atendimento teste de ediçaõ dentro do navegador",
       "dimId": "I",
       "norm": "MP0045",
       "setores": [
@@ -215,33 +215,9 @@
         "com"
       ],
       "desc": "Avaliação dos canais disponíveis para atendimento ao usuário, incluindo canais digitais e físicos.",
+      "praticas": [],
+      "fontes": [],
       "perguntas": [
-        {
-          "id": "p1",
-          "texto": "Os canais de atendimento estão claramente identificados e acessíveis?",
-          "respostas": [
-            {
-              "id": "rms44colknh18",
-              "setorId": "ti",
-              "texto": "Sim, mantemos portal atualizado e helpdesk 24h."
-            },
-            {
-              "id": "rms44colkjfim",
-              "setorId": "com",
-              "texto": "Utilizamos CRM integrado com todos os canais."
-            }
-          ]
-        },
-        {
-          "id": "p2",
-          "texto": "Existe mapeamento das barreiras de acesso identificadas pelos usuários?",
-          "respostas": []
-        },
-        {
-          "id": "pms42f2i96xa9",
-          "texto": "TESTE !@#$ JSON",
-          "respostas": []
-        },
         {
           "id": "pms42wvytxb8v",
           "texto": "teste design pergunta",
@@ -259,6 +235,8 @@
         "ti"
       ],
       "desc": "Grau de precisão das informações reportadas nos demonstrativos periódicos.",
+      "praticas": [],
+      "fontes": [],
       "perguntas": [
         {
           "id": "p3",
@@ -282,6 +260,8 @@
         "ti"
       ],
       "desc": "Capacidade de exportar dados nos formatos exigidos por diferentes regulamentos e públicos.",
+      "praticas": [],
+      "fontes": [],
       "perguntas": []
     },
     {
@@ -294,6 +274,8 @@
         "com"
       ],
       "desc": "Adequação da linguagem utilizada nas comunicações e documentos oficiais.",
+      "praticas": [],
+      "fontes": [],
       "perguntas": []
     },
     {
@@ -307,6 +289,8 @@
         "jur"
       ],
       "desc": "olaaaaa",
+      "praticas": [],
+      "fontes": [],
       "perguntas": [
         {
           "id": "pms42fxt1jggz",
@@ -340,6 +324,8 @@
         "ti"
       ],
       "desc": "testando",
+      "praticas": [],
+      "fontes": [],
       "perguntas": [
         {
           "id": "pms42hxu7fo1m",
@@ -357,18 +343,26 @@
           "respostas": []
         }
       ]
+    },
+    {
+      "id": "tms6tx0nc8g1x",
+      "nome": "teste 123",
+      "dimId": "VI",
+      "norm": "MP001",
+      "setores": [
+        "jur"
+      ],
+      "desc": "Teste de topico para ver se aparece no mapa",
+      "praticas": [],
+      "fontes": [
+        {
+          "pag": "12",
+          "sec": "4.3",
+          "tit": "Teste de seção"
+        }
+      ],
+      "perguntas": []
     }
   ],
-  "processos": [
-    {
-      "respId": "rms44colknh18",
-      "titulo": "",
-      "narrativa": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-      "sist": [],
-      "main": [],
-      "tools": [
-        "Oracle DB"
-      ]
-    }
-  ]
+  "processos": []
 }

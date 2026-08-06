@@ -1,0 +1,302 @@
+{
+  "versao": 2,
+  "atualizadoEm": "2026-08-06T20:46:33.796Z",
+  "meta": {
+    "titulo": "Kickoff — Qualidade da Informação nas 12 Dimensões",
+    "descricao": "Alinhamento inicial do mapa de tópicos por dimensão: o que já está consolidado, qual normativo endereça cada ponto e com quem precisamos conversar. Os dados abaixo são fictícios e servem de estrutura para o preenchimento real.",
+    "setor": "Superintendência de Governança de Dados",
+    "data": "12 de agosto de 2026",
+    "fimTitulo": "Obrigada pela atenção",
+    "fimMensagem": "A partir daqui o trabalho é de cada owner com a sua dimensão. Dúvidas, ajustes e novos tópicos podem ser trazidos a qualquer momento."
+  },
+  "dimensoes": [
+    {
+      "id": "d1",
+      "roman": "I",
+      "nome": "Acessibilidade",
+      "descricao": "condições que permitam aos usuários obter informações, incluindo a indicação clara do local de disponibilização, a forma de realizar eventual demanda, os prazos e outras características relevantes de acesso, assegurado tratamento especial às pessoas com deficiência;",
+      "topicos": [
+        {
+          "id": "d1-t1",
+          "titulo": "Canal único de solicitação de informações",
+          "descricao": "Consolidar em um só ponto de entrada os pedidos hoje espalhados por e-mail, chamado e planilha.",
+          "normativo": "NORM-014/2025",
+          "owner": "A. Ribeiro",
+          "setor": "Atendimento"
+        },
+        {
+          "id": "d1-t2",
+          "titulo": "Padrão de acessibilidade digital dos relatórios",
+          "descricao": "Revisar contraste, leitura por leitor de tela e alternativas textuais nos relatórios publicados.",
+          "normativo": "POL-DAD-03",
+          "owner": "C. Menezes",
+          "setor": "Comunicação"
+        }
+      ]
+    },
+    {
+      "id": "d2",
+      "roman": "II",
+      "nome": "Acurácia",
+      "descricao": "medida em que a informação fornecida reflete a realidade de maneira precisa e confiável, de acordo com a metodologia utilizada;",
+      "topicos": [
+        {
+          "id": "d2-t1",
+          "titulo": "Régua de conferência dos indicadores",
+          "descricao": "Definir amostragem e tolerância aceitável na conferência mensal dos números divulgados.",
+          "normativo": "NORM-021/2025",
+          "owner": "R. Tavares",
+          "setor": "Controladoria"
+        },
+        {
+          "id": "d2-t2",
+          "titulo": "Documentação das metodologias de cálculo",
+          "descricao": "Registrar fórmula, fonte e premissas de cada indicador em ficha técnica versionada.",
+          "normativo": "IN 07/2026",
+          "owner": "L. Barreto",
+          "setor": "Planejamento"
+        }
+      ]
+    },
+    {
+      "id": "d3",
+      "roman": "III",
+      "nome": "Adaptabilidade",
+      "descricao": "capacidade de gerar informações em formato que atenda às diversas demandas por informações, incluindo as não periodicamente reportadas, bem como as decorrentes de mudanças regulamentares previstas, inclusive em situações adversas ou de crise;",
+      "topicos": [
+        {
+          "id": "d3-t1",
+          "titulo": "Modelo de resposta a demandas não periódicas",
+          "descricao": "Template e fluxo para atender pedidos fora do calendário regulatório em até 5 dias úteis.",
+          "normativo": "NORM-014/2025",
+          "owner": "P. Andrade",
+          "setor": "Riscos"
+        },
+        {
+          "id": "d3-t2",
+          "titulo": "Plano de contingência de reporte em crise",
+          "descricao": "Como manter o reporte quando houver indisponibilidade de sistema ou evento adverso.",
+          "normativo": "POL-CONT-02",
+          "owner": "M. Fontes",
+          "setor": "TI · Dados"
+        }
+      ]
+    },
+    {
+      "id": "d4",
+      "roman": "IV",
+      "nome": "Clareza",
+      "descricao": "apresentação das informações de forma concisa, permitindo a fácil compreensão e atendendo às necessidades do usuário;",
+      "topicos": [
+        {
+          "id": "d4-t1",
+          "titulo": "Guia de redação dos relatórios",
+          "descricao": "Padronizar linguagem, glossário e limite de extensão dos textos entregues ao usuário final.",
+          "normativo": "POL-DAD-03",
+          "owner": "C. Menezes",
+          "setor": "Comunicação"
+        },
+        {
+          "id": "d4-t2",
+          "titulo": "Revisão dos rótulos de tabelas e gráficos",
+          "descricao": "Eliminar siglas internas e nomes de campo de sistema nas peças publicadas.",
+          "normativo": "IN 07/2026",
+          "owner": "L. Barreto",
+          "setor": "Planejamento"
+        }
+      ]
+    },
+    {
+      "id": "d5",
+      "roman": "V",
+      "nome": "Comparabilidade",
+      "descricao": "capacidade de possibilitar ao usuário identificar e compreender semelhanças e diferenças entre informações, seja em diferentes períodos ou entre diferentes áreas geográficas ou domínios não geográficos;",
+      "topicos": [
+        {
+          "id": "d5-t1",
+          "titulo": "Série histórica mínima obrigatória",
+          "descricao": "Garantir 24 meses comparáveis em todo indicador publicado, com nota de quebra de série.",
+          "normativo": "NORM-021/2025",
+          "owner": "R. Tavares",
+          "setor": "Controladoria"
+        },
+        {
+          "id": "d5-t2",
+          "titulo": "Chave única de segmentação",
+          "descricao": "Unificar os cortes por região, produto e canal usados por áreas diferentes.",
+          "normativo": "POL-DAD-05",
+          "owner": "J. Siqueira",
+          "setor": "TI · Dados"
+        }
+      ]
+    },
+    {
+      "id": "d6",
+      "roman": "VI",
+      "nome": "Completude",
+      "descricao": "capacidade de a informação atender integralmente os aspectos requeridos, com dados completos;",
+      "topicos": [
+        {
+          "id": "d6-t1",
+          "titulo": "Inventário de campos obrigatórios por reporte",
+          "descricao": "Mapear campo a campo o que é exigido e onde há preenchimento parcial hoje.",
+          "normativo": "NORM-030/2026",
+          "owner": "P. Andrade",
+          "setor": "Riscos"
+        },
+        {
+          "id": "d6-t2",
+          "titulo": "Tratamento de lacunas e não respostas",
+          "descricao": "Regra única para campo ausente: estimar, sinalizar ou bloquear a publicação.",
+          "normativo": "IN 07/2026",
+          "owner": "L. Barreto",
+          "setor": "Planejamento"
+        }
+      ]
+    },
+    {
+      "id": "d7",
+      "roman": "VII",
+      "nome": "Confiabilidade",
+      "descricao": "ausência de desvio relevante nos dados revisados em relação ao seu valor inicial;",
+      "topicos": [
+        {
+          "id": "d7-t1",
+          "titulo": "Monitoramento de reprocessamentos",
+          "descricao": "Acompanhar variação entre o dado inicial e o dado revisado, com limite de alerta.",
+          "normativo": "NORM-021/2025",
+          "owner": "R. Tavares",
+          "setor": "Controladoria"
+        },
+        {
+          "id": "d7-t2",
+          "titulo": "Critério de republicação",
+          "descricao": "Quando uma correção exige nova divulgação e comunicação ao usuário.",
+          "normativo": "POL-DAD-03",
+          "owner": "A. Ribeiro",
+          "setor": "Atendimento"
+        }
+      ]
+    },
+    {
+      "id": "d8",
+      "roman": "VIII",
+      "nome": "Consistência",
+      "descricao": "medida em que as informações referentes ao mesmo evento ou fato estão padronizadas e livres de contradições, mesmo quando geradas por diferentes fontes ou métodos;",
+      "topicos": [
+        {
+          "id": "d8-t1",
+          "titulo": "Dicionário corporativo de dados",
+          "descricao": "Definição única de cliente, produto e data-base entre os sistemas de origem.",
+          "normativo": "POL-DAD-05",
+          "owner": "J. Siqueira",
+          "setor": "TI · Dados"
+        },
+        {
+          "id": "d8-t2",
+          "titulo": "Conciliação entre fontes",
+          "descricao": "Rotina de batimento entre o data warehouse e os sistemas transacionais.",
+          "normativo": "NORM-030/2026",
+          "owner": "M. Fontes",
+          "setor": "TI · Dados"
+        }
+      ]
+    },
+    {
+      "id": "d9",
+      "roman": "IX",
+      "nome": "Integridade",
+      "descricao": "propriedade pela qual se assegura que a informação é autêntica e que não foi modificada de maneira não autorizada ou acidental;",
+      "topicos": [
+        {
+          "id": "d9-t1",
+          "titulo": "Controle de acesso e trilha de alteração",
+          "descricao": "Quem pode alterar base e relatório, e como toda alteração fica registrada.",
+          "normativo": "POL-SEG-01",
+          "owner": "D. Nogueira",
+          "setor": "Segurança da Informação"
+        },
+        {
+          "id": "d9-t2",
+          "titulo": "Assinatura e versionamento das entregas",
+          "descricao": "Selar o arquivo publicado para detectar modificação posterior não autorizada.",
+          "normativo": "POL-SEG-04",
+          "owner": "D. Nogueira",
+          "setor": "Segurança da Informação"
+        }
+      ]
+    },
+    {
+      "id": "d10",
+      "roman": "X",
+      "nome": "Rastreabilidade",
+      "descricao": "condições que permitam rastrear a informação desde a origem até a sua disponibilização ao usuário final;",
+      "topicos": [
+        {
+          "id": "d10-t1",
+          "titulo": "Linhagem ponta a ponta dos indicadores",
+          "descricao": "Do sistema de origem até o número publicado, com todas as transformações registradas.",
+          "normativo": "NORM-030/2026",
+          "owner": "J. Siqueira",
+          "setor": "TI · Dados"
+        },
+        {
+          "id": "d10-t2",
+          "titulo": "Registro de responsáveis por etapa",
+          "descricao": "Identificar quem gerou, revisou e aprovou cada entrega de informação.",
+          "normativo": "POL-DAD-05",
+          "owner": "P. Andrade",
+          "setor": "Riscos"
+        }
+      ]
+    },
+    {
+      "id": "d11",
+      "roman": "XI",
+      "nome": "Relevância",
+      "descricao": "capacidade de fornecer informações úteis, que possam influenciar a tomada de decisões pelos usuários; e",
+      "topicos": [
+        {
+          "id": "d11-t1",
+          "titulo": "Revisão do portfólio de relatórios",
+          "descricao": "Descontinuar entregas sem uso comprovado e reforçar as que apoiam decisão.",
+          "normativo": "IN 07/2026",
+          "owner": "L. Barreto",
+          "setor": "Planejamento"
+        },
+        {
+          "id": "d11-t2",
+          "titulo": "Pesquisa de utilidade com usuários",
+          "descricao": "Ouvir áreas usuárias sobre o que falta e o que sobra nas informações recebidas.",
+          "normativo": "POL-DAD-03",
+          "owner": "C. Menezes",
+          "setor": "Comunicação"
+        }
+      ]
+    },
+    {
+      "id": "d12",
+      "roman": "XII",
+      "nome": "Tempestividade",
+      "descricao": "fornecimento das informações em tempo hábil, no prazo estabelecido, observado um curto intervalo de tempo entre os fatos relatados e a data da prestação da informação, de modo a não comprometer sua utilidade aos usuários.",
+      "topicos": [
+        {
+          "id": "d12-t1",
+          "titulo": "Calendário oficial de divulgação",
+          "descricao": "Prazos por entrega, com responsável e janela de fechamento acordada.",
+          "normativo": "NORM-014/2025",
+          "owner": "R. Tavares",
+          "setor": "Controladoria"
+        },
+        {
+          "id": "d12-t2",
+          "titulo": "Alerta de risco de atraso",
+          "descricao": "Sinalização automática quando uma etapa passa do prazo intermediário.",
+          "normativo": "NORM-030/2026",
+          "owner": "M. Fontes",
+          "setor": "TI · Dados"
+        }
+      ]
+    }
+  ]
+}
