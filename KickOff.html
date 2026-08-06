@@ -757,6 +757,9 @@ function render(){
   const fkey = foco && foco.dataset ? foco.dataset.fkey : null;
   const selStart = foco && typeof foco.selectionStart==='number' ? foco.selectionStart : null;
   const selEnd   = foco && typeof foco.selectionEnd==='number' ? foco.selectionEnd : null;
+  // o innerHTML recria o #scroller e zeraria a rolagem — guarda a posição
+  const antigo = $('#scroller');
+  const topo = antigo ? antigo.scrollTop : 0;
 
   $('#app').innerHTML =
     '<div class="wrap"><div class="halo halo1"></div><div class="halo halo2"></div>' +
@@ -768,8 +771,24 @@ function render(){
     const el = document.querySelector('[data-fkey="'+fkey+'"]');
     if(el){ el.focus(); try{ if(selStart!==null) el.setSelectionRange(selStart,selEnd); }catch(e){} }
   }
-  if(S.mode==='present') ligarScroller();
+  if(S.mode==='present'){
+    const novo = $('#scroller');
+    if(novo && topo) novo.scrollTop = topo;
+    ligarScroller();
+  }
   pintarToast();
+}
+
+/* troca de seção: sem recriar o DOM, só reaplica animação e realça o dock */
+function pintarSecao(){
+  const el=$('#scroller'); if(!el) return;
+  const secoes=el.children;
+  for(let i=0;i<secoes.length;i++){
+    const sec=secoes[i];
+    if(i===S.section){ sec.style.animation='none'; void sec.offsetWidth; sec.style.animation=anim(i); }
+    else sec.style.animation='none';
+  }
+  document.querySelectorAll('[data-act="ir"]').forEach((b,i)=>b.classList.toggle('on', i===S.section));
 }
 
 /* ------------------------------------------------------------------ */
@@ -781,7 +800,7 @@ function ligarScroller(){
   el.addEventListener('scroll',()=>{
     if(locked) return;
     const n=Math.round(el.scrollTop/el.clientHeight);
-    if(n!==S.section){ S.dir = n>S.section?1:-1; S.section=n; render(); }
+    if(n!==S.section){ S.dir = n>S.section?1:-1; S.section=n; pintarSecao(); }
   },{passive:true});
   el.addEventListener('wheel',(e)=>{
     if(S.modal||S.confirmar) return;
@@ -803,8 +822,8 @@ function irSecao(i){
   if(n===S.section) return;
   locked=true; clearTimeout(tLock); tLock=setTimeout(()=>{ locked=false; },820);
   S.dir = n>S.section?1:-1; S.section=n;
+  pintarSecao();
   animarPara(n*el.clientHeight);
-  render();
 }
 
 function animarPara(alvo){
