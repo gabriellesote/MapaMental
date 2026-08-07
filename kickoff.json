@@ -1,6 +1,6 @@
 {
-  "versao": 2,
-  "atualizadoEm": "2026-08-07T20:27:35.668Z",
+  "versao": 3,
+  "atualizadoEm": "2026-08-07T21:23:02.232Z",
   "meta": {
     "titulo": "Kickoff — Qualidade da Informação nas 12 Dimensões",
     "descricao": "Alinhamento inicial do mapa de tópicos por dimensão: o que já está consolidado, qual normativo endereça cada ponto e com quem precisamos conversar. Os dados abaixo são fictícios e servem de estrutura para o preenchimento real.",
@@ -8,6 +8,53 @@
     "data": "12 de agosto de 2026",
     "fimTitulo": "Obrigada pela atenção",
     "fimMensagem": "A partir daqui o trabalho é de cada owner com a sua dimensão. Dúvidas, ajustes e novos tópicos podem ser trazidos a qualquer momento."
+  },
+  "catalogo": {
+    "owners": [
+      {
+        "nome": "A. Ribeiro",
+        "setor": "Atendimento"
+      },
+      {
+        "nome": "C. Menezes",
+        "setor": "Comunicação"
+      },
+      {
+        "nome": "D. Nogueira",
+        "setor": "Segurança da Informação"
+      },
+      {
+        "nome": "J. Siqueira",
+        "setor": "TI · Dados"
+      },
+      {
+        "nome": "L. Barreto",
+        "setor": "Planejamento"
+      },
+      {
+        "nome": "M. Fontes",
+        "setor": "TI · Dados"
+      },
+      {
+        "nome": "P. Andrade",
+        "setor": "Riscos"
+      },
+      {
+        "nome": "R. Tavares",
+        "setor": "Controladoria"
+      }
+    ],
+    "normativos": [
+      "IN 07/2026",
+      "NORM-014/2025",
+      "NORM-021/2025",
+      "NORM-030/2026",
+      "POL-CONT-02",
+      "POL-DAD-03",
+      "POL-DAD-05",
+      "POL-SEG-01",
+      "POL-SEG-04"
+    ]
   },
   "dimensoes": [
     {
@@ -17,26 +64,26 @@
       "descricao": "condições que permitam aos usuários obter informações, incluindo a indicação clara do local de disponibilização, a forma de realizar eventual demanda, os prazos e outras características relevantes de acesso, assegurado tratamento especial às pessoas com deficiência;",
       "topicos": [
         {
-          "id": "d1-t1",
-          "titulo": "Canal único de solicitação de informações",
-          "descricao": "Consolidar em um só ponto de entrada os pedidos hoje espalhados por e-mail, chamado e planilha.",
-          "normativo": "NORM-014/2025",
+          "id": "d1-t1786134694596",
+          "titulo": "j",
+          "descricao": "",
+          "normativo": "—",
           "owners": [
             {
-              "nome": "A. Ribeiro",
-              "setor": "Atendimento"
+              "nome": "a definir",
+              "setor": "a definir"
             }
           ]
         },
         {
-          "id": "d1-t2",
-          "titulo": "Padrão de acessibilidade digital dos relatórios",
-          "descricao": "Revisar contraste, leitura por leitor de tela e alternativas textuais nos relatórios publicados.",
-          "normativo": "POL-DAD-03",
+          "id": "d1-t1786134710478",
+          "titulo": ",k",
+          "descricao": "",
+          "normativo": "—",
           "owners": [
             {
-              "nome": "C. Menezes",
-              "setor": "Comunicação"
+              "nome": "a definir",
+              "setor": "a definir"
             }
           ]
         }

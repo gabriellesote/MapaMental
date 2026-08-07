@@ -107,6 +107,8 @@ textarea.inp{color:var(--fg2);line-height:1.65;resize:vertical}
 .ownx:hover{color:#e2707a;border-color:#7a2b32}
 .ownadd{align-self:flex-start;padding:7px 13px;border-radius:999px;border:1px dashed var(--gline2);background:transparent;color:var(--fg2);font-size:11.5px;cursor:pointer;transition:border-color .2s ease,color .2s ease}
 .ownadd:hover{border-color:var(--a,var(--brand));color:var(--fg)}
+.dupbtn{padding:8px 14px;border-radius:999px;border:1px solid var(--gline2);background:transparent;color:var(--fg2);font-size:11.5px;cursor:pointer;white-space:nowrap;transition:color .2s ease,border-color .2s ease}
+.dupbtn:hover{color:var(--fg);border-color:var(--a)}
 .delbtn{padding:8px 14px;border-radius:999px;border:1px solid #7a2b32;background:transparent;color:#e2707a;font-size:11.5px;cursor:pointer}
 .delbtn:hover{background:color-mix(in oklab,#e2707a 14%,transparent)}
 .emptybox{border:1px dashed var(--gline2);border-radius:20px;padding:26px;color:var(--muted);font-size:13px}
@@ -277,6 +279,44 @@ const idxDe = id => S.data.dimensoes.findIndex(d=>d.id===id);
 const accentDe = id => ACCENTS[Math.max(0,idxDe(id))%12];
 const totalTopicos = () => S.data.dimensoes.reduce((a,d)=>a+d.topicos.length,0);
 
+/* Catálogo — junta o que já foi digitado nos tópicos com o que ficou
+   guardado em data.catalogo, para sugerir na hora de criar novos tópicos.
+   O que sai de um tópico continua no catálogo. */
+function catalogo(){
+  const owners={}, normativos={};
+  const guardado=S.data.catalogo||{};
+  (guardado.owners||[]).forEach(o=>{ if(o && o.nome) owners[o.nome]=o.setor||''; });
+  (guardado.normativos||[]).forEach(n=>{ if(n) normativos[n]=1; });
+  S.data.dimensoes.forEach(d=>d.topicos.forEach(t=>{
+    if(t.normativo && t.normativo!=='—') normativos[t.normativo]=1;
+    (t.owners||[]).forEach(o=>{
+      if(!o || !o.nome || o.nome==='a definir') return;
+      if(o.setor && o.setor!=='a definir') owners[o.nome]=o.setor;
+      else if(!(o.nome in owners)) owners[o.nome]='';
+    });
+  }));
+  return {
+    owners: Object.keys(owners).sort().map(n=>({nome:n, setor:owners[n]})),
+    normativos: Object.keys(normativos).sort()
+  };
+}
+
+/* setor já usado por este owner, para preencher sozinho */
+function setorDoOwner(nome){
+  const c=catalogo().owners.find(o=>o.nome===nome);
+  return c?c.setor:'';
+}
+
+function datalists(){
+  const c=catalogo();
+  const setores={};
+  c.owners.forEach(o=>{ if(o.setor) setores[o.setor]=1; });
+  const op=v=>`<option value="${esc(v)}"></option>`;
+  return `<datalist id="dlOwners">${c.owners.map(o=>op(o.nome)).join('')}</datalist>
+  <datalist id="dlSetores">${Object.keys(setores).sort().map(op).join('')}</datalist>
+  <datalist id="dlNorm">${c.normativos.map(op).join('')}</datalist>`;
+}
+
 function contatos(){
   const m={};
   S.data.dimensoes.forEach(d=>d.topicos.forEach(t=>{
@@ -305,7 +345,7 @@ function pintarToast(){
 /* ------------------------------------------------------------------ */
 /* Persistência                                                        */
 /* ------------------------------------------------------------------ */
-function payload(d){ return {versao:2, atualizadoEm:new Date().toISOString(), meta:d.meta, dimensoes:d.dimensoes}; }
+function payload(d){ return {versao:3, atualizadoEm:new Date().toISOString(), meta:d.meta, catalogo:d.catalogo||catalogo(), dimensoes:d.dimensoes}; }
 
 function salvarUI(patch){
   let ui={}; try{ ui=JSON.parse(localStorage.getItem(LS_UI)||'{}'); }catch(e){}
@@ -314,6 +354,7 @@ function salvarUI(patch){
 }
 
 function salvarLocal(){
+  S.data.catalogo=catalogo();   // owners e normativos usados ficam guardados
   try{ localStorage.setItem(LS_DATA, JSON.stringify(S.data)); }catch(e){}
 }
 
@@ -541,12 +582,12 @@ function painelDimensao(){
         <div class="tcard">
           <input class="tinp" placeholder="Título do tópico" data-field="top.titulo" data-dim="${dim.id}" data-top="${t.id}" data-fkey="t-${t.id}-tit" value="${esc(t.titulo)}">
           <textarea class="tarea" rows="3" placeholder="Descrição" data-field="top.descricao" data-dim="${dim.id}" data-top="${t.id}" data-fkey="t-${t.id}-desc">${esc(t.descricao)}</textarea>
-          <input class="tmeta norm mono" placeholder="Normativo" data-field="top.normativo" data-dim="${dim.id}" data-top="${t.id}" data-fkey="t-${t.id}-norm" value="${esc(t.normativo)}">
+          <input class="tmeta norm mono" list="dlNorm" placeholder="Normativo" data-field="top.normativo" data-dim="${dim.id}" data-top="${t.id}" data-fkey="t-${t.id}-norm" value="${esc(t.normativo)}">
           <div style="display:flex;flex-direction:column;gap:6px">
             <div class="sec-lbl" style="letter-spacing:.14em">Owners</div>
             ${(t.owners||[]).map((o,oi)=>`<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 30px;gap:6px;align-items:center">
-              <input class="tmeta" placeholder="Owner" data-field="own.nome" data-dim="${dim.id}" data-top="${t.id}" data-oi="${oi}" data-fkey="t-${t.id}-o${oi}-n" value="${esc(o.nome)}">
-              <input class="tmeta" style="color:var(--fg2)" placeholder="Setor" data-field="own.setor" data-dim="${dim.id}" data-top="${t.id}" data-oi="${oi}" data-fkey="t-${t.id}-o${oi}-s" value="${esc(o.setor)}">
+              <input class="tmeta" list="dlOwners" placeholder="Owner" data-field="own.nome" data-dim="${dim.id}" data-top="${t.id}" data-oi="${oi}" data-fkey="t-${t.id}-o${oi}-n" value="${esc(o.nome)}">
+              <input class="tmeta" list="dlSetores" style="color:var(--fg2)" placeholder="Setor" data-field="own.setor" data-dim="${dim.id}" data-top="${t.id}" data-oi="${oi}" data-fkey="t-${t.id}-o${oi}-s" value="${esc(o.setor)}">
               <button class="ownx" data-act="delOwner" data-dim="${dim.id}" data-top="${t.id}" data-oi="${oi}" title="Remover owner">✕</button>
             </div>`).join('')}
             ${(t.owners||[]).length===0?'<div style="padding:9px 11px;border:1px dashed var(--gline2);border-radius:11px;color:var(--muted);font-size:11.5px">Nenhum owner definido.</div>':''}
@@ -554,6 +595,7 @@ function painelDimensao(){
           </div>
           <div style="display:flex;align-items:center;gap:8px;padding-top:4px">
             <select class="tsel" data-act="mover" data-dim="${dim.id}" data-top="${t.id}">${opcoes(dim.id)}</select>
+            <button class="dupbtn" data-act="duplicar" data-dim="${dim.id}" data-top="${t.id}" title="Duplicar tópico">⧉ Duplicar</button>
             <button class="delbtn" data-act="excluir" data-dim="${dim.id}" data-top="${t.id}">Excluir</button>
           </div>
         </div>`).join('')}
@@ -571,6 +613,7 @@ function menuHtml(){
     <button class="menu-item" data-act="conectar"><em>⛁</em>${S.fileState==='none'?'Autorizar arquivo JSON (auto-save)':'Trocar / reautorizar arquivo'}</button>
     <button class="menu-item" data-act="carregar"><em>↧</em>Carregar de um JSON</button>
     <button class="menu-item" data-act="baixar"><em>↥</em>Baixar cópia do JSON</button>
+    <button class="menu-item" data-act="csv"><em>▦</em>Exportar CSV (${totalLinhasCsv()} linhas)</button>
     <button class="menu-item" data-act="json"><em>{ }</em>Editar JSON</button>
     <button class="menu-item" data-act="historico"><em>⟲</em>Histórico de alterações</button>
     <div class="sep"></div>
@@ -743,12 +786,12 @@ function viewModal(){
         <label class="lab" style="font-size:12px">Dimensão<select class="minp" data-form="dimId">${op}</select></label>
         <label class="lab" style="font-size:12px">Título do tópico<input class="minp" data-form="titulo" data-fkey="f-tit" placeholder="Ex.: Trilha de auditoria dos extratos" value="${esc(f.titulo)}"></label>
         <label class="lab" style="font-size:12px">Descrição breve<textarea class="minp" rows="3" data-form="descricao" data-fkey="f-desc" placeholder="Uma ou duas linhas sobre o que precisa ser conversado.">${esc(f.descricao)}</textarea></label>
-        <label class="lab" style="font-size:12px">Normativo<input class="minp mono" data-form="normativo" data-fkey="f-norm" placeholder="NORM-000/2026" value="${esc(f.normativo)}"></label>
+        <label class="lab" style="font-size:12px">Normativo<input class="minp mono" list="dlNorm" data-form="normativo" data-fkey="f-norm" placeholder="NORM-000/2026" value="${esc(f.normativo)}"></label>
         <div style="display:flex;flex-direction:column;gap:9px">
-          <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)">Owners<span style="flex:1;height:1px;background:var(--gline)"></span><span style="font-size:11px">nome e setor de cada responsável</span></div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)">Owners<span style="flex:1;height:1px;background:var(--gline)"></span><span style="font-size:11px">escolha um já usado ou digite um novo</span></div>
           ${ow.map((o,i)=>`<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 38px;gap:10px;align-items:center">
-            <input class="minp" data-form="ownNome" data-oi="${i}" data-fkey="f-o${i}-n" placeholder="Nome do responsável" value="${esc(o.nome)}">
-            <input class="minp" style="color:var(--fg2)" data-form="ownSetor" data-oi="${i}" data-fkey="f-o${i}-s" placeholder="Ex.: Controladoria" value="${esc(o.setor)}">
+            <input class="minp" list="dlOwners" data-form="ownNome" data-oi="${i}" data-fkey="f-o${i}-n" placeholder="Nome do responsável" value="${esc(o.nome)}">
+            <input class="minp" list="dlSetores" style="color:var(--fg2)" data-form="ownSetor" data-oi="${i}" data-fkey="f-o${i}-s" placeholder="Ex.: Controladoria" value="${esc(o.setor)}">
             <button class="ownx" style="width:38px;height:38px;border-color:var(--gline2);font-size:13px" data-act="delFormOwner" data-oi="${i}" title="Remover owner">✕</button>
           </div>`).join('')}
           <button class="ownadd" style="padding:9px 16px;font-size:12.5px" data-act="addFormOwner">+ Adicionar outro owner</button>
@@ -829,6 +872,7 @@ function render(){
     (S.mode==='present' ? viewPresent() : viewConfig()) +
     viewModal() +
     viewConfirm() +
+    datalists() +
     '</div>';
 
   if(fkey){
@@ -955,6 +999,50 @@ function moverTopico(dimId,topId,alvoId){
   toast('Tópico movido.');
 }
 
+function duplicarTopico(dimId,topId){
+  const d=dimDe(dimId); if(!d) return;
+  const i=d.topicos.findIndex(x=>x.id===topId); if(i<0) return;
+  const copia=clone(d.topicos[i]);
+  copia.id=dimId+'-t'+Date.now();
+  copia.titulo=(copia.titulo||'Tópico')+' (cópia)';
+  d.topicos.splice(i+1,0,copia);
+  commit('Tópico duplicado: '+d.topicos[i].titulo);
+  toast('Tópico duplicado.');
+}
+
+/* ---- CSV: uma linha por par tópico × owner ---- */
+function celulaCsv(v){
+  const s=String(v==null?'':v);
+  return /[";\n\r]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s;
+}
+
+function gerarCsv(){
+  const linhas=[['Nº','Dimensão','Descrição da dimensão','Tópico','Descrição do tópico','Normativo','Owner','Setor']];
+  S.data.dimensoes.forEach(d=>{
+    d.topicos.forEach(t=>{
+      const owners=(t.owners&&t.owners.length)?t.owners:[{nome:'a definir',setor:'a definir'}];
+      owners.forEach(o=>{
+        linhas.push([d.roman, d.nome, d.descricao, t.titulo, t.descricao, t.normativo, o.nome||'a definir', o.setor||'a definir']);
+      });
+    });
+  });
+  return linhas.map(l=>l.map(celulaCsv).join(';')).join('\r\n');
+}
+
+function totalLinhasCsv(){
+  return S.data.dimensoes.reduce((a,d)=>a+d.topicos.reduce((b,t)=>b+Math.max(1,(t.owners||[]).length),0),0);
+}
+
+function baixarCsv(){
+  // BOM para o Excel abrir os acentos certo; ponto e vírgula é o separador pt-BR
+  const blob=new Blob(['﻿'+gerarCsv()],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download='kickoff-dimensoes.csv'; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+  S.menuOpen=false; render();
+  toast('CSV baixado.');
+}
+
 function excluirTopico(dimId,topId){
   const d=dimDe(dimId); if(!d) return;
   const t=d.topicos.find(x=>x.id===topId); if(!t) return;
@@ -1010,7 +1098,7 @@ function salvarJson(){
   try{
     const p=JSON.parse(S.jsonText);
     if(!p.dimensoes || !Array.isArray(p.dimensoes)) throw new Error('campo "dimensoes" ausente ou inválido');
-    S.data=migrate({meta:p.meta||S.data.meta, dimensoes:p.dimensoes});
+    S.data=migrate({meta:p.meta||S.data.meta, catalogo:p.catalogo||S.data.catalogo, dimensoes:p.dimensoes});
     if(!dimDe(S.selected)) S.selected=S.data.dimensoes[0]?S.data.dimensoes[0].id:'d1';
     S.modal=null; S.jsonError='';
     commit('JSON editado manualmente');
@@ -1051,7 +1139,7 @@ async function carregarArquivo(){
     const p=JSON.parse(await f.text());
     if(!p.dimensoes) throw new Error('estrutura inválida');
     fileHandle=h; await idbPut(h);
-    S.data=migrate({meta:p.meta||S.data.meta, dimensoes:p.dimensoes});
+    S.data=migrate({meta:p.meta||S.data.meta, catalogo:p.catalogo||S.data.catalogo, dimensoes:p.dimensoes});
     if(!dimDe(S.selected)) S.selected=S.data.dimensoes[0].id;
     S.fileName=h.name; S.fileState='ok';
     commit('Dados carregados de '+h.name);
@@ -1137,7 +1225,9 @@ document.addEventListener('click',(ev)=>{
       render(); break;
     }
     case 'salvarSync': salvarSincronizar(); break;
+    case 'duplicar': duplicarTopico(alvo.dataset.dim, alvo.dataset.top); break;
     case 'excluir': excluirTopico(alvo.dataset.dim, alvo.dataset.top); break;
+    case 'csv': baixarCsv(); break;
     case 'salvarTopico': salvarTopico(); break;
     case 'json': abrirJson(); break;
     case 'salvarJson': salvarJson(); break;
@@ -1177,7 +1267,16 @@ document.addEventListener('input',(ev)=>{
     const campoForm=el.dataset.form;
     if(campoForm==='ownNome' || campoForm==='ownSetor'){
       const arr=ownersForm(), oi=parseInt(el.dataset.oi,10);
-      if(arr[oi]) arr[oi][campoForm==='ownNome'?'nome':'setor']=el.value;
+      if(!arr[oi]) return;
+      arr[oi][campoForm==='ownNome'?'nome':'setor']=el.value;
+      if(campoForm==='ownNome'){
+        const setor=setorDoOwner(el.value);
+        if(setor && !arr[oi].setor){
+          arr[oi].setor=setor;
+          const alvo=document.querySelector('[data-form="ownSetor"][data-oi="'+oi+'"]');
+          if(alvo) alvo.value=setor;
+        }
+      }
       return;
     }
     S.form[campoForm]=el.value;
@@ -1213,9 +1312,18 @@ document.addEventListener('input',(ev)=>{
   if(campo.startsWith('own.')){
     const d=dimDe(el.dataset.dim); if(!d) return;
     const t=d.topicos.find(x=>x.id===el.dataset.top); if(!t||!t.owners) return;
-    const o=t.owners[parseInt(el.dataset.oi,10)]; if(!o) return;
+    const oi=parseInt(el.dataset.oi,10);
+    const o=t.owners[oi]; if(!o) return;
     const k=campo.slice(4);
     o[k]=v;
+    if(k==='nome'){
+      const setor=setorDoOwner(v);
+      if(setor && !o.setor){
+        o.setor=setor;
+        const alvo=document.querySelector('[data-field="own.setor"][data-top="'+t.id+'"][data-oi="'+oi+'"]');
+        if(alvo) alvo.value=setor;
+      }
+    }
     patch(k==='nome'?'Owner alterado':'Setor do owner alterado');
     return;
   }
@@ -1283,7 +1391,7 @@ function normalizar(d){
     if(!Array.isArray(dim.topicos)) dim.topicos=[];
     dim.topicos.forEach((t,j)=>{ if(!t.id) t.id=dim.id+'-t'+(j+1); });
   });
-  return {meta:d.meta, dimensoes:d.dimensoes};
+  return {meta:d.meta, catalogo:d.catalogo||null, dimensoes:d.dimensoes};
 }
 
 async function iniciar(){
