@@ -58,6 +58,8 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--brand)}
 .menu-txt{padding:0 12px 10px;font-size:11.5px;color:var(--muted);line-height:1.5}
 .menu-item{display:flex;width:100%;gap:10px;align-items:center;padding:10px 12px;border:0;border-radius:12px;background:transparent;color:var(--fg);font-size:13px;cursor:pointer;text-align:left;transition:background .2s ease}
 .menu-item:hover{background:var(--glass)}
+.menu-item.destaque{padding:11px 12px;margin-bottom:4px;border:1px solid var(--gline2);background:color-mix(in oklab, var(--brand) 16%, transparent);font-weight:600}
+.menu-item.destaque:hover{background:color-mix(in oklab, var(--brand) 26%, transparent)}
 .menu-item em{color:var(--muted);font-style:normal;width:16px;text-align:center;flex:none}
 .sep{height:1px;background:var(--gline);margin:8px 4px}
 
@@ -101,6 +103,10 @@ textarea.inp{color:var(--fg2);line-height:1.65;resize:vertical}
 .tmeta{width:100%;min-width:0;padding:9px 11px;border-radius:11px;border:1px solid var(--gline2);background:var(--panel);color:var(--fg);font-size:12px}
 .tmeta.norm{color:var(--a);font-size:11.5px}
 .tsel{flex:1;min-width:0;padding:8px 10px;border-radius:11px;border:1px solid var(--gline);background:transparent;color:var(--muted);font-size:11.5px}
+.ownx{width:30px;height:30px;border-radius:50%;border:1px solid var(--gline);background:transparent;color:var(--muted);font-size:12px;line-height:1;cursor:pointer;transition:color .2s ease,border-color .2s ease}
+.ownx:hover{color:#e2707a;border-color:#7a2b32}
+.ownadd{align-self:flex-start;padding:7px 13px;border-radius:999px;border:1px dashed var(--gline2);background:transparent;color:var(--fg2);font-size:11.5px;cursor:pointer;transition:border-color .2s ease,color .2s ease}
+.ownadd:hover{border-color:var(--a,var(--brand));color:var(--fg)}
 .delbtn{padding:8px 14px;border-radius:999px;border:1px solid #7a2b32;background:transparent;color:#e2707a;font-size:11.5px;cursor:pointer}
 .delbtn:hover{background:color-mix(in oklab,#e2707a 14%,transparent)}
 .emptybox{border:1px dashed var(--gline2);border-radius:20px;padding:26px;color:var(--muted);font-size:13px}
@@ -199,6 +205,24 @@ const TOPICOS = [
 const FIM_TITULO = 'Obrigada pela atenção';
 const FIM_MENSAGEM = 'A partir daqui o trabalho é de cada owner com a sua dimensão. Dúvidas, ajustes e novos tópicos podem ser trazidos a qualquer momento.';
 
+/* owner/setor por tópico viraram uma lista de owners — converte o formato antigo */
+function migrate(data){
+  if(!data) return data;
+  if(data.meta){
+    if(!data.meta.fimTitulo) data.meta.fimTitulo=FIM_TITULO;
+    if(!data.meta.fimMensagem) data.meta.fimMensagem=FIM_MENSAGEM;
+  }
+  (data.dimensoes||[]).forEach(function(dim){
+    (dim.topicos||[]).forEach(function(t){
+      if(!Array.isArray(t.owners)){
+        t.owners = (t.owner||t.setor) ? [{nome:t.owner||'a definir', setor:t.setor||'a definir'}] : [];
+      }
+      delete t.owner; delete t.setor;
+    });
+  });
+  return data;
+}
+
 function defaultData(){
   return {
     meta:{
@@ -213,7 +237,7 @@ function defaultData(){
       return {
         id:'d'+(i+1), roman:ROMAN[i], nome:d[0], descricao:d[1],
         topicos:(TOPICOS[i]||[]).map(function(t,j){
-          return {id:'d'+(i+1)+'-t'+(j+1), titulo:t[0], descricao:t[1], normativo:t[2], owner:t[3], setor:t[4]};
+          return {id:'d'+(i+1)+'-t'+(j+1), titulo:t[0], descricao:t[1], normativo:t[2], owners:[{nome:t[3], setor:t[4]}]};
         })
       };
     })
@@ -256,9 +280,12 @@ const totalTopicos = () => S.data.dimensoes.reduce((a,d)=>a+d.topicos.length,0);
 function contatos(){
   const m={};
   S.data.dimensoes.forEach(d=>d.topicos.forEach(t=>{
-    const k=t.owner||'a definir';
-    if(!m[k]) m[k]={owner:k, setor:t.setor||'—', dims:[]};
-    if(m[k].dims.indexOf(d.nome)<0) m[k].dims.push(d.nome);
+    const lista=(t.owners&&t.owners.length)?t.owners:[{nome:'a definir',setor:'—'}];
+    lista.forEach(o=>{
+      const k=o.nome||'a definir';
+      if(!m[k]) m[k]={owner:k, setor:o.setor||'—', dims:[]};
+      if(m[k].dims.indexOf(d.nome)<0) m[k].dims.push(d.nome);
+    });
   }));
   return Object.keys(m).sort().map(k=>m[k]);
 }
@@ -514,10 +541,16 @@ function painelDimensao(){
         <div class="tcard">
           <input class="tinp" placeholder="Título do tópico" data-field="top.titulo" data-dim="${dim.id}" data-top="${t.id}" data-fkey="t-${t.id}-tit" value="${esc(t.titulo)}">
           <textarea class="tarea" rows="3" placeholder="Descrição" data-field="top.descricao" data-dim="${dim.id}" data-top="${t.id}" data-fkey="t-${t.id}-desc">${esc(t.descricao)}</textarea>
-          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
-            <input class="tmeta norm mono" placeholder="Normativo" data-field="top.normativo" data-dim="${dim.id}" data-top="${t.id}" data-fkey="t-${t.id}-norm" value="${esc(t.normativo)}">
-            <input class="tmeta" placeholder="Owner" data-field="top.owner" data-dim="${dim.id}" data-top="${t.id}" data-fkey="t-${t.id}-own" value="${esc(t.owner)}">
-            <input class="tmeta" style="color:var(--fg2)" placeholder="Setor" data-field="top.setor" data-dim="${dim.id}" data-top="${t.id}" data-fkey="t-${t.id}-set" value="${esc(t.setor)}">
+          <input class="tmeta norm mono" placeholder="Normativo" data-field="top.normativo" data-dim="${dim.id}" data-top="${t.id}" data-fkey="t-${t.id}-norm" value="${esc(t.normativo)}">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div class="sec-lbl" style="letter-spacing:.14em">Owners</div>
+            ${(t.owners||[]).map((o,oi)=>`<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 30px;gap:6px;align-items:center">
+              <input class="tmeta" placeholder="Owner" data-field="own.nome" data-dim="${dim.id}" data-top="${t.id}" data-oi="${oi}" data-fkey="t-${t.id}-o${oi}-n" value="${esc(o.nome)}">
+              <input class="tmeta" style="color:var(--fg2)" placeholder="Setor" data-field="own.setor" data-dim="${dim.id}" data-top="${t.id}" data-oi="${oi}" data-fkey="t-${t.id}-o${oi}-s" value="${esc(o.setor)}">
+              <button class="ownx" data-act="delOwner" data-dim="${dim.id}" data-top="${t.id}" data-oi="${oi}" title="Remover owner">✕</button>
+            </div>`).join('')}
+            ${(t.owners||[]).length===0?'<div style="padding:9px 11px;border:1px dashed var(--gline2);border-radius:11px;color:var(--muted);font-size:11.5px">Nenhum owner definido.</div>':''}
+            <button class="ownadd" data-act="addOwner" data-dim="${dim.id}" data-top="${t.id}">+ Adicionar owner</button>
           </div>
           <div style="display:flex;align-items:center;gap:8px;padding-top:4px">
             <select class="tsel" data-act="mover" data-dim="${dim.id}" data-top="${t.id}">${opcoes(dim.id)}</select>
@@ -534,6 +567,7 @@ function menuHtml(){
   return `<div class="menu" id="menu">
     <div class="menu-lbl">Dados</div>
     <div class="menu-txt" id="syncdetail">${esc(s.detail||'')}</div>
+    <button class="menu-item destaque" data-act="salvarSync"><em style="color:var(--brand)">⤓</em>Salvar e sincronizar</button>
     <button class="menu-item" data-act="conectar"><em>⛁</em>${S.fileState==='none'?'Autorizar arquivo JSON (auto-save)':'Trocar / reautorizar arquivo'}</button>
     <button class="menu-item" data-act="carregar"><em>↧</em>Carregar de um JSON</button>
     <button class="menu-item" data-act="baixar"><em>↥</em>Baixar cópia do JSON</button>
@@ -586,8 +620,7 @@ function painelPresent(dim){
           <div style="font-size:13px;line-height:1.62;color:var(--fg2);text-wrap:pretty">${esc(t.descricao)}</div>
           <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:15px">
             <span class="tag norm mono">${esc(t.normativo)}</span>
-            <span class="tag"><em>Owner</em>${esc(t.owner)}</span>
-            <span class="tag"><em>Setor</em>${esc(t.setor)}</span>
+            ${(t.owners||[]).map(o=>`<span class="tag" style="gap:8px">${esc(o.nome||'a definir')}<span style="width:1px;height:11px;background:var(--gline2)"></span><em>${esc(o.setor||'a definir')}</em></span>`).join('')}
           </div>
         </div>`).join('')}
         ${n===0?'<div class="emptybox">Nenhum tópico mapeado nesta dimensão.</div>':''}
@@ -700,7 +733,8 @@ function viewPresent(){
 /* ------------------------------------------------------------------ */
 function viewModal(){
   if(S.modal==='topic'){
-    const f=S.form||{dimId:'d1',titulo:'',descricao:'',normativo:'',owner:'',setor:''};
+    const f=S.form||formVazio();
+    const ow=(f.owners&&f.owners.length)?f.owners:[{nome:'',setor:''}];
     const op=S.data.dimensoes.map(x=>`<option value="${x.id}"${x.id===f.dimId?' selected':''}>${esc(x.roman+' — '+x.nome)}</option>`).join('');
     return `<div class="ovl" data-act="fundo"><div class="modal" data-modal="1" style="max-width:640px;padding:30px 32px">
       <h3>Adicionar novo tópico</h3>
@@ -709,11 +743,16 @@ function viewModal(){
         <label class="lab" style="font-size:12px">Dimensão<select class="minp" data-form="dimId">${op}</select></label>
         <label class="lab" style="font-size:12px">Título do tópico<input class="minp" data-form="titulo" data-fkey="f-tit" placeholder="Ex.: Trilha de auditoria dos extratos" value="${esc(f.titulo)}"></label>
         <label class="lab" style="font-size:12px">Descrição breve<textarea class="minp" rows="3" data-form="descricao" data-fkey="f-desc" placeholder="Uma ou duas linhas sobre o que precisa ser conversado.">${esc(f.descricao)}</textarea></label>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-          <label class="lab" style="font-size:12px">Normativo<input class="minp mono" data-form="normativo" data-fkey="f-norm" placeholder="NORM-000/2026" value="${esc(f.normativo)}"></label>
-          <label class="lab" style="font-size:12px">Owner<input class="minp" data-form="owner" data-fkey="f-own" placeholder="Nome do responsável" value="${esc(f.owner)}"></label>
+        <label class="lab" style="font-size:12px">Normativo<input class="minp mono" data-form="normativo" data-fkey="f-norm" placeholder="NORM-000/2026" value="${esc(f.normativo)}"></label>
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)">Owners<span style="flex:1;height:1px;background:var(--gline)"></span><span style="font-size:11px">nome e setor de cada responsável</span></div>
+          ${ow.map((o,i)=>`<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 38px;gap:10px;align-items:center">
+            <input class="minp" data-form="ownNome" data-oi="${i}" data-fkey="f-o${i}-n" placeholder="Nome do responsável" value="${esc(o.nome)}">
+            <input class="minp" style="color:var(--fg2)" data-form="ownSetor" data-oi="${i}" data-fkey="f-o${i}-s" placeholder="Ex.: Controladoria" value="${esc(o.setor)}">
+            <button class="ownx" style="width:38px;height:38px;border-color:var(--gline2);font-size:13px" data-act="delFormOwner" data-oi="${i}" title="Remover owner">✕</button>
+          </div>`).join('')}
+          <button class="ownadd" style="padding:9px 16px;font-size:12.5px" data-act="addFormOwner">+ Adicionar outro owner</button>
         </div>
-        <label class="lab" style="font-size:12px">Setor / área<input class="minp" data-form="setor" data-fkey="f-set" placeholder="Ex.: Controladoria" value="${esc(f.setor)}"></label>
       </div>
       <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:26px">
         <button class="mbtn" data-act="fechar">Cancelar</button>
@@ -755,18 +794,22 @@ function viewModal(){
     </div></div>`;
   }
 
-  if(S.confirmar){
-    const c=S.confirmar;
-    return `<div class="ovl" data-act="fundo" style="align-items:center"><div class="modal" data-modal="1" style="max-width:460px">
-      <h3>${esc(c.titulo)}</h3>
-      <div class="sub" style="margin-bottom:22px;line-height:1.6">${esc(c.texto)}</div>
-      <div style="display:flex;justify-content:flex-end;gap:10px">
-        <button class="mbtn" data-act="fechar">Cancelar</button>
-        <button class="mbtn dang" data-act="confirmarOk">${esc(c.ok||'Confirmar')}</button>
-      </div>
-    </div></div>`;
-  }
   return '';
+}
+
+/* diálogo de confirmação — camada própria, acima dos demais modais */
+function viewConfirm(){
+  const c=S.confirmar; if(!c) return '';
+  return `<div class="ovl" data-act="fundoConfirma" style="z-index:95;align-items:center;padding:32px 24px;background:rgba(4,7,10,.72)">
+    <div class="modal" data-modal="1" style="max-width:440px;background:var(--panel2);border-radius:26px">
+      <h3 style="font-size:19px;margin-bottom:9px">${esc(c.titulo)}</h3>
+      <div style="font-size:13.5px;line-height:1.62;color:var(--fg2);text-wrap:pretty">${esc(c.texto)}</div>
+      <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:24px">
+        <button class="mbtn" style="padding:11px 18px" data-act="cancelarConfirma">Cancelar</button>
+        <button class="mbtn" style="padding:11px 22px;border:0;font-weight:600;color:#fff;background:${c.danger?'#c2384a':'var(--brand)'}" data-act="confirmarOk">${esc(c.ok||'Confirmar')}</button>
+      </div>
+    </div>
+  </div>`;
 }
 
 /* ------------------------------------------------------------------ */
@@ -785,6 +828,7 @@ function render(){
     '<div class="wrap"><div class="halo halo1"></div><div class="halo halo2"></div>' +
     (S.mode==='present' ? viewPresent() : viewConfig()) +
     viewModal() +
+    viewConfirm() +
     '</div>';
 
   if(fkey){
@@ -871,14 +915,15 @@ function animarPara(alvo){
 /* ------------------------------------------------------------------ */
 function fecharModal(){ S.modal=null; S.confirmar=null; S.jsonError=''; render(); }
 
-function pedirConfirmacao(titulo,texto,ok,acao){
-  S.confirmar={titulo:titulo,texto:texto,ok:ok,acao:acao};
-  S.menuOpen=false; render();
+function pedirConfirmacao(cfg){
+  S.confirmar=cfg; S.menuOpen=false; render();
 }
+
+function formVazio(){ return {dimId:S.selected||'d1',titulo:'',descricao:'',normativo:'',owners:[{nome:'',setor:''}]}; }
 
 function novoTopico(){
   S.modal='topic'; S.menuOpen=false;
-  S.form={dimId:S.selected||'d1',titulo:'',descricao:'',normativo:'',owner:'',setor:''};
+  S.form=formVazio();
   render();
 }
 
@@ -886,10 +931,14 @@ function salvarTopico(){
   const f=S.form||{};
   if(!f.titulo||!f.titulo.trim()){ toast('Informe o título do tópico.'); return; }
   const alvo=dimDe(f.dimId); if(!alvo) return;
+  let ow=(f.owners||[])
+    .filter(o=>(o.nome&&o.nome.trim())||(o.setor&&o.setor.trim()))
+    .map(o=>({nome:(o.nome||'a definir').trim(), setor:(o.setor||'a definir').trim()}));
+  if(!ow.length) ow=[{nome:'a definir', setor:'a definir'}];
   alvo.topicos.push({
     id:f.dimId+'-t'+Date.now(),
     titulo:f.titulo, descricao:f.descricao,
-    normativo:f.normativo||'—', owner:f.owner||'a definir', setor:f.setor||'a definir'
+    normativo:f.normativo||'—', owners:ow
   });
   S.modal=null; S.selected=f.dimId;
   commit('Tópico adicionado: '+f.titulo);
@@ -909,13 +958,45 @@ function moverTopico(dimId,topId,alvoId){
 function excluirTopico(dimId,topId){
   const d=dimDe(dimId); if(!d) return;
   const t=d.topicos.find(x=>x.id===topId); if(!t) return;
-  pedirConfirmacao('Excluir tópico','Excluir o tópico “'+t.titulo+'”? Esta ação não pode ser desfeita — mas a versão anterior fica no histórico.','Excluir',()=>{
-    const dd=dimDe(dimId);
-    dd.topicos=dd.topicos.filter(x=>x.id!==topId);
-    S.confirmar=null;
-    commit('Tópico excluído: '+t.titulo);
-    toast('Tópico excluído.');
+  pedirConfirmacao({
+    titulo:'Excluir tópico',
+    texto:'“'+t.titulo+'” será removido da dimensão '+d.roman+' — '+d.nome+'. Esta ação pode ser desfeita pelo histórico de alterações.',
+    ok:'Excluir tópico', danger:true,
+    acao:()=>{
+      const dd=dimDe(dimId);
+      dd.topicos=dd.topicos.filter(x=>x.id!==topId);
+      commit('Tópico excluído: '+t.titulo);
+      toast('Tópico excluído.');
+    }
   });
+}
+
+function addOwner(dimId,topId){
+  const d=dimDe(dimId); if(!d) return;
+  const t=d.topicos.find(x=>x.id===topId); if(!t) return;
+  if(!Array.isArray(t.owners)) t.owners=[];
+  t.owners.push({nome:'',setor:''});
+  commit('Owner adicionado em '+t.titulo);
+}
+
+function delOwner(dimId,topId,oi){
+  const d=dimDe(dimId); if(!d) return;
+  const t=d.topicos.find(x=>x.id===topId); if(!t||!t.owners) return;
+  t.owners.splice(oi,1);
+  commit('Owner removido de '+t.titulo);
+}
+
+function ownersForm(){
+  if(!S.form) S.form=formVazio();
+  if(!Array.isArray(S.form.owners)||!S.form.owners.length) S.form.owners=[{nome:'',setor:''}];
+  return S.form.owners;
+}
+
+async function salvarSincronizar(){
+  S.menuOpen=false;
+  commit('Dados salvos manualmente');
+  if(fileHandle) await gravarArquivo(false);
+  else toast('Salvo no navegador. Autorize um arquivo JSON para sincronizar em disco.');
 }
 
 function abrirJson(){
@@ -929,10 +1010,7 @@ function salvarJson(){
   try{
     const p=JSON.parse(S.jsonText);
     if(!p.dimensoes || !Array.isArray(p.dimensoes)) throw new Error('campo "dimensoes" ausente ou inválido');
-    const meta=p.meta||S.data.meta;
-    if(!meta.fimTitulo) meta.fimTitulo=FIM_TITULO;
-    if(!meta.fimMensagem) meta.fimMensagem=FIM_MENSAGEM;
-    S.data={meta:meta, dimensoes:p.dimensoes};
+    S.data=migrate({meta:p.meta||S.data.meta, dimensoes:p.dimensoes});
     if(!dimDe(S.selected)) S.selected=S.data.dimensoes[0]?S.data.dimensoes[0].id:'d1';
     S.modal=null; S.jsonError='';
     commit('JSON editado manualmente');
@@ -973,10 +1051,7 @@ async function carregarArquivo(){
     const p=JSON.parse(await f.text());
     if(!p.dimensoes) throw new Error('estrutura inválida');
     fileHandle=h; await idbPut(h);
-    const meta=p.meta||S.data.meta;
-    if(!meta.fimTitulo) meta.fimTitulo=FIM_TITULO;
-    if(!meta.fimMensagem) meta.fimMensagem=FIM_MENSAGEM;
-    S.data={meta:meta, dimensoes:p.dimensoes};
+    S.data=migrate({meta:p.meta||S.data.meta, dimensoes:p.dimensoes});
     if(!dimDe(S.selected)) S.selected=S.data.dimensoes[0].id;
     S.fileName=h.name; S.fileState='ok';
     commit('Dados carregados de '+h.name);
@@ -1052,6 +1127,16 @@ document.addEventListener('click',(ev)=>{
       S.unlocked[id]=!S.unlocked[id]; render(); break;
     }
     case 'novo': novoTopico(); break;
+    case 'addOwner': addOwner(alvo.dataset.dim, alvo.dataset.top); break;
+    case 'delOwner': delOwner(alvo.dataset.dim, alvo.dataset.top, parseInt(alvo.dataset.oi,10)); break;
+    case 'addFormOwner': ownersForm().push({nome:'',setor:''}); render(); break;
+    case 'delFormOwner': {
+      const arr=ownersForm();
+      arr.splice(parseInt(alvo.dataset.oi,10),1);
+      if(!arr.length) arr.push({nome:'',setor:''});
+      render(); break;
+    }
+    case 'salvarSync': salvarSincronizar(); break;
     case 'excluir': excluirTopico(alvo.dataset.dim, alvo.dataset.top); break;
     case 'salvarTopico': salvarTopico(); break;
     case 'json': abrirJson(); break;
@@ -1066,6 +1151,8 @@ document.addEventListener('click',(ev)=>{
     case 'logoHide': S.logoVisible=false; salvarUI({logoVisible:false}); render(); break;
     case 'logoRemove': S.logo=null; salvarUI({logo:null}); S.menuOpen=false; render(); break;
     case 'confirmarOk': { const a=S.confirmar&&S.confirmar.acao; S.confirmar=null; if(a) a(); else render(); break; }
+    case 'cancelarConfirma': S.confirmar=null; render(); break;
+    case 'fundoConfirma': if(!ev.target.closest('[data-modal]')){ S.confirmar=null; render(); } break;
     case 'fechar': fecharModal(); break;
     case 'fundo': fecharModal(); break;
   }
@@ -1086,8 +1173,14 @@ document.addEventListener('input',(ev)=>{
   if(el.id==='jsonArea'){ S.jsonText=el.value; return; }
 
   if(el.dataset && el.dataset.form){
-    if(!S.form) S.form={dimId:S.selected||'d1',titulo:'',descricao:'',normativo:'',owner:'',setor:''};
-    S.form[el.dataset.form]=el.value;
+    if(!S.form) S.form=formVazio();
+    const campoForm=el.dataset.form;
+    if(campoForm==='ownNome' || campoForm==='ownSetor'){
+      const arr=ownersForm(), oi=parseInt(el.dataset.oi,10);
+      if(arr[oi]) arr[oi][campoForm==='ownNome'?'nome':'setor']=el.value;
+      return;
+    }
+    S.form[campoForm]=el.value;
     return;
   }
 
@@ -1115,6 +1208,15 @@ document.addEventListener('input',(ev)=>{
     const k=campo.slice(4);
     t[k]=v;
     patch('Tópico alterado: '+(t.titulo||'sem título'));
+    return;
+  }
+  if(campo.startsWith('own.')){
+    const d=dimDe(el.dataset.dim); if(!d) return;
+    const t=d.topicos.find(x=>x.id===el.dataset.top); if(!t||!t.owners) return;
+    const o=t.owners[parseInt(el.dataset.oi,10)]; if(!o) return;
+    const k=campo.slice(4);
+    o[k]=v;
+    patch(k==='nome'?'Owner alterado':'Setor do owner alterado');
     return;
   }
 });
@@ -1151,7 +1253,8 @@ document.addEventListener('mouseout',(ev)=>{
 /* teclado */
 document.addEventListener('keydown',(e)=>{
   if(e.key==='Escape'){
-    if(S.modal||S.confirmar){ fecharModal(); }
+    if(S.confirmar){ S.confirmar=null; render(); }
+    else if(S.modal){ fecharModal(); }
     else if(S.mode==='present'){ S.mode='config'; S.dockOpen=false; boundEl=null; render(); }
     return;
   }
@@ -1173,8 +1276,7 @@ window.addEventListener('beforeunload',()=>{ salvarLocal(); });
 function normalizar(d){
   if(!d || !Array.isArray(d.dimensoes)) return null;
   if(!d.meta) d.meta=defaultData().meta;
-  if(!d.meta.fimTitulo) d.meta.fimTitulo=FIM_TITULO;
-  if(!d.meta.fimMensagem) d.meta.fimMensagem=FIM_MENSAGEM;
+  migrate(d);
   d.dimensoes.forEach((dim,i)=>{
     if(!dim.id) dim.id='d'+(i+1);
     if(!dim.roman) dim.roman=ROMAN[i]||String(i+1);
