@@ -1,6 +1,6 @@
 {
   "versao": 3,
-  "atualizadoEm": "2026-08-07T21:23:02.232Z",
+  "atualizadoEm": "2026-08-07T21:24:37.824Z",
   "meta": {
     "titulo": "Kickoff — Qualidade da Informação nas 12 Dimensões",
     "descricao": "Alinhamento inicial do mapa de tópicos por dimensão: o que já está consolidado, qual normativo endereça cada ponto e com quem precisamos conversar. Os dados abaixo são fictícios e servem de estrutura para o preenchimento real.",
@@ -70,8 +70,8 @@
           "normativo": "—",
           "owners": [
             {
-              "nome": "a definir",
-              "setor": "a definir"
+              "nome": "D. Nogueira",
+              "setor": "Segurança da Informação"
             }
           ]
         },

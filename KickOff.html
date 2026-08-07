@@ -301,6 +301,31 @@ function catalogo(){
   };
 }
 
+const CAT_OWNERS='__owners', CAT_NORM='__normativos';
+const A_OWNERS='oklch(.68 .13 285)', A_NORM='oklch(.68 .13 75)';
+const ehCatalogo = id => id===CAT_OWNERS || id===CAT_NORM;
+
+function garantirCatalogo(){
+  if(!S.data.catalogo) S.data.catalogo=catalogo();
+  if(!Array.isArray(S.data.catalogo.owners)) S.data.catalogo.owners=[];
+  if(!Array.isArray(S.data.catalogo.normativos)) S.data.catalogo.normativos=[];
+  return S.data.catalogo;
+}
+
+/* em quantos tópicos cada entrada do catálogo é usada */
+function usosOwner(nome){
+  let n=0;
+  S.data.dimensoes.forEach(d=>d.topicos.forEach(t=>{
+    if((t.owners||[]).some(o=>o.nome===nome)) n++;
+  }));
+  return n;
+}
+function usosNormativo(cod){
+  let n=0;
+  S.data.dimensoes.forEach(d=>d.topicos.forEach(t=>{ if(t.normativo===cod) n++; }));
+  return n;
+}
+
 /* setor já usado por este owner, para preencher sozinho */
 function setorDoOwner(nome){
   const c=catalogo().owners.find(o=>o.nome===nome);
@@ -536,6 +561,9 @@ function viewConfig(){
       <div class="grid-dims" style="margin-top:18px;display:grid;grid-template-columns:330px minmax(0,1fr);gap:26px;align-items:start">
         <div class="side glass" style="position:sticky;top:96px;padding:12px;border-radius:24px;display:flex;flex-direction:column;gap:4px">
           ${S.data.dimensoes.map((dim,i)=>dimRow(dim,i)).join('')}
+          <div class="sep" style="margin:8px 6px"></div>
+          ${catRow(CAT_OWNERS,'◍','Owners',A_OWNERS,catalogo().owners.length)}
+          ${catRow(CAT_NORM,'§','Normativos',A_NORM,catalogo().normativos.length)}
         </div>
         <div style="display:flex;flex-direction:column;gap:20px;min-width:0">
           ${painelDimensao()}
@@ -556,7 +584,84 @@ function dimRow(dim,i){
   </div>`;
 }
 
+function catRow(id,icone,rotulo,accent,n){
+  const on = S.selected===id;
+  return `<div class="dimrow${on?' on':''}" style="--a:${accent}" data-act="selecionar" data-dim="${id}">
+    <span class="rail"></span>
+    <span class="rom" style="font-size:13px">${icone}</span>
+    <span class="nm">${rotulo}</span>
+    <span class="ct mono">${n}</span>
+    <span class="chip"><i></i></span>
+  </div>`;
+}
+
+/* ---- painel de catálogo: owners e normativos como cartões ---- */
+function painelOwners(){
+  const lista=catalogo().owners;
+  return `<div class="dimpanel" style="--a:${A_OWNERS}">
+    <div class="blob"></div>
+    <div style="position:relative;padding:28px 32px 22px;border-bottom:1px solid var(--gline)">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <span class="romchip">◍</span>
+        <span style="font-size:26px;font-weight:700;letter-spacing:-.035em">Owners</span>
+        <span style="flex:1;height:1px;background:var(--gline)"></span>
+        <span class="mono" style="font-size:11px;color:var(--muted)">${lista.length===1?'1 owner':lista.length+' owners'}</span>
+        <button class="ghostbtn" data-act="catAddOwner">Novo owner<i>+</i></button>
+      </div>
+      <div style="font-size:13.5px;line-height:1.68;color:var(--fg2);max-width:940px;text-wrap:pretty">Cadastro de responsáveis reaproveitado nas sugestões ao criar tópicos. Renomear um owner aqui atualiza todos os tópicos em que ele aparece.</div>
+    </div>
+    <div class="topicgrid">
+      ${lista.map(o=>{
+        const n=usosOwner(o.nome);
+        return `<div class="tcard">
+          <input class="tinp" data-catfield="ownerNome" data-key="${esc(o.nome)}" data-fkey="co-${esc(o.nome)}-n" placeholder="Nome do owner" value="${esc(o.nome)}">
+          <input class="tmeta" list="dlSetores" style="color:var(--fg2)" data-catfield="ownerSetor" data-key="${esc(o.nome)}" data-fkey="co-${esc(o.nome)}-s" placeholder="Setor" value="${esc(o.setor)}">
+          <div style="display:flex;align-items:center;gap:8px;padding-top:4px">
+            <span class="mono" style="flex:1;font-size:11px;color:var(--muted)">${n===0?'não usado':(n===1?'1 tópico':n+' tópicos')}</span>
+            <button class="dupbtn" data-act="catDupOwner" data-key="${esc(o.nome)}">⧉ Duplicar</button>
+            <button class="delbtn" data-act="catDelOwner" data-key="${esc(o.nome)}">Excluir</button>
+          </div>
+        </div>`;
+      }).join('')}
+      ${lista.length===0?'<div class="emptybox click" data-act="catAddOwner">Nenhum owner cadastrado. Clique para adicionar.</div>':''}
+    </div>
+  </div>`;
+}
+
+function painelNormativos(){
+  const lista=catalogo().normativos;
+  return `<div class="dimpanel" style="--a:${A_NORM}">
+    <div class="blob"></div>
+    <div style="position:relative;padding:28px 32px 22px;border-bottom:1px solid var(--gline)">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <span class="romchip">§</span>
+        <span style="font-size:26px;font-weight:700;letter-spacing:-.035em">Normativos</span>
+        <span style="flex:1;height:1px;background:var(--gline)"></span>
+        <span class="mono" style="font-size:11px;color:var(--muted)">${lista.length===1?'1 código':lista.length+' códigos'}</span>
+        <button class="ghostbtn" data-act="catAddNorm">Novo normativo<i>+</i></button>
+      </div>
+      <div style="font-size:13.5px;line-height:1.68;color:var(--fg2);max-width:940px;text-wrap:pretty">Códigos de normativo reaproveitados nas sugestões ao criar tópicos. Renomear um código aqui atualiza todos os tópicos que o citam.</div>
+    </div>
+    <div class="topicgrid">
+      ${lista.map(c=>{
+        const n=usosNormativo(c);
+        return `<div class="tcard">
+          <input class="tinp mono" data-catfield="normativo" data-key="${esc(c)}" data-fkey="cn-${esc(c)}" placeholder="NORM-000/2026" value="${esc(c)}">
+          <div style="display:flex;align-items:center;gap:8px;padding-top:4px">
+            <span class="mono" style="flex:1;font-size:11px;color:var(--muted)">${n===0?'não usado':(n===1?'1 tópico':n+' tópicos')}</span>
+            <button class="dupbtn" data-act="catDupNorm" data-key="${esc(c)}">⧉ Duplicar</button>
+            <button class="delbtn" data-act="catDelNorm" data-key="${esc(c)}">Excluir</button>
+          </div>
+        </div>`;
+      }).join('')}
+      ${lista.length===0?'<div class="emptybox click" data-act="catAddNorm">Nenhum normativo cadastrado. Clique para adicionar.</div>':''}
+    </div>
+  </div>`;
+}
+
 function painelDimensao(){
+  if(S.selected===CAT_OWNERS) return painelOwners();
+  if(S.selected===CAT_NORM) return painelNormativos();
   const dim=dimDe(S.selected); if(!dim) return '';
   const i=idxDe(dim.id), a=ACCENTS[i%12], aberta=!!S.unlocked[dim.id];
   const n=dim.topicos.length;
@@ -963,7 +1068,10 @@ function pedirConfirmacao(cfg){
   S.confirmar=cfg; S.menuOpen=false; render();
 }
 
-function formVazio(){ return {dimId:S.selected||'d1',titulo:'',descricao:'',normativo:'',owners:[{nome:'',setor:''}]}; }
+function formVazio(){
+  const dim = dimDe(S.selected) ? S.selected : (S.data.dimensoes[0]||{}).id||'d1';
+  return {dimId:dim,titulo:'',descricao:'',normativo:'',owners:[{nome:'',setor:''}]};
+}
 
 function novoTopico(){
   S.modal='topic'; S.menuOpen=false;
@@ -1008,6 +1116,122 @@ function duplicarTopico(dimId,topId){
   d.topicos.splice(i+1,0,copia);
   commit('Tópico duplicado: '+d.topicos[i].titulo);
   toast('Tópico duplicado.');
+}
+
+/* ---- catálogo: owners e normativos gerenciados como tópicos ---- */
+function nomeUnico(base, usados){
+  if(usados.indexOf(base)<0) return base;
+  let i=2;
+  while(usados.indexOf(base+' '+i)>=0) i++;
+  return base+' '+i;
+}
+
+function catRenomearOwner(chave, novo){
+  novo=(novo||'').trim();
+  if(!novo || novo===chave){ render(); return; }
+  const cat=garantirCatalogo();
+  if(cat.owners.some(o=>o.nome===novo) || catalogo().owners.some(o=>o.nome===novo)){
+    toast('Já existe um owner com esse nome.'); render(); return;
+  }
+  const antigo=cat.owners.find(o=>o.nome===chave);
+  if(antigo) antigo.nome=novo; else cat.owners.push({nome:novo, setor:setorDoOwner(chave)});
+  S.data.dimensoes.forEach(d=>d.topicos.forEach(t=>{
+    (t.owners||[]).forEach(o=>{ if(o.nome===chave) o.nome=novo; });
+  }));
+  commit('Owner renomeado: '+chave+' → '+novo);
+  toast('Owner renomeado em '+usosOwner(novo)+' tópico(s).');
+}
+
+function catSetorOwner(chave, setor){
+  setor=(setor||'').trim();
+  const cat=garantirCatalogo();
+  const item=cat.owners.find(o=>o.nome===chave);
+  if(item) item.setor=setor; else cat.owners.push({nome:chave, setor:setor});
+  S.data.dimensoes.forEach(d=>d.topicos.forEach(t=>{
+    (t.owners||[]).forEach(o=>{ if(o.nome===chave) o.setor=setor; });
+  }));
+  commit('Setor do owner alterado: '+chave);
+}
+
+function catAddOwner(){
+  const cat=garantirCatalogo();
+  const nome=nomeUnico('Novo owner', catalogo().owners.map(o=>o.nome));
+  cat.owners.push({nome:nome, setor:''});
+  S.selected=CAT_OWNERS;
+  commit('Owner cadastrado: '+nome);
+}
+
+function catDupOwner(chave){
+  const cat=garantirCatalogo();
+  const base=catalogo().owners.find(o=>o.nome===chave); if(!base) return;
+  cat.owners.push({nome:nomeUnico(chave+' (cópia)', catalogo().owners.map(o=>o.nome)), setor:base.setor});
+  commit('Owner duplicado: '+chave);
+  toast('Owner duplicado.');
+}
+
+function catDelOwner(chave){
+  const n=usosOwner(chave);
+  pedirConfirmacao({
+    titulo:'Excluir owner',
+    texto: n===0
+      ? '“'+chave+'” sai do cadastro e deixa de aparecer nas sugestões.'
+      : '“'+chave+'” sai do cadastro e será removido dos '+n+' tópico(s) em que aparece. Esta ação pode ser desfeita pelo histórico de alterações.',
+    ok:'Excluir owner', danger:true,
+    acao:()=>{
+      const cat=garantirCatalogo();
+      cat.owners=cat.owners.filter(o=>o.nome!==chave);
+      S.data.dimensoes.forEach(d=>d.topicos.forEach(t=>{
+        if(Array.isArray(t.owners)) t.owners=t.owners.filter(o=>o.nome!==chave);
+      }));
+      commit('Owner excluído: '+chave);
+      toast('Owner excluído.');
+    }
+  });
+}
+
+function catRenomearNorm(chave, novo){
+  novo=(novo||'').trim();
+  if(!novo || novo===chave){ render(); return; }
+  const cat=garantirCatalogo();
+  if(catalogo().normativos.indexOf(novo)>=0){ toast('Esse código já existe.'); render(); return; }
+  const i=cat.normativos.indexOf(chave);
+  if(i>=0) cat.normativos[i]=novo; else cat.normativos.push(novo);
+  S.data.dimensoes.forEach(d=>d.topicos.forEach(t=>{ if(t.normativo===chave) t.normativo=novo; }));
+  commit('Normativo renomeado: '+chave+' → '+novo);
+  toast('Normativo atualizado em '+usosNormativo(novo)+' tópico(s).');
+}
+
+function catAddNorm(){
+  const cat=garantirCatalogo();
+  const cod=nomeUnico('NORM-000/2026', catalogo().normativos);
+  cat.normativos.push(cod);
+  S.selected=CAT_NORM;
+  commit('Normativo cadastrado: '+cod);
+}
+
+function catDupNorm(chave){
+  const cat=garantirCatalogo();
+  cat.normativos.push(nomeUnico(chave+' (cópia)', catalogo().normativos));
+  commit('Normativo duplicado: '+chave);
+  toast('Normativo duplicado.');
+}
+
+function catDelNorm(chave){
+  const n=usosNormativo(chave);
+  pedirConfirmacao({
+    titulo:'Excluir normativo',
+    texto: n===0
+      ? '“'+chave+'” sai do cadastro e deixa de aparecer nas sugestões.'
+      : '“'+chave+'” sai do cadastro e os '+n+' tópico(s) que o citam ficam sem normativo. Esta ação pode ser desfeita pelo histórico de alterações.',
+    ok:'Excluir normativo', danger:true,
+    acao:()=>{
+      const cat=garantirCatalogo();
+      cat.normativos=cat.normativos.filter(c=>c!==chave);
+      S.data.dimensoes.forEach(d=>d.topicos.forEach(t=>{ if(t.normativo===chave) t.normativo='—'; }));
+      commit('Normativo excluído: '+chave);
+      toast('Normativo excluído.');
+    }
+  });
 }
 
 /* ---- CSV: uma linha por par tópico × owner ---- */
@@ -1199,6 +1423,8 @@ document.addEventListener('click',(ev)=>{
     case 'apresentar':
       commit('Configuração salva para apresentação', false);
       gravarArquivo(true);
+      // os itens de catálogo não existem na apresentação
+      if(!dimDe(S.selected)) S.selected=S.data.dimensoes[0].id;
       S.mode='present'; S.section=0; S.dir=1; S.menuOpen=false; boundEl=null;
       animarEntrada=true;
       render();
@@ -1226,6 +1452,12 @@ document.addEventListener('click',(ev)=>{
     }
     case 'salvarSync': salvarSincronizar(); break;
     case 'duplicar': duplicarTopico(alvo.dataset.dim, alvo.dataset.top); break;
+    case 'catAddOwner': catAddOwner(); break;
+    case 'catDupOwner': catDupOwner(alvo.dataset.key); break;
+    case 'catDelOwner': catDelOwner(alvo.dataset.key); break;
+    case 'catAddNorm': catAddNorm(); break;
+    case 'catDupNorm': catDupNorm(alvo.dataset.key); break;
+    case 'catDelNorm': catDelNorm(alvo.dataset.key); break;
     case 'excluir': excluirTopico(alvo.dataset.dim, alvo.dataset.top); break;
     case 'csv': baixarCsv(); break;
     case 'salvarTopico': salvarTopico(); break;
@@ -1332,6 +1564,14 @@ document.addEventListener('input',(ev)=>{
 /* selects */
 document.addEventListener('change',(ev)=>{
   const el=ev.target;
+  /* catálogo: grava ao sair do campo, porque o nome atual é a chave da edição */
+  if(el.dataset && el.dataset.catfield){
+    const chave=el.dataset.key, v=el.value;
+    if(el.dataset.catfield==='ownerNome') catRenomearOwner(chave, v);
+    else if(el.dataset.catfield==='ownerSetor') catSetorOwner(chave, v);
+    else if(el.dataset.catfield==='normativo') catRenomearNorm(chave, v);
+    return;
+  }
   if(el.dataset && el.dataset.act==='mover'){
     moverTopico(el.dataset.dim, el.dataset.top, el.value);
     return;
