@@ -44,7 +44,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--brand)}
 .kicker{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
 .syncpill{display:flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;border:1px solid var(--gline);background:var(--glass);font-size:12px;color:var(--fg2);cursor:default}
 .dot{width:7px;height:7px;flex:none;border-radius:50%}
-.iconbtn{width:38px;height:38px;flex:none;border-radius:50%;border:1px solid var(--gline);background:var(--glass);color:var(--fg2);cursor:pointer;font-size:14px;transition:color .25s ease,border-color .25s ease}
+.iconbtn{width:38px;height:38px;flex:none;display:flex;align-items:center;justify-content:center;padding:0;border-radius:50%;border:1px solid var(--gline);background:var(--glass);color:var(--fg2);cursor:pointer;font-size:14px;transition:color .25s ease,border-color .25s ease}
 .iconbtn:hover{color:var(--fg);border-color:var(--gline2)}
 .cta{display:flex;align-items:center;gap:9px;height:38px;padding:0 6px 0 17px;border-radius:999px;border:0;background:var(--brand);color:var(--brandfg);font-size:12.5px;font-weight:600;line-height:1;white-space:nowrap;cursor:pointer;box-shadow:0 10px 28px color-mix(in oklab, var(--brand) 34%, transparent);transition:transform .25s cubic-bezier(.2,.9,.25,1)}
 .cta:hover{transform:translateY(-2px)}
@@ -103,7 +103,7 @@ textarea.inp{color:var(--fg2);line-height:1.65;resize:vertical}
 .tmeta{width:100%;min-width:0;padding:9px 11px;border-radius:11px;border:1px solid var(--gline2);background:var(--panel);color:var(--fg);font-size:12px}
 .tmeta.norm{color:var(--a);font-size:11.5px}
 .tsel{flex:1;min-width:0;padding:8px 10px;border-radius:11px;border:1px solid var(--gline);background:transparent;color:var(--muted);font-size:11.5px}
-.ownx{width:30px;height:30px;border-radius:50%;border:1px solid var(--gline);background:transparent;color:var(--muted);font-size:12px;line-height:1;cursor:pointer;transition:color .2s ease,border-color .2s ease}
+.ownx{width:30px;height:30px;flex:none;display:flex;align-items:center;justify-content:center;padding:0;border-radius:50%;border:1px solid var(--gline);background:transparent;color:var(--muted);font-size:12px;line-height:1;cursor:pointer;transition:color .2s ease,border-color .2s ease}
 .ownx:hover{color:#e2707a;border-color:#7a2b32}
 .ownadd{align-self:flex-start;padding:7px 13px;border-radius:999px;border:1px dashed var(--gline2);background:transparent;color:var(--fg2);font-size:11.5px;cursor:pointer;transition:border-color .2s ease,color .2s ease}
 .ownadd:hover{border-color:var(--a,var(--brand));color:var(--fg)}
@@ -121,17 +121,18 @@ textarea.inp{color:var(--fg2);line-height:1.65;resize:vertical}
 .dockhint{position:absolute;right:0;top:50%;margin-top:-34px;width:2px;height:68px;border-radius:2px;background:var(--gline2);transition:opacity .5s ease;animation:kfBreathe 4.2s ease-in-out infinite;pointer-events:none}
 .dock{margin-right:18px;display:flex;flex-direction:column;align-items:center;gap:10px;padding:12px 10px;border-radius:999px;border:1px solid var(--gline);background:var(--glass2);backdrop-filter:blur(26px);box-shadow:var(--shadow);opacity:0;transform:translateX(20px);pointer-events:none;transition:opacity .35s ease,transform .5s cubic-bezier(.16,.9,.24,1)}
 .dock.on{opacity:1;transform:translateX(0);pointer-events:auto}
-.dockbtn{width:30px;height:30px;border-radius:50%;border:1px solid transparent;background:transparent;color:var(--muted);font-size:10px;line-height:1;cursor:pointer;transition:color .3s ease,border-color .3s ease}
+.dockbtn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;padding:0;border-radius:50%;border:1px solid transparent;background:transparent;color:var(--muted);font-size:10px;line-height:1;cursor:pointer;transition:color .3s ease,border-color .3s ease}
 .dockbtn:hover{color:var(--fg);border-color:var(--gline2)}
 .dockbtn.on{color:var(--fg);border-color:var(--gline2)}
 #scroller{height:100vh;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
 #scroller::-webkit-scrollbar{display:none}
-.pcard{position:relative;min-width:172px;padding:26px 28px;border-radius:26px;border:1px solid var(--gline2);background:linear-gradient(150deg, var(--glass2), var(--glass) 58%);backdrop-filter:blur(26px);box-shadow:var(--shadow);overflow:hidden}
-.pcard .b{position:absolute;top:-60px;right:-40px;width:150px;height:150px;border-radius:50%;filter:blur(34px);pointer-events:none}
-.pcard .n{position:relative;font-size:44px;font-weight:700;letter-spacing:-.05em;line-height:1}
-.pcard .c{position:relative;margin-top:10px;font-size:11.5px;letter-spacing:.02em;color:var(--fg2)}
+.pcard{position:relative;min-width:150px;padding:16px 19px;border-radius:20px;border:1px solid var(--gline2);background:linear-gradient(150deg, var(--glass2), var(--glass) 58%);backdrop-filter:blur(26px);box-shadow:var(--shadow);overflow:hidden}
+.pcard .b{position:absolute;top:-46px;right:-30px;width:110px;height:110px;border-radius:50%;filter:blur(30px);opacity:.55;pointer-events:none}
+.pcard .n{position:relative;font-size:calc(30px * var(--sc1));font-weight:700;letter-spacing:-.045em;line-height:1}
+.pcard .c{position:relative;margin-top:6px;font-size:calc(10.5px * var(--sc1));letter-spacing:.02em;color:var(--fg2)}
 .ptcard{border:1px solid var(--gline);border-left:2px solid var(--a);border-radius:20px;background:var(--glass);padding:20px 22px;transition:transform .3s cubic-bezier(.2,.9,.25,1),background .3s ease,border-color .3s ease}
-.ptcard:hover{transform:translateY(-4px);background:var(--glass2);border-color:var(--a)}
+.ptcard.mdl{border-color:color-mix(in oklab,var(--mdl) 40%,var(--gline));border-left-color:var(--mdl);background:color-mix(in oklab,var(--mdl) 9%,var(--panel))}
+.ptwrap:hover .ptcard.mdl{background:color-mix(in oklab,var(--mdl) 14%,var(--panel2));border-color:var(--mdl)}
 .tag{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;border:1px solid var(--gline);font-size:11.5px;color:var(--fg2)}
 .tag em{color:var(--muted);font-style:normal}
 .tag.norm{background:color-mix(in oklab, var(--a) 16%, transparent);border-color:color-mix(in oklab, var(--a) 45%, var(--gline));font-size:10.5px;color:var(--a)}
@@ -149,12 +150,58 @@ textarea.inp{color:var(--fg2);line-height:1.65;resize:vertical}
 .errbox{margin-top:12px;padding:10px 14px;border-radius:12px;border:1px solid #7a2b32;color:#e2707a;font-size:12.5px}
 .toast{position:fixed;left:50%;bottom:32px;transform:translateX(-50%);z-index:90;padding:13px 22px;border-radius:999px;border:1px solid var(--gline2);background:var(--glass2);backdrop-filter:blur(20px);color:var(--fg);font-size:13px;box-shadow:var(--shadow);animation:kfIn .22s ease-out}
 
+/* ---------- destaques, tipografia configurável e dropdown próprio ---------- */
+:root{--fs-tt:16px;--fs-td:13px;--fs-tf:10.5px;--sc1:1;--sc3:1;--mdl:oklch(.72 .15 320);--own-hl:oklch(.76 .12 190)}
+:root[data-theme="light"]{--mdl:oklch(.5 .18 320);--own-hl:oklch(.48 .11 195)}
+.ptflags{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;margin-bottom:11px}
+.ptcard.mdl:hover{border-color:var(--mdl)}
+.tag.mdl{color:var(--mdl);border-color:color-mix(in oklab,var(--mdl) 45%,var(--gline));background:color-mix(in oklab,var(--mdl) 15%,transparent);font-size:var(--fs-tf)}
+.tag.owhl{color:var(--own-hl);border-color:color-mix(in oklab,var(--own-hl) 50%,var(--gline));background:color-mix(in oklab,var(--own-hl) 13%,transparent);font-weight:600;box-shadow:0 0 0 1px color-mix(in oklab,var(--own-hl) 20%,transparent),0 6px 18px color-mix(in oklab,var(--own-hl) 14%,transparent)}
+.tag.owhl em{color:color-mix(in oklab,var(--own-hl) 60%,var(--fg2))}
+.hlbtn{width:30px;height:30px;flex:none;display:flex;align-items:center;justify-content:center;padding:0;border-radius:50%;border:1px solid var(--gline);background:transparent;color:var(--muted);font-size:11px;line-height:1;cursor:pointer;transition:color .2s ease,border-color .2s ease,background .2s ease}
+.hlbtn:hover{color:var(--fg);border-color:var(--gline2)}
+.hlbtn.on{color:var(--own-hl);border-color:color-mix(in oklab,var(--own-hl) 55%,var(--gline));background:color-mix(in oklab,var(--own-hl) 14%,transparent)}
+.togchip{display:inline-flex;align-items:center;gap:7px;padding:7px 13px;border-radius:999px;border:1px solid var(--gline2);background:transparent;color:var(--fg2);font-size:11.5px;cursor:pointer;transition:color .2s ease,border-color .2s ease,background .2s ease}
+.togchip:hover{color:var(--fg)}
+.togchip.on{color:var(--mdl);border-color:color-mix(in oklab,var(--mdl) 55%,var(--gline));background:color-mix(in oklab,var(--mdl) 15%,transparent);font-weight:600}
+.dimhover{position:relative;display:flex;align-items:center;gap:9px;cursor:help}
+.dimtip{position:absolute;left:0;top:calc(100% + 9px);z-index:25;width:max-content;max-width:min(680px,58vw);padding:13px 16px;border-radius:16px;border:1px solid var(--gline2);background:var(--panel2);box-shadow:var(--shadow);font-size:12.5px;line-height:1.6;color:var(--fg2);text-wrap:pretty;opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .22s ease,transform .22s ease,visibility .22s}
+.dimhover:hover .dimtip{opacity:1;visibility:visible;transform:none}
+.sug{position:fixed;z-index:120;overflow:auto;padding:6px;border-radius:16px;border:1px solid var(--line2);background:var(--panel2);box-shadow:var(--shadow);animation:kfPop .16s cubic-bezier(.16,.9,.24,1)}
+.sug-i{display:flex;align-items:center;gap:10px;width:100%;padding:9px 11px;border:0;border-radius:11px;background:transparent;color:var(--fg);font-size:12.5px;text-align:left;cursor:pointer}
+.sug-i:hover,.sug-i.on{background:var(--glass2)}
+.sug-i .s{margin-left:auto;padding-left:10px;font-size:11px;color:var(--muted);white-space:nowrap}
+.sug-empty{padding:10px 11px;font-size:11.5px;line-height:1.5;color:var(--muted)}
+.rangerow{display:flex;flex-direction:column;gap:7px}
+.rangerow .rl{display:flex;justify-content:space-between;gap:10px;font-size:11.5px;color:var(--muted)}
+.rangerow input[type=range]{flex:1;min-width:0;width:auto;accent-color:var(--brand)}
+.numinp{width:64px;flex:none;padding:6px 7px;border-radius:9px;border:1px solid var(--gline2);background:var(--panel);color:var(--fg);font-size:11.5px;text-align:center;font-family:'IBM Plex Mono',ui-monospace,monospace}
+.resetbtn{padding:7px 13px;border-radius:999px;border:1px solid var(--gline2);background:transparent;color:var(--fg2);font-size:11.5px;cursor:pointer;transition:color .2s ease,border-color .2s ease}
+.resetbtn:hover{color:var(--fg);border-color:var(--brand)}
+.segbtn{flex:1;padding:9px 10px;border-radius:12px;border:1px solid var(--gline2);background:transparent;color:var(--fg2);font-size:12px;cursor:pointer;transition:color .2s ease,background .2s ease}
+.segbtn:hover{color:var(--fg)}
+.segbtn.on{background:color-mix(in oklab,var(--brand) 78%,transparent);border-color:transparent;color:var(--brandfg);font-weight:600}
+
+.ptwrap{display:flex;flex-direction:column;min-width:0;transition:transform .3s cubic-bezier(.2,.9,.25,1)}
+.ptwrap:hover{transform:translateY(-4px)}
+.pttabs{display:flex;flex-wrap:wrap;gap:6px;padding-left:16px;position:relative;z-index:0}
+.pttab{display:inline-flex;align-items:center;gap:6px;padding:5px 12px 10px;margin-bottom:-5px;border:1px solid color-mix(in oklab,var(--a) 40%,var(--gline));border-bottom:0;border-radius:12px 12px 0 0;font-size:var(--fs-tf);line-height:1;white-space:nowrap;transition:border-color .3s ease,background .3s ease}
+.pttab.norm{color:var(--a);background:color-mix(in oklab,var(--a) 17%,var(--panel))}
+.pttab.mdl{color:var(--mdl);border-color:color-mix(in oklab,var(--mdl) 42%,var(--gline));background:color-mix(in oklab,var(--mdl) 17%,var(--panel))}
+.ptwrap:hover .pttab.norm{border-color:color-mix(in oklab,var(--a) 62%,transparent)}
+.ptwrap:hover .pttab.mdl{border-color:color-mix(in oklab,var(--mdl) 62%,transparent)}
+.ptcard{position:relative;z-index:1;background:var(--panel);backdrop-filter:none}
+.ptwrap:hover .ptcard{background:var(--panel2);border-color:var(--a)}
+
 @media (max-width:1180px){
   .page{padding:26px 18px 80px}
   .topbar-in{padding:12px 18px;flex-wrap:wrap}
   .grid-top{grid-template-columns:minmax(0,1fr)!important}
   .grid-dims{grid-template-columns:minmax(0,1fr)!important}
   .grid-dims>.side{position:static!important}
+}
+@media (max-width:1080px){
+  .grid-abertura{grid-template-columns:minmax(0,1fr)!important;gap:26px!important}
 }
 </style>
 </head>
@@ -213,6 +260,7 @@ function migrate(data){
   if(data.meta){
     if(!data.meta.fimTitulo) data.meta.fimTitulo=FIM_TITULO;
     if(!data.meta.fimMensagem) data.meta.fimMensagem=FIM_MENSAGEM;
+    if(!data.meta.tagModelagem) data.meta.tagModelagem=TAG_MDL;
   }
   (data.dimensoes||[]).forEach(function(dim){
     (dim.topicos||[]).forEach(function(t){
@@ -233,7 +281,8 @@ function defaultData(){
       setor:'Superintendência de Governança de Dados',
       data:'12 de agosto de 2026',
       fimTitulo:FIM_TITULO,
-      fimMensagem:FIM_MENSAGEM
+      fimMensagem:FIM_MENSAGEM,
+      tagModelagem:TAG_MDL
     },
     dimensoes: DIMENSOES.map(function(d,i){
       return {
@@ -252,6 +301,9 @@ const ARQUIVO_PADRAO='kickoff.json';
 /* ------------------------------------------------------------------ */
 /* Estado                                                              */
 /* ------------------------------------------------------------------ */
+const TAG_MDL = 'Modelagem';
+const PRES_PADRAO = {fsTitulo:16, fsDesc:13, fsFlag:10.5, fsDimDesc:12.5, sc1:1, sc3:1, dimHeader:'compact'};
+
 const S = {
   data: defaultData(),
   history: [],
@@ -261,6 +313,8 @@ const S = {
   form:null, jsonText:'', jsonError:'',
   confirmar:null,
   logo:null, logoVisible:true, logoSize:34,
+  favicon:null,
+  pres:Object.assign({}, PRES_PADRAO),
   fileName:'', fileState:'none', lastSync:'', toastMsg:''
 };
 
@@ -270,6 +324,8 @@ let tSave=null, tHist=null, tToast=null, tDock=null, tLock=null, raf=null, locke
 /* ------------------------------------------------------------------ */
 /* Utilidades                                                          */
 /* ------------------------------------------------------------------ */
+function tagMdl(){ return (S.data && S.data.meta && S.data.meta.tagModelagem) || TAG_MDL; }
+
 const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const $ = sel => document.querySelector(sel);
 const agora = () => { const d=new Date(); return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); };
@@ -279,10 +335,14 @@ const idxDe = id => S.data.dimensoes.findIndex(d=>d.id===id);
 const accentDe = id => ACCENTS[Math.max(0,idxDe(id))%12];
 const totalTopicos = () => S.data.dimensoes.reduce((a,d)=>a+d.topicos.length,0);
 
-/* Catálogo — junta o que já foi digitado nos tópicos com o que ficou
-   guardado em data.catalogo, para sugerir na hora de criar novos tópicos.
-   O que sai de um tópico continua no catálogo. */
-function catalogo(){
+/* Catálogo — owners e normativos guardados em data.catalogo.
+   É um registro gravado, não uma leitura ao vivo dos tópicos: recalcular a
+   cada tecla fazia "MP001" entrar como M, MP, MP0, MP00 e MP001. O registro
+   só é refeito em momentos definidos — ver registrarCatalogo(). */
+function catalogo(){ return garantirCatalogo(); }
+
+/* junta o que está guardado com o que os tópicos usam hoje */
+function catalogoDerivado(){
   const owners={}, normativos={};
   const guardado=S.data.catalogo||{};
   (guardado.owners||[]).forEach(o=>{ if(o && o.nome) owners[o.nome]=o.setor||''; });
@@ -306,9 +366,35 @@ const A_OWNERS='oklch(.68 .13 285)', A_NORM='oklch(.68 .13 75)';
 const ehCatalogo = id => id===CAT_OWNERS || id===CAT_NORM;
 
 function garantirCatalogo(){
-  if(!S.data.catalogo) S.data.catalogo=catalogo();
+  if(!S.data.catalogo) S.data.catalogo=catalogoDerivado();
   if(!Array.isArray(S.data.catalogo.owners)) S.data.catalogo.owners=[];
   if(!Array.isArray(S.data.catalogo.normativos)) S.data.catalogo.normativos=[];
+  return S.data.catalogo;
+}
+
+/* Limpeza única: versões anteriores gravavam o catálogo a cada tecla, então
+   "MP001" deixou para trás M, MP, MP0 e MP00. Remove as entradas que não são
+   usadas por nenhum tópico e são só o começo de outra entrada. */
+function limparFragmentos(){
+  const cat=garantirCatalogo();
+  const usadosNorm={}, usadosOwn={};
+  S.data.dimensoes.forEach(d=>d.topicos.forEach(t=>{
+    if(t.normativo) usadosNorm[t.normativo]=1;
+    (t.owners||[]).forEach(o=>{ if(o && o.nome) usadosOwn[o.nome]=1; });
+  }));
+  const fragmento=(v,todos,usados)=>
+    !usados[v] && todos.some(x=>x!==v && x.length>v.length && x.indexOf(v)===0);
+
+  const norms=cat.normativos.slice();
+  cat.normativos=norms.filter(c=>!fragmento(c,norms,usadosNorm));
+
+  const nomes=cat.owners.map(o=>o.nome);
+  cat.owners=cat.owners.filter(o=>!fragmento(o.nome,nomes,usadosOwn));
+}
+
+/* refaz o registro — só ao concluir uma edição, nunca durante a digitação */
+function registrarCatalogo(){
+  S.data.catalogo=catalogoDerivado();
   return S.data.catalogo;
 }
 
@@ -332,15 +418,8 @@ function setorDoOwner(nome){
   return c?c.setor:'';
 }
 
-function datalists(){
-  const c=catalogo();
-  const setores={};
-  c.owners.forEach(o=>{ if(o.setor) setores[o.setor]=1; });
-  const op=v=>`<option value="${esc(v)}"></option>`;
-  return `<datalist id="dlOwners">${c.owners.map(o=>op(o.nome)).join('')}</datalist>
-  <datalist id="dlSetores">${Object.keys(setores).sort().map(op).join('')}</datalist>
-  <datalist id="dlNorm">${c.normativos.map(op).join('')}</datalist>`;
-}
+/* as sugestões de owner, setor e normativo usam dropdown próprio (bloco “sugestões”) */
+function datalists(){ return ''; }
 
 function contatos(){
   const m={};
@@ -379,7 +458,6 @@ function salvarUI(patch){
 }
 
 function salvarLocal(){
-  S.data.catalogo=catalogo();   // owners e normativos usados ficam guardados
   try{ localStorage.setItem(LS_DATA, JSON.stringify(S.data)); }catch(e){}
 }
 
@@ -390,6 +468,7 @@ function registrarHistorico(nota){
 
 /* commit = alteração estrutural: grava tudo e redesenha */
 function commit(nota, redesenhar){
+  registrarCatalogo();
   salvarLocal();
   registrarHistorico(nota);
   clearTimeout(tSave); tSave=setTimeout(()=>gravarArquivo(true),700);
@@ -448,7 +527,7 @@ async function gravarArquivo(silencioso){
     if(!silencioso) toast('Arquivo sincronizado.');
   }catch(e){
     S.fileState='error'; pintarSync();
-    if(!silencioso) toast('Falha ao gravar: '+e.message);
+    if(!silencioso) avisar('Falha ao gravar no arquivo', (e&&e.message)||'Reautorize o acesso pelo menu de configurações.');
   }
 }
 
@@ -481,6 +560,167 @@ function logoHtml(h){
 }
 
 /* ------------------------------------------------------------------ */
+/* Tipografia configurável, ícone da guia e avisos                     */
+/* ------------------------------------------------------------------ */
+function aplicarVars(){
+  const r=document.documentElement.style;
+  r.setProperty('--fs-tt', S.pres.fsTitulo+'px');
+  r.setProperty('--fs-td', S.pres.fsDesc+'px');
+  r.setProperty('--fs-tf', S.pres.fsFlag+'px');
+  r.setProperty('--fs-dd', (S.pres.fsDimDesc||12.5)+'px');
+  r.setProperty('--sc1', String(S.pres.sc1));
+  r.setProperty('--sc3', String(S.pres.sc3));
+}
+
+function aplicarFavicon(){
+  let l=document.querySelector('link[rel="icon"]');
+  if(!S.favicon){ if(l) l.remove(); return; }
+  if(!l){ l=document.createElement('link'); l.rel='icon'; document.head.appendChild(l); }
+  l.href=S.favicon;
+}
+
+/* aceita data: URI, URL, código <svg> ou o CSS que o Iconify gera */
+function iconDe(txt){
+  txt=(txt||'').trim();
+  if(!txt) return null;
+  const m=txt.match(/url\((['"]?)([^)]*?)\1\)/i);
+  if(m) return m[2].replace(/&quot;/g,'"').trim();
+  if(/^data:/i.test(txt) || /^https?:\/\//i.test(txt)) return txt;
+  if(/^<svg[\s>]/i.test(txt)) return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(txt);
+  return null;
+}
+
+function enviarFavicon(){
+  const inp=document.createElement('input');
+  inp.type='file'; inp.accept='image/png,image/svg+xml,image/x-icon,image/jpeg';
+  inp.onchange=()=>{
+    const f=inp.files[0]; if(!f) return;
+    const r=new FileReader();
+    r.onload=()=>{
+      S.favicon=r.result;
+      salvarUI({favicon:S.favicon});
+      aplicarFavicon(); render(); toast('Ícone da guia aplicado.');
+    };
+    r.readAsDataURL(f);
+  };
+  inp.click();
+}
+
+function aplicarFaviconCodigo(){
+  const ta=$('#favCode');
+  const src=iconDe(ta?ta.value:'');
+  if(!src){
+    avisar('Código não reconhecido','Cole o CSS que o Iconify gera (com url("data:image/svg+xml,…")), uma URL de imagem, um data: URI ou o código <svg> completo.');
+    return;
+  }
+  S.favicon=src; salvarUI({favicon:src});
+  aplicarFavicon(); render(); toast('Ícone da guia aplicado.');
+}
+
+/* aviso de uma via — substitui o alert do navegador */
+function avisar(titulo,texto){
+  S.confirmar={titulo:titulo, texto:texto, ok:'Entendi', soOk:true};
+  S.menuOpen=false; render();
+}
+
+function abrirSync(){
+  if(S.fileState==='none'){ conectarArquivo(); return; }
+  const s=syncInfo();
+  pedirConfirmacao({
+    titulo:'Sincronização com arquivo',
+    texto:s.detail||'',
+    ok:S.fileState==='ok'?'Gravar agora':'Reautorizar acesso',
+    acao:()=>{ gravarArquivo(false); }
+  });
+}
+
+/* ------------------------------------------------------------------ */
+/* Sugestões — dropdown próprio para owner, setor e normativo         */
+/* ------------------------------------------------------------------ */
+const SUG={el:null, input:null, items:[], i:-1};
+
+function sugFonte(tipo){
+  const c=catalogo();
+  if(tipo==='owners') return c.owners.map(o=>({v:o.nome, s:o.setor||''}));
+  if(tipo==='setores'){
+    const m={}; c.owners.forEach(o=>{ if(o.setor) m[o.setor]=1; });
+    return Object.keys(m).sort().map(v=>({v:v, s:''}));
+  }
+  if(tipo==='norm') return c.normativos.map(v=>{ const n=usosNormativo(v); return {v:v, s:n?(n===1?'1 tópico':n+' tópicos'):''}; });
+  return [];
+}
+
+function fecharSug(){
+  if(SUG.el) SUG.el.remove();
+  SUG.el=null; SUG.input=null; SUG.items=[]; SUG.i=-1;
+}
+
+function abrirSug(input){
+  const tipo=input.dataset.sug;
+  const todos=sugFonte(tipo);
+  if(!todos.length){ fecharSug(); return; }
+  const q=(input.value||'').trim().toLowerCase();
+  const lista=(q?todos.filter(x=>x.v.toLowerCase().indexOf(q)>=0):todos).slice(0,60);
+  if(!SUG.el){ SUG.el=document.createElement('div'); SUG.el.className='sug'; document.body.appendChild(SUG.el); }
+  SUG.input=input; SUG.items=lista; SUG.i=-1;
+  SUG.el.innerHTML = lista.length
+    ? lista.map((x,k)=>'<button type="button" class="sug-i" data-sugi="'+k+'">'+esc(x.v)+(x.s?'<span class="s">'+esc(x.s)+'</span>':'')+'</button>').join('')
+    : '<div class="sug-empty">Nada com esse texto. O que você digitar entra como novo.</div>';
+  posicionarSug();
+}
+
+function posicionarSug(){
+  if(!SUG.el || !SUG.input) return;
+  const r=SUG.input.getBoundingClientRect();
+  const abaixo=window.innerHeight-r.bottom, acima=r.top;
+  const paraCima = abaixo<200 && acima>abaixo;
+  SUG.el.style.left=Math.max(8,Math.min(r.left, window.innerWidth-Math.max(r.width,200)-8))+'px';
+  SUG.el.style.width=Math.max(r.width,200)+'px';
+  SUG.el.style.maxHeight=Math.max(120,Math.min(280,(paraCima?acima:abaixo)-18))+'px';
+  if(paraCima){ SUG.el.style.top=''; SUG.el.style.bottom=(window.innerHeight-r.top+6)+'px'; }
+  else { SUG.el.style.bottom=''; SUG.el.style.top=(r.bottom+6)+'px'; }
+}
+
+function mexerSug(passo){
+  if(!SUG.el || !SUG.items.length) return;
+  SUG.i=(SUG.i+passo+SUG.items.length)%SUG.items.length;
+  const bs=SUG.el.querySelectorAll('.sug-i');
+  bs.forEach((b,k)=>b.classList.toggle('on', k===SUG.i));
+  const at=bs[SUG.i];
+  if(at){
+    const t=at.offsetTop, h=at.offsetHeight;
+    if(t<SUG.el.scrollTop) SUG.el.scrollTop=t-6;
+    else if(t+h>SUG.el.scrollTop+SUG.el.clientHeight) SUG.el.scrollTop=t+h-SUG.el.clientHeight+6;
+  }
+}
+
+function escolherSug(k){
+  const it=SUG.items[k], input=SUG.input;
+  if(!it || !input) return;
+  input.value=it.v;
+  fecharSug();
+  input.dispatchEvent(new Event('input',{bubbles:true}));
+  input.dispatchEvent(new Event('change',{bubbles:true}));
+  if(input.isConnected) input.focus();
+}
+
+document.addEventListener('focusin',(e)=>{
+  const alvo=e.target.closest?e.target.closest('[data-sug]'):null;
+  if(alvo) abrirSug(alvo);
+  else if(!(e.target.closest && e.target.closest('.sug'))) fecharSug();
+});
+document.addEventListener('input',(e)=>{
+  if(e.target.dataset && e.target.dataset.sug) abrirSug(e.target);
+});
+document.addEventListener('mousedown',(e)=>{
+  const it=e.target.closest?e.target.closest('[data-sugi]'):null;
+  if(it){ e.preventDefault(); escolherSug(parseInt(it.dataset.sugi,10)); return; }
+  if(SUG.el && !(e.target.closest('.sug')||e.target.closest('[data-sug]'))) fecharSug();
+});
+window.addEventListener('resize',fecharSug);
+document.addEventListener('scroll',fecharSug,true);
+
+/* ------------------------------------------------------------------ */
 /* Render — configuração                                               */
 /* ------------------------------------------------------------------ */
 function viewConfig(){
@@ -494,7 +734,7 @@ function viewConfig(){
         <div style="font-size:14px;font-weight:600;letter-spacing:-.02em">Mapa das 12 dimensões</div>
       </div>
       <div style="flex:1"></div>
-      <div class="syncpill" id="syncpill" title="${esc(s.detail||'')}"><span class="dot" style="background:${s.color}"></span>${esc(s.label)}</div>
+      <div class="syncpill" id="syncpill" data-act="sync" style="cursor:pointer" title="${esc(s.detail||'')}"><span class="dot" style="background:${s.color}"></span>${esc(s.label)}</div>
       <button class="iconbtn" data-act="tema" title="Tema">${S.theme==='dark'?'☀':'☾'}</button>
       <div style="position:relative">
         <button class="iconbtn" data-act="menu" title="Configurações">⚙</button>
@@ -522,6 +762,9 @@ function viewConfig(){
                 <input class="inp" data-field="meta.data" data-fkey="m-dat" value="${esc(d.meta.data)}">
               </label>
             </div>
+            <label class="lab">Nome da tag de destaque
+              <input class="inp" data-field="meta.tagModelagem" data-fkey="m-tag" placeholder="Modelagem" value="${esc(d.meta.tagModelagem||TAG_MDL)}">
+            </label>
             <div class="sep" style="margin:6px 0"></div>
             <div class="sec-lbl">Seção final</div>
             <label class="lab">Título do encerramento
@@ -551,6 +794,8 @@ function viewConfig(){
           </div>
         </div>
       </div>
+
+      ${painelAparencia()}
 
       <div style="margin-top:34px;display:flex;align-items:center;gap:14px">
         <div class="sec-lbl">Conteúdo por dimensão</div>
@@ -615,7 +860,7 @@ function painelOwners(){
         const n=usosOwner(o.nome);
         return `<div class="tcard">
           <input class="tinp" data-catfield="ownerNome" data-key="${esc(o.nome)}" data-fkey="co-${esc(o.nome)}-n" placeholder="Nome do owner" value="${esc(o.nome)}">
-          <input class="tmeta" list="dlSetores" style="color:var(--fg2)" data-catfield="ownerSetor" data-key="${esc(o.nome)}" data-fkey="co-${esc(o.nome)}-s" placeholder="Setor" value="${esc(o.setor)}">
+          <input class="tmeta" data-sug="setores" style="color:var(--fg2)" data-catfield="ownerSetor" data-key="${esc(o.nome)}" data-fkey="co-${esc(o.nome)}-s" placeholder="Setor" value="${esc(o.setor)}">
           <div style="display:flex;align-items:center;gap:8px;padding-top:4px">
             <span class="mono" style="flex:1;font-size:11px;color:var(--muted)">${n===0?'não usado':(n===1?'1 tópico':n+' tópicos')}</span>
             <button class="dupbtn" data-act="catDupOwner" data-key="${esc(o.nome)}">⧉ Duplicar</button>
@@ -687,12 +932,14 @@ function painelDimensao(){
         <div class="tcard">
           <input class="tinp" placeholder="Título do tópico" data-field="top.titulo" data-dim="${dim.id}" data-top="${t.id}" data-fkey="t-${t.id}-tit" value="${esc(t.titulo)}">
           <textarea class="tarea" rows="3" placeholder="Descrição" data-field="top.descricao" data-dim="${dim.id}" data-top="${t.id}" data-fkey="t-${t.id}-desc">${esc(t.descricao)}</textarea>
-          <input class="tmeta norm mono" list="dlNorm" placeholder="Normativo" data-field="top.normativo" data-dim="${dim.id}" data-top="${t.id}" data-fkey="t-${t.id}-norm" value="${esc(t.normativo)}">
+          <input class="tmeta norm mono" data-sug="norm" placeholder="Normativo" data-field="top.normativo" data-dim="${dim.id}" data-top="${t.id}" data-fkey="t-${t.id}-norm" value="${esc(t.normativo)}">
+          <button class="togchip${t.modelagem?' on':''}" data-act="modelagem" data-dim="${dim.id}" data-top="${t.id}" style="align-self:flex-start" title="Destaca o card e acrescenta a flag na apresentação">◈ ${esc(tagMdl())}</button>
           <div style="display:flex;flex-direction:column;gap:6px">
             <div class="sec-lbl" style="letter-spacing:.14em">Owners</div>
-            ${(t.owners||[]).map((o,oi)=>`<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 30px;gap:6px;align-items:center">
-              <input class="tmeta" list="dlOwners" placeholder="Owner" data-field="own.nome" data-dim="${dim.id}" data-top="${t.id}" data-oi="${oi}" data-fkey="t-${t.id}-o${oi}-n" value="${esc(o.nome)}">
-              <input class="tmeta" list="dlSetores" style="color:var(--fg2)" placeholder="Setor" data-field="own.setor" data-dim="${dim.id}" data-top="${t.id}" data-oi="${oi}" data-fkey="t-${t.id}-o${oi}-s" value="${esc(o.setor)}">
+            ${(t.owners||[]).map((o,oi)=>`<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 30px 30px;gap:6px;align-items:center">
+              <input class="tmeta" data-sug="owners" placeholder="Owner" data-field="own.nome" data-dim="${dim.id}" data-top="${t.id}" data-oi="${oi}" data-fkey="t-${t.id}-o${oi}-n" value="${esc(o.nome)}">
+              <input class="tmeta" data-sug="setores" style="color:var(--fg2)" placeholder="Setor" data-field="own.setor" data-dim="${dim.id}" data-top="${t.id}" data-oi="${oi}" data-fkey="t-${t.id}-o${oi}-s" value="${esc(o.setor)}">
+              <button class="hlbtn${o.destaque?' on':''}" data-act="ownHl" data-dim="${dim.id}" data-top="${t.id}" data-oi="${oi}" title="${o.destaque?'Flag destacada na apresentação':'Destacar a flag deste owner na apresentação'}">◆</button>
               <button class="ownx" data-act="delOwner" data-dim="${dim.id}" data-top="${t.id}" data-oi="${oi}" title="Remover owner">✕</button>
             </div>`).join('')}
             ${(t.owners||[]).length===0?'<div style="padding:9px 11px;border:1px dashed var(--gline2);border-radius:11px;color:var(--muted);font-size:11.5px">Nenhum owner definido.</div>':''}
@@ -705,6 +952,64 @@ function painelDimensao(){
           </div>
         </div>`).join('')}
       ${n===0?`<div class="emptybox click" data-act="novo">Nenhum tópico nesta dimensão. Clique para adicionar.</div>`:''}
+    </div>
+  </div>`;
+}
+
+function sliderPres(k,rot,min,max,step,suf){
+  const v=S.pres[k];
+  return `<div class="rangerow">
+    <div class="rl"><span>${rot}</span><span class="mono rv">${suf==='x'?Number(v).toFixed(2)+'×':v+'px'}</span></div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <input type="range" min="${min}" max="${max}" step="${step}" value="${v}" data-act="pres" data-k="${k}" data-suf="${suf}">
+      <input type="number" class="numinp" min="${min}" max="${max}" step="${step}" value="${v}" data-act="presNum" data-k="${k}" data-suf="${suf}" title="Valor exato">
+    </div>
+  </div>`;
+}
+
+function painelAparencia(){
+  const h=S.pres.dimHeader;
+  return `<div class="glass" style="margin-top:26px;padding:26px 28px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:22px">
+      <div class="sec-lbl">Aparência da apresentação</div>
+      <div style="flex:1;height:1px;background:var(--gline)"></div>
+      <button class="resetbtn" data-act="presReset" title="Volta tamanhos, escalas e cabeçalho aos valores originais">⟲ Restaurar padrão</button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:28px">
+      <div style="display:flex;flex-direction:column;gap:15px">
+        <div class="sec-lbl" style="color:var(--fg2)">Cards de tópico</div>
+        ${sliderPres('fsTitulo','Título',13,26,.5,'px')}
+        ${sliderPres('fsDesc','Descrição',10,20,.5,'px')}
+        ${sliderPres('fsFlag','Flags (normativo e owners)',9,16,.5,'px')}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:15px">
+        <div class="sec-lbl" style="color:var(--fg2)">Escala de texto por seção</div>
+        ${sliderPres('sc1','Seção 1 — abertura',.7,1.4,.02,'x')}
+        ${sliderPres('sc3','Seção 3 — encerramento',.7,1.4,.02,'x')}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:13px">
+        <div class="sec-lbl" style="color:var(--fg2)">Cabeçalho da dimensão (seção 2)</div>
+        <div style="display:flex;gap:8px">
+          <button class="segbtn${h==='compact'?' on':''}" data-act="dimHeader" data-v="compact">Compacto</button>
+          <button class="segbtn${h==='hover'?' on':''}" data-act="dimHeader" data-v="hover">Definição no hover</button>
+        </div>
+        ${h==='compact'?sliderPres('fsDimDesc','Tamanho da definição',10,18,.5,'px'):''}
+        <div style="font-size:11.5px;line-height:1.55;color:var(--muted);text-wrap:pretty">${h==='hover'
+          ? 'Só o nome da dimensão fica no cabeçalho; a definição aparece ao passar o mouse, liberando toda a área para os cards.'
+          : 'Nome e definição seguem visíveis, em escala reduzida e com a definição limitada a duas linhas.'}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:13px">
+        <div class="sec-lbl" style="color:var(--fg2)">Ícone da guia do navegador</div>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <div style="width:44px;height:44px;flex:none;border-radius:12px;border:1px solid var(--gline2);background:var(--panel);display:flex;align-items:center;justify-content:center;overflow:hidden">
+            ${S.favicon?`<img src="${esc(S.favicon)}" alt="" style="width:26px;height:26px;object-fit:contain">`:'<span class="mono" style="font-size:10px;color:var(--muted)">—</span>'}
+          </div>
+          <button class="ghostbtn" data-act="faviconUp" style="height:34px">PNG ou SVG<i>↑</i></button>
+          ${S.favicon?'<button class="dupbtn" data-act="faviconDel">Remover</button>':''}
+        </div>
+        <textarea id="favCode" class="inp" rows="2" placeholder="Cole o CSS do Iconify, uma URL ou o código &lt;svg&gt;" style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;line-height:1.5"></textarea>
+        <button class="dupbtn" data-act="faviconCode" style="align-self:flex-start">Aplicar código</button>
+      </div>
     </div>
   </div>`;
 }
@@ -751,24 +1056,35 @@ function anim(i){
 /* conteúdo interno do balão da dimensão — trocado sozinho, sem recriar o balão */
 function painelPresent(dim){
   const n=dim.topicos.length;
-  return `<div class="blob" style="top:-140px;right:-90px;width:380px;height:380px;filter:blur(70px)"></div>
-    <div style="position:relative;flex:none;padding:30px 36px 22px;border-bottom:1px solid var(--gline)">
-      <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
-        <span class="romchip mono" style="min-width:38px;height:28px;padding:0 10px;font-size:11.5px">${dim.roman}</span>
-        <span style="font-size:clamp(26px,2.3vw,36px);font-weight:700;letter-spacing:-.04em;line-height:1">${esc(dim.nome)}</span>
+  const hover = S.pres.dimHeader==='hover';
+  return `<div style="position:relative;flex:none;padding:16px 34px 14px;border-bottom:1px solid var(--gline)">
+      <div style="display:flex;align-items:center;gap:12px">
+        <span class="romchip mono" style="min-width:34px;height:24px;padding:0 9px;font-size:11px">${dim.roman}</span>
+        ${hover
+          ? `<span class="dimhover">
+              <span style="font-size:clamp(19px,1.55vw,25px);font-weight:700;letter-spacing:-.035em;line-height:1.15">${esc(dim.nome)}</span>
+              <span class="mono" style="padding:2px 8px;border:1px solid var(--gline);border-radius:999px;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">definição</span>
+              <span class="dimtip">${esc(dim.descricao)}</span>
+            </span>`
+          : `<span style="font-size:clamp(19px,1.55vw,25px);font-weight:700;letter-spacing:-.035em;line-height:1.15">${esc(dim.nome)}</span>`}
         <span style="flex:1;height:1px;background:var(--gline)"></span>
         <span class="mono" style="font-size:11px;color:var(--muted)">${n===1?'1 tópico':n+' tópicos'}</span>
       </div>
-      <div style="font-size:14px;line-height:1.66;color:var(--fg2);max-width:1000px;text-wrap:pretty">${esc(dim.descricao)}</div>
+      ${hover?'':`<div style="margin-top:7px;font-size:var(--fs-dd);line-height:1.5;color:var(--muted);max-width:1000px;text-wrap:pretty;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${esc(dim.descricao)}</div>`}
     </div>
-    <div data-scrollable="1" style="position:relative;flex:1;min-height:0;overflow:auto;padding:22px 36px 30px">
+    <div data-scrollable="1" style="position:relative;flex:1;min-height:0;overflow:auto;padding:20px 34px 28px">
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px;align-items:start">
-        ${dim.topicos.map(t=>`<div class="ptcard">
-          <div style="font-size:16px;font-weight:600;letter-spacing:-.02em;line-height:1.3;margin-bottom:9px;text-wrap:pretty">${esc(t.titulo)}</div>
-          <div style="font-size:13px;line-height:1.62;color:var(--fg2);text-wrap:pretty">${esc(t.descricao)}</div>
-          <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:15px">
-            <span class="tag norm mono">${esc(t.normativo)}</span>
-            ${(t.owners||[]).map(o=>`<span class="tag" style="gap:8px">${esc(o.nome||'a definir')}<span style="width:1px;height:11px;background:var(--gline2)"></span><em>${esc(o.setor||'a definir')}</em></span>`).join('')}
+        ${dim.topicos.map(t=>`<div class="ptwrap">
+          <div class="pttabs">
+            <span class="pttab norm mono">${esc(t.normativo)}</span>
+            ${t.modelagem?`<span class="pttab mdl mono">◈ ${esc(tagMdl())}</span>`:''}
+          </div>
+          <div class="ptcard${t.modelagem?' mdl':''}">
+            <div style="font-size:var(--fs-tt);font-weight:600;letter-spacing:-.02em;line-height:1.3;margin-bottom:9px;text-wrap:pretty">${esc(t.titulo)}</div>
+            <div style="font-size:var(--fs-td);line-height:1.62;color:var(--fg2);text-wrap:pretty">${esc(t.descricao)}</div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:15px">
+              ${(t.owners||[]).map(o=>`<span class="tag${o.destaque?' owhl':''}" style="gap:8px;font-size:var(--fs-tf)">${esc(o.nome||'a definir')}<span style="width:1px;height:11px;background:var(--gline2)"></span><em>${esc(o.setor||'a definir')}</em></span>`).join('')}
+            </div>
           </div>
         </div>`).join('')}
         ${n===0?'<div class="emptybox">Nenhum tópico mapeado nesta dimensão.</div>':''}
@@ -788,6 +1104,94 @@ function pintarDimensao(){
   const pos=$('#dimpos'); if(pos) pos.textContent=(i+1)+' / 12 · use ← →';
 }
 
+/* feixes animados da abertura — canvas, só na seção 1 da apresentação */
+let beamsAnim=null;
+
+function beams(){
+  return '<canvas id="beamsCanvas" aria-hidden="true" style="position:absolute;inset:0;z-index:0;width:100%;height:100%;pointer-events:none;filter:blur(15px)"></canvas>';
+}
+
+function pararBeams(){
+  if(!beamsAnim) return;
+  cancelAnimationFrame(beamsAnim.raf);
+  window.removeEventListener('resize', beamsAnim.onResize);
+  beamsAnim=null;
+}
+
+function ligarBeams(){
+  const cv=document.getElementById('beamsCanvas');
+  if(!cv){ pararBeams(); return; }
+  if(beamsAnim && beamsAnim.cv===cv) return;
+  pararBeams();
+  const ctx=cv.getContext('2d'); if(!ctx) return;
+  const forca = S.theme==='dark' ? 1 : .5;
+  const st={cv:cv, raf:0, feixes:[], w:0, h:0, onResize:null};
+
+  function criar(w,h){
+    return {x:Math.random()*w*1.5-w*.25, y:Math.random()*h*1.5-h*.25,
+      largura:60+Math.random()*90, comp:h*2.5, ang:-35+Math.random()*10,
+      vel:.5+Math.random()*.9, op:.14+Math.random()*.14, hue:212+Math.random()*28,
+      pulso:Math.random()*Math.PI*2, vPulso:.02+Math.random()*.03};
+  }
+  function reiniciar(b,i,total){
+    const vao=st.w/3, col=i%3;
+    b.y=st.h+120;
+    b.x=col*vao+vao/2+(Math.random()-.5)*vao*.6;
+    b.largura=80+Math.random()*110;
+    b.vel=.5+Math.random()*.5;
+    b.hue=212+(i*28)/total;
+    b.op=.16+Math.random()*.12;
+  }
+  function tamanho(){
+    const dpr=window.devicePixelRatio||1, r=cv.getBoundingClientRect();
+    st.w=Math.max(1,r.width); st.h=Math.max(1,r.height);
+    cv.width=st.w*dpr; cv.height=st.h*dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    st.feixes=Array.from({length:30},()=>criar(st.w,st.h));
+  }
+  function desenhar(b){
+    ctx.save();
+    ctx.translate(b.x,b.y);
+    ctx.rotate(b.ang*Math.PI/180);
+    const o=b.op*(.8+Math.sin(b.pulso)*.2)*forca;
+    const g=ctx.createLinearGradient(0,0,0,b.comp);
+    g.addColorStop(0,'hsla('+b.hue+',92%,52%,0)');
+    g.addColorStop(.1,'hsla('+b.hue+',92%,52%,'+(o*.5)+')');
+    g.addColorStop(.4,'hsla('+b.hue+',92%,52%,'+o+')');
+    g.addColorStop(.6,'hsla('+b.hue+',92%,52%,'+o+')');
+    g.addColorStop(.9,'hsla('+b.hue+',92%,52%,'+(o*.5)+')');
+    g.addColorStop(1,'hsla('+b.hue+',92%,52%,0)');
+    ctx.fillStyle=g;
+    ctx.fillRect(-b.largura/2,0,b.largura,b.comp);
+    ctx.restore();
+  }
+  function passo(){
+    ctx.clearRect(0,0,st.w,st.h);
+    ctx.filter='blur(35px)';
+    const total=st.feixes.length;
+    st.feixes.forEach((b,i)=>{
+      b.y-=b.vel; b.pulso+=b.vPulso;
+      if(b.y+b.comp < -100) reiniciar(b,i,total);
+      desenhar(b);
+    });
+    st.raf=requestAnimationFrame(passo);
+  }
+
+  st.onResize=tamanho;
+  window.addEventListener('resize', st.onResize);
+  tamanho();
+  beamsAnim=st;
+  passo();
+}
+
+/* os halos dos cantos saem da abertura e do encerramento */
+function ajustarHalos(){
+  const esconder = S.mode==='present';
+  document.querySelectorAll('.halo').forEach(h=>{
+    h.style.display = esconder ? 'none' : '';
+  });
+}
+
 function viewPresent(){
   const d=S.data, dim=dimDe(S.selected)||d.dimensoes[0];
   const i=idxDe(dim.id), a=ACCENTS[Math.max(0,i)%12];
@@ -805,27 +1209,24 @@ function viewPresent(){
 
     <div id="scroller">
       <section data-scrollable="1" style="height:100vh;display:flex;flex-direction:column;justify-content:center;padding:clamp(32px,5vh,64px) clamp(40px,7vw,120px);position:relative;overflow:auto">
-        <div style="max-width:1180px;animation:${anim(0)}">
+        ${beams()}
+        <div style="position:relative;z-index:1;width:100%;max-width:1040px;margin:0 auto;display:flex;flex-direction:column;align-items:center;text-align:center;animation:${anim(0)}">
           ${S.logo&&S.logoVisible?`<div style="margin-bottom:clamp(18px,3vh,34px)">${logoHtml(S.logoSize)}</div>`:''}
-          <div style="display:flex;align-items:center;gap:14px;margin-bottom:clamp(16px,3vh,30px);flex-wrap:wrap">
+          <div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:clamp(16px,3vh,30px);flex-wrap:wrap">
             <span style="width:9px;height:9px;border-radius:50%;background:var(--brand)"></span>
-            <span class="mono" style="font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--fg2)">Kickoff</span>
+            <span class="mono" style="font-size:calc(12px * var(--sc1));letter-spacing:.28em;text-transform:uppercase;color:var(--fg2)">Kickoff</span>
             <span style="width:120px;height:1px;background:var(--gline2)"></span>
-            <span class="mono" style="font-size:12px;letter-spacing:.14em;color:var(--muted)">${esc(d.meta.data)}</span>
+            <span class="mono" style="font-size:calc(12px * var(--sc1));letter-spacing:.14em;color:var(--muted)">${esc(d.meta.data)}</span>
           </div>
-          <h1 style="margin:0 0 clamp(18px,3vh,30px);font-size:clamp(38px,5.2vw,86px);line-height:1;letter-spacing:-.05em;font-weight:700;max-width:16ch;text-wrap:balance">${esc(d.meta.titulo)}</h1>
-          <p style="margin:0;max-width:680px;font-size:clamp(15px,1.25vw,18px);line-height:1.7;color:var(--fg2);text-wrap:pretty">${esc(d.meta.descricao)}</p>
-          <div style="margin-top:clamp(24px,4vh,46px);display:flex;flex-wrap:wrap;gap:16px">
-            <div class="pcard"><span class="b" style="background:color-mix(in oklab, oklch(.58 .17 275) 40%, transparent)"></span><div class="n">12</div><div class="c">dimensões de qualidade</div></div>
-            <div class="pcard"><span class="b" style="background:color-mix(in oklab, color-mix(in oklab, #1626FF 74%, white) 34%, transparent)"></span><div class="n">${totalTopicos()}</div><div class="c">tópicos mapeados</div></div>
-            <div class="pcard" style="max-width:310px;display:flex;flex-direction:column;justify-content:space-between">
-              <span class="b" style="top:auto;right:auto;bottom:-70px;left:-30px;width:170px;height:170px;background:color-mix(in oklab, oklch(.5 .17 270) 40%, transparent);filter:blur(38px)"></span>
-              <div class="sec-lbl" style="position:relative">Apresentado por</div>
-              <div style="position:relative;margin-top:16px;font-size:15.5px;font-weight:500;line-height:1.4;text-wrap:pretty">${esc(d.meta.setor)}</div>
-            </div>
+          <h1 style="margin:0 auto clamp(16px,2.8vh,28px);font-size:calc(clamp(38px,5.2vw,86px) * var(--sc1));line-height:1;letter-spacing:-.05em;font-weight:700;max-width:18ch;text-wrap:balance">${esc(d.meta.titulo)}</h1>
+          <p style="margin:0 auto;max-width:680px;font-size:calc(clamp(15px,1.25vw,18px) * var(--sc1));line-height:1.7;color:var(--fg2);text-wrap:pretty">${esc(d.meta.descricao)}</p>
+          <div style="margin-top:clamp(24px,4.2vh,46px);display:flex;flex-direction:column;align-items:center;gap:11px">
+            <span style="width:54px;height:1px;background:var(--gline2)"></span>
+            <span class="mono" style="font-size:calc(10.5px * var(--sc1));letter-spacing:.26em;text-transform:uppercase;color:var(--muted)">Apresentado por</span>
+            <span style="font-size:calc(18px * var(--sc1));font-weight:500;letter-spacing:-.02em;line-height:1.4;text-wrap:pretty">${esc(d.meta.setor)}</span>
           </div>
         </div>
-        <div style="margin-top:clamp(22px,4vh,44px);flex:none;display:flex;align-items:center;gap:12px;color:var(--muted);font-size:11px;letter-spacing:.16em;text-transform:uppercase;animation:kfPulse 3.4s ease-in-out infinite">
+        <div style="position:relative;z-index:1;margin-top:clamp(22px,4vh,44px);flex:none;display:flex;align-items:center;justify-content:center;gap:12px;color:var(--muted);font-size:11px;letter-spacing:.16em;text-transform:uppercase;animation:kfPulse 3.4s ease-in-out infinite">
           <span style="width:22px;height:1px;background:var(--gline2)"></span>role para começar
         </div>
       </section>
@@ -834,6 +1235,8 @@ function viewPresent(){
         <div style="display:flex;align-items:center;gap:16px;margin-bottom:26px;flex:none">
           <span class="mono" style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)">As 12 dimensões</span>
           <span style="flex:1;height:1px;background:var(--gline)"></span>
+          <span class="mono" style="font-size:11px;color:var(--muted)">12 dimensões · ${totalTopicos()} tópicos</span>
+          <span style="width:1px;height:12px;background:var(--gline2)"></span>
           <span class="mono" id="dimpos" style="font-size:11px;color:var(--muted)">${(i+1)} / 12 · use ← →</span>
         </div>
         <div style="flex:1;min-height:0;display:grid;grid-template-columns:300px minmax(0,1fr);gap:30px">
@@ -859,16 +1262,16 @@ function viewPresent(){
           ${S.logo&&S.logoVisible?`<div style="margin-bottom:clamp(18px,3vh,34px);animation:kfRise .9s cubic-bezier(.16,.9,.24,1) both">${logoHtml(S.logoSize)}</div>`:''}
           <div style="display:flex;align-items:center;gap:14px;margin-bottom:26px;animation:kfRise .9s cubic-bezier(.16,.9,.24,1) .1s both">
             <span style="width:44px;height:1px;background:color-mix(in oklab, #1626FF 34%, transparent)"></span>
-            <span class="mono" style="font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:color-mix(in oklab, #1626FF 34%, var(--fg2))">Encerramento</span>
+            <span class="mono" style="font-size:calc(11px * var(--sc3));letter-spacing:.3em;text-transform:uppercase;color:color-mix(in oklab, #1626FF 34%, var(--fg2))">Encerramento</span>
             <span style="width:44px;height:1px;background:color-mix(in oklab, #1626FF 34%, transparent)"></span>
           </div>
-          <h2 style="margin:0 0 clamp(16px,3vh,26px);padding-bottom:.12em;font-size:clamp(40px,5.6vw,96px);line-height:1.16;letter-spacing:-.055em;font-weight:700;background:linear-gradient(120deg, var(--fg) 20%, color-mix(in oklab, #1626FF 38%, var(--fg)) 50%, var(--fg) 82%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:kfRise 1s cubic-bezier(.16,.9,.24,1) .18s both">${esc(d.meta.fimTitulo||FIM_TITULO)}</h2>
-          <p style="margin:0;max-width:560px;font-size:clamp(14px,1.15vw,17px);line-height:1.72;color:var(--fg2);text-wrap:pretty;animation:kfRise 1s cubic-bezier(.16,.9,.24,1) .3s both">${esc(d.meta.fimMensagem||FIM_MENSAGEM)}</p>
+          <h2 style="margin:0 0 clamp(16px,3vh,26px);padding-bottom:.12em;font-size:calc(clamp(40px,5.6vw,96px) * var(--sc3));line-height:1.16;letter-spacing:-.055em;font-weight:700;background:linear-gradient(120deg, var(--fg) 20%, color-mix(in oklab, #1626FF 38%, var(--fg)) 50%, var(--fg) 82%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:kfRise 1s cubic-bezier(.16,.9,.24,1) .18s both">${esc(d.meta.fimTitulo||FIM_TITULO)}</h2>
+          <p style="margin:0;max-width:560px;font-size:calc(clamp(14px,1.15vw,17px) * var(--sc3));line-height:1.72;color:var(--fg2);text-wrap:pretty;animation:kfRise 1s cubic-bezier(.16,.9,.24,1) .3s both">${esc(d.meta.fimMensagem||FIM_MENSAGEM)}</p>
           <div style="margin-top:clamp(24px,4vh,44px);padding:16px 26px;border-radius:999px;border:1px solid color-mix(in oklab, #1626FF 24%, var(--gline2));background:var(--glass2);backdrop-filter:blur(26px);box-shadow:var(--shadow);display:flex;align-items:center;gap:16px;animation:kfRise 1s cubic-bezier(.16,.9,.24,1) .42s both">
             <span style="width:7px;height:7px;border-radius:50%;background:color-mix(in oklab, #1626FF 62%, var(--fg2));animation:kfPulse 3s ease-in-out infinite"></span>
-            <span style="font-size:13.5px;font-weight:500">${esc(d.meta.setor)}</span>
+            <span style="font-size:calc(13.5px * var(--sc3));font-weight:500">${esc(d.meta.setor)}</span>
             <span style="width:1px;height:16px;background:var(--gline)"></span>
-            <span class="mono" style="font-size:12px;color:var(--muted)">${esc(d.meta.data)}</span>
+            <span class="mono" style="font-size:calc(12px * var(--sc3));color:var(--muted)">${esc(d.meta.data)}</span>
           </div>
         </div>
       </section>
@@ -891,12 +1294,20 @@ function viewModal(){
         <label class="lab" style="font-size:12px">Dimensão<select class="minp" data-form="dimId">${op}</select></label>
         <label class="lab" style="font-size:12px">Título do tópico<input class="minp" data-form="titulo" data-fkey="f-tit" placeholder="Ex.: Trilha de auditoria dos extratos" value="${esc(f.titulo)}"></label>
         <label class="lab" style="font-size:12px">Descrição breve<textarea class="minp" rows="3" data-form="descricao" data-fkey="f-desc" placeholder="Uma ou duas linhas sobre o que precisa ser conversado.">${esc(f.descricao)}</textarea></label>
-        <label class="lab" style="font-size:12px">Normativo<input class="minp mono" list="dlNorm" data-form="normativo" data-fkey="f-norm" placeholder="NORM-000/2026" value="${esc(f.normativo)}"></label>
+        <label class="lab" style="font-size:12px">Normativo<input class="minp mono" data-sug="norm" data-form="normativo" data-fkey="f-norm" placeholder="NORM-000/2026" value="${esc(f.normativo)}"></label>
+        <div style="display:flex;align-items:center;gap:14px;padding:13px 15px;border:1px solid var(--gline);border-radius:16px">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:12.5px;font-weight:600">Tópico de ${esc(tagMdl())}</div>
+            <div style="font-size:11.5px;line-height:1.5;color:var(--muted);margin-top:3px;text-wrap:pretty">Destaca o card com cor própria e acrescenta a flag ao lado da flag do normativo.</div>
+          </div>
+          <button class="togchip${f.modelagem?' on':''}" data-act="formModelagem">◈ ${f.modelagem?'Marcado':'Marcar'}</button>
+        </div>
         <div style="display:flex;flex-direction:column;gap:9px">
-          <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)">Owners<span style="flex:1;height:1px;background:var(--gline)"></span><span style="font-size:11px">escolha um já usado ou digite um novo</span></div>
-          ${ow.map((o,i)=>`<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 38px;gap:10px;align-items:center">
-            <input class="minp" list="dlOwners" data-form="ownNome" data-oi="${i}" data-fkey="f-o${i}-n" placeholder="Nome do responsável" value="${esc(o.nome)}">
-            <input class="minp" list="dlSetores" style="color:var(--fg2)" data-form="ownSetor" data-oi="${i}" data-fkey="f-o${i}-s" placeholder="Ex.: Controladoria" value="${esc(o.setor)}">
+          <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)">Owners<span style="flex:1;height:1px;background:var(--gline)"></span><span style="font-size:11px">◆ destaca a flag na apresentação</span></div>
+          ${ow.map((o,i)=>`<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 38px 38px;gap:10px;align-items:center">
+            <input class="minp" data-sug="owners" data-form="ownNome" data-oi="${i}" data-fkey="f-o${i}-n" placeholder="Nome do responsável" value="${esc(o.nome)}">
+            <input class="minp" data-sug="setores" style="color:var(--fg2)" data-form="ownSetor" data-oi="${i}" data-fkey="f-o${i}-s" placeholder="Ex.: Controladoria" value="${esc(o.setor)}">
+            <button class="hlbtn${o.destaque?' on':''}" style="width:38px;height:38px;font-size:13px" data-act="formOwnHl" data-oi="${i}" title="${o.destaque?'Flag destacada':'Destacar a flag deste owner'}">◆</button>
             <button class="ownx" style="width:38px;height:38px;border-color:var(--gline2);font-size:13px" data-act="delFormOwner" data-oi="${i}" title="Remover owner">✕</button>
           </div>`).join('')}
           <button class="ownadd" style="padding:9px 16px;font-size:12.5px" data-act="addFormOwner">+ Adicionar outro owner</button>
@@ -953,7 +1364,7 @@ function viewConfirm(){
       <h3 style="font-size:19px;margin-bottom:9px">${esc(c.titulo)}</h3>
       <div style="font-size:13.5px;line-height:1.62;color:var(--fg2);text-wrap:pretty">${esc(c.texto)}</div>
       <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:24px">
-        <button class="mbtn" style="padding:11px 18px" data-act="cancelarConfirma">Cancelar</button>
+        ${c.soOk?'':'<button class="mbtn" style="padding:11px 18px" data-act="cancelarConfirma">Cancelar</button>'}
         <button class="mbtn" style="padding:11px 22px;border:0;font-weight:600;color:#fff;background:${c.danger?'#c2384a':'var(--brand)'}" data-act="confirmarOk">${esc(c.ok||'Confirmar')}</button>
       </div>
     </div>
@@ -988,8 +1399,10 @@ function render(){
     const novo = $('#scroller');
     if(novo && topo) novo.scrollTop = topo;
     ligarScroller();
+    ligarBeams();
     animarEntrada = false;
-  }
+  } else pararBeams();
+  ajustarHalos();
   pintarToast();
 }
 
@@ -1009,6 +1422,7 @@ function pintarSecao(){
     else sec.style.animation='none';
   }
   document.querySelectorAll('[data-act="ir"]').forEach((b,i)=>b.classList.toggle('on', i===S.section));
+  ajustarHalos();
 }
 
 /* ------------------------------------------------------------------ */
@@ -1070,7 +1484,7 @@ function pedirConfirmacao(cfg){
 
 function formVazio(){
   const dim = dimDe(S.selected) ? S.selected : (S.data.dimensoes[0]||{}).id||'d1';
-  return {dimId:dim,titulo:'',descricao:'',normativo:'',owners:[{nome:'',setor:''}]};
+  return {dimId:dim,titulo:'',descricao:'',normativo:'',modelagem:false,owners:[{nome:'',setor:'',destaque:false}]};
 }
 
 function novoTopico(){
@@ -1085,12 +1499,12 @@ function salvarTopico(){
   const alvo=dimDe(f.dimId); if(!alvo) return;
   let ow=(f.owners||[])
     .filter(o=>(o.nome&&o.nome.trim())||(o.setor&&o.setor.trim()))
-    .map(o=>({nome:(o.nome||'a definir').trim(), setor:(o.setor||'a definir').trim()}));
-  if(!ow.length) ow=[{nome:'a definir', setor:'a definir'}];
+    .map(o=>({nome:(o.nome||'a definir').trim(), setor:(o.setor||'a definir').trim(), destaque:!!o.destaque}));
+  if(!ow.length) ow=[{nome:'a definir', setor:'a definir', destaque:false}];
   alvo.topicos.push({
     id:f.dimId+'-t'+Date.now(),
     titulo:f.titulo, descricao:f.descricao,
-    normativo:f.normativo||'—', owners:ow
+    normativo:f.normativo||'—', modelagem:!!f.modelagem, owners:ow
   });
   S.modal=null; S.selected=f.dimId;
   commit('Tópico adicionado: '+f.titulo);
@@ -1287,8 +1701,22 @@ function addOwner(dimId,topId){
   const d=dimDe(dimId); if(!d) return;
   const t=d.topicos.find(x=>x.id===topId); if(!t) return;
   if(!Array.isArray(t.owners)) t.owners=[];
-  t.owners.push({nome:'',setor:''});
+  t.owners.push({nome:'',setor:'',destaque:false});
   commit('Owner adicionado em '+t.titulo);
+}
+
+function togOwnerHl(dimId,topId,oi){
+  const d=dimDe(dimId); if(!d) return;
+  const t=d.topicos.find(x=>x.id===topId); if(!t||!t.owners||!t.owners[oi]) return;
+  t.owners[oi].destaque=!t.owners[oi].destaque;
+  commit((t.owners[oi].destaque?'Owner destacado em ':'Destaque de owner removido em ')+t.titulo);
+}
+
+function togModelagem(dimId,topId){
+  const d=dimDe(dimId); if(!d) return;
+  const t=d.topicos.find(x=>x.id===topId); if(!t) return;
+  t.modelagem=!t.modelagem;
+  commit((t.modelagem?'Tópico marcado como Modelagem: ':'Marca de Modelagem removida: ')+t.titulo);
 }
 
 function delOwner(dimId,topId,oi){
@@ -1300,7 +1728,7 @@ function delOwner(dimId,topId,oi){
 
 function ownersForm(){
   if(!S.form) S.form=formVazio();
-  if(!Array.isArray(S.form.owners)||!S.form.owners.length) S.form.owners=[{nome:'',setor:''}];
+  if(!Array.isArray(S.form.owners)||!S.form.owners.length) S.form.owners=[{nome:'',setor:'',destaque:false}];
   return S.form.owners;
 }
 
@@ -1342,9 +1770,18 @@ function restaurarVersao(i){
   toast('Versão restaurada.');
 }
 
-async function conectarArquivo(){
-  S.menuOpen=false; render();
-  if(!window.showSaveFilePicker){ toast('Navegador sem File System Access — use “Baixar cópia do JSON”.'); return; }
+function conectarArquivo(){
+  S.menuOpen=false;
+  pedirConfirmacao({
+    titulo:'Autorizar gravação no arquivo JSON',
+    texto:'O navegador vai pedir sua permissão para gravar em um arquivo .json escolhido por você. Enquanto a permissão estiver ativa, cada alteração é gravada nesse arquivo automaticamente. Nada sai deste computador.',
+    ok:'Escolher arquivo',
+    acao:escolherArquivoJson
+  });
+}
+
+async function escolherArquivoJson(){
+  if(!window.showSaveFilePicker){ avisar('Recurso indisponível neste navegador','Este navegador não permite gravar direto em arquivo. Use “Baixar cópia do JSON” para guardar os dados.'); return; }
   try{
     const h=await window.showSaveFilePicker({suggestedName:ARQUIVO_PADRAO, types:[{description:'JSON',accept:{'application/json':['.json']}}]});
     fileHandle=h; await idbPut(h);
@@ -1354,9 +1791,18 @@ async function conectarArquivo(){
   }catch(e){}
 }
 
-async function carregarArquivo(){
-  S.menuOpen=false; render();
-  if(!window.showOpenFilePicker){ toast('Navegador sem File System Access.'); return; }
+function carregarArquivo(){
+  S.menuOpen=false;
+  pedirConfirmacao({
+    titulo:'Carregar dados de um JSON',
+    texto:'O conteúdo atual da configuração será substituído pelo conteúdo do arquivo escolhido. A versão de agora continua disponível no histórico de alterações.',
+    ok:'Escolher arquivo',
+    acao:abrirArquivoJson
+  });
+}
+
+async function abrirArquivoJson(){
+  if(!window.showOpenFilePicker){ avisar('Recurso indisponível neste navegador','Este navegador não permite abrir arquivos dessa forma. Cole o conteúdo em “Editar JSON”.'); return; }
   try{
     const [h]=await window.showOpenFilePicker({types:[{description:'JSON',accept:{'application/json':['.json']}}]});
     const f=await h.getFile();
@@ -1368,7 +1814,7 @@ async function carregarArquivo(){
     S.fileName=h.name; S.fileState='ok';
     commit('Dados carregados de '+h.name);
     toast('Dados carregados de '+h.name);
-  }catch(e){ if(e && e.message) toast('Não foi possível carregar: '+e.message); }
+  }catch(e){ if(e && e.name!=='AbortError') avisar('Não foi possível carregar o arquivo', (e&&e.message)||'Estrutura inválida.'); }
 }
 
 function baixarJson(){
@@ -1410,6 +1856,8 @@ document.addEventListener('click',(ev)=>{
   if(!alvo) return;
   const act=alvo.dataset.act;
   if(act==='logoSize') return;              // tratado no input
+  if(act==='pres') return;                  // sliders de tipografia — tratados no input
+  if(act==='presNum') return;               // idem, campo numérico
   if(act==='mover') return;                 // tratado no change
   if(act==='fundo' && ev.target.closest('[data-modal]')) return;
 
@@ -1443,13 +1891,27 @@ document.addEventListener('click',(ev)=>{
     case 'novo': novoTopico(); break;
     case 'addOwner': addOwner(alvo.dataset.dim, alvo.dataset.top); break;
     case 'delOwner': delOwner(alvo.dataset.dim, alvo.dataset.top, parseInt(alvo.dataset.oi,10)); break;
-    case 'addFormOwner': ownersForm().push({nome:'',setor:''}); render(); break;
+    case 'addFormOwner': ownersForm().push({nome:'',setor:'',destaque:false}); render(); break;
     case 'delFormOwner': {
       const arr=ownersForm();
       arr.splice(parseInt(alvo.dataset.oi,10),1);
-      if(!arr.length) arr.push({nome:'',setor:''});
+      if(!arr.length) arr.push({nome:'',setor:'',destaque:false});
       render(); break;
     }
+    case 'presReset':
+      S.pres=Object.assign({}, PRES_PADRAO);
+      salvarUI({pres:S.pres}); aplicarVars(); render();
+      toast('Aparência restaurada ao padrão.');
+      break;
+    case 'sync': abrirSync(); break;
+    case 'dimHeader': S.pres.dimHeader=alvo.dataset.v; salvarUI({pres:S.pres}); render(); break;
+    case 'faviconUp': enviarFavicon(); break;
+    case 'faviconCode': aplicarFaviconCodigo(); break;
+    case 'faviconDel': S.favicon=null; salvarUI({favicon:null}); aplicarFavicon(); render(); break;
+    case 'ownHl': togOwnerHl(alvo.dataset.dim, alvo.dataset.top, parseInt(alvo.dataset.oi,10)); break;
+    case 'modelagem': togModelagem(alvo.dataset.dim, alvo.dataset.top); break;
+    case 'formOwnHl': { const arr=ownersForm(), i=parseInt(alvo.dataset.oi,10); if(arr[i]) arr[i].destaque=!arr[i].destaque; render(); break; }
+    case 'formModelagem': { if(!S.form) S.form=formVazio(); S.form.modelagem=!S.form.modelagem; render(); break; }
     case 'salvarSync': salvarSincronizar(); break;
     case 'duplicar': duplicarTopico(alvo.dataset.dim, alvo.dataset.top); break;
     case 'catAddOwner': catAddOwner(); break;
@@ -1489,6 +1951,25 @@ document.addEventListener('input',(ev)=>{
     salvarUI({logoSize:S.logoSize});
     const lbl=el.previousElementSibling && el.previousElementSibling.querySelector('.mono');
     if(lbl) lbl.textContent=S.logoSize+'px';
+    return;
+  }
+
+  if(el.dataset && (el.dataset.act==='pres' || el.dataset.act==='presNum')){
+    const k=el.dataset.k, suf=el.dataset.suf;
+    let v=parseFloat(el.value);
+    if(isNaN(v)) return;
+    const min=parseFloat(el.min), max=parseFloat(el.max);
+    v=Math.min(max, Math.max(min, v));
+    S.pres[k]=v;
+    salvarUI({pres:S.pres});
+    aplicarVars();
+    const row=el.closest('.rangerow');
+    if(row){
+      const lbl=row.querySelector('.rv');
+      if(lbl) lbl.textContent = suf==='x' ? v.toFixed(2)+'×' : v+'px';
+      const par=row.querySelector(el.dataset.act==='pres'?'[data-act="presNum"]':'[data-act="pres"]');
+      if(par && par!==el) par.value=v;
+    }
     return;
   }
 
@@ -1572,6 +2053,13 @@ document.addEventListener('change',(ev)=>{
     else if(el.dataset.catfield==='normativo') catRenomearNorm(chave, v);
     return;
   }
+  /* normativo e owner do tópico só entram no catálogo quando o campo é
+     concluído — durante a digitação seriam gravados pedaço por pedaço */
+  if(el.dataset && ['top.normativo','own.nome','own.setor'].indexOf(el.dataset.field)>=0){
+    registrarCatalogo();
+    salvarLocal();
+    return;
+  }
   if(el.dataset && el.dataset.act==='mover'){
     moverTopico(el.dataset.dim, el.dataset.top, el.value);
     return;
@@ -1600,6 +2088,11 @@ document.addEventListener('mouseout',(ev)=>{
 
 /* teclado */
 document.addEventListener('keydown',(e)=>{
+  if(SUG.el && SUG.input && document.activeElement===SUG.input){
+    if(e.key==='ArrowDown'||e.key==='ArrowUp'){ e.preventDefault(); mexerSug(e.key==='ArrowDown'?1:-1); return; }
+    if(e.key==='Enter' && SUG.i>=0){ e.preventDefault(); escolherSug(SUG.i); return; }
+    if(e.key==='Escape'){ e.preventDefault(); fecharSug(); return; }
+  }
   if(e.key==='Escape'){
     if(S.confirmar){ S.confirmar=null; render(); }
     else if(S.modal){ fecharModal(); }
@@ -1642,6 +2135,10 @@ async function iniciar(){
   S.logo = ui.logo||null;
   S.logoVisible = ui.logoVisible!==false;
   S.logoSize = ui.logoSize||34;
+  S.favicon = ui.favicon||null;
+  if(ui.pres && typeof ui.pres==='object') Object.assign(S.pres, ui.pres);
+  aplicarVars();
+  aplicarFavicon();
 
   try{ S.history=JSON.parse(localStorage.getItem(LS_HIST)||'[]'); }catch(e){}
 
@@ -1664,6 +2161,8 @@ async function iniciar(){
     S.lastSync=ui.lastSync||'restaurado do navegador';
   }
   if(!dimDe(S.selected)) S.selected=S.data.dimensoes[0].id;
+  registrarCatalogo();
+  if(!ui.catLimpo){ limparFragmentos(); salvarLocal(); salvarUI({catLimpo:true}); }
 
   render();
   restaurarHandle();

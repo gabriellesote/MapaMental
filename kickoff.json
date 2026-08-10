@@ -1,13 +1,14 @@
 {
   "versao": 3,
-  "atualizadoEm": "2026-08-07T21:24:37.824Z",
+  "atualizadoEm": "2026-08-10T23:56:49.359Z",
   "meta": {
     "titulo": "Kickoff — Qualidade da Informação nas 12 Dimensões",
     "descricao": "Alinhamento inicial do mapa de tópicos por dimensão: o que já está consolidado, qual normativo endereça cada ponto e com quem precisamos conversar. Os dados abaixo são fictícios e servem de estrutura para o preenchimento real.",
     "setor": "Riscos e Continuidade",
     "data": "12 de agosto de 2026",
     "fimTitulo": "Obrigada pela atenção",
-    "fimMensagem": "A partir daqui o trabalho é de cada owner com a sua dimensão. Dúvidas, ajustes e novos tópicos podem ser trazidos a qualquer momento."
+    "fimMensagem": "A partir daqui o trabalho é de cada owner com a sua dimensão. Dúvidas, ajustes e novos tópicos podem ser trazidos a qualquer momento.",
+    "tagModelagem": "Modelagem"
   },
   "catalogo": {
     "owners": [
@@ -53,7 +54,9 @@
       "POL-DAD-03",
       "POL-DAD-05",
       "POL-SEG-01",
-      "POL-SEG-04"
+      "POL-SEG-04",
+      "a ddsad",
+      "asdasd"
     ]
   },
   "dimensoes": [
@@ -65,27 +68,73 @@
       "topicos": [
         {
           "id": "d1-t1786134694596",
-          "titulo": "j",
-          "descricao": "",
-          "normativo": "—",
+          "titulo": "Lorem",
+          "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.  ",
+          "normativo": "a ddsad",
           "owners": [
             {
               "nome": "D. Nogueira",
-              "setor": "Segurança da Informação"
+              "setor": "Segurança da Informação",
+              "destaque": false
             }
-          ]
+          ],
+          "modelagem": false
+        },
+        {
+          "id": "d1-t1786400977309",
+          "titulo": "Lorem (cópia)",
+          "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Suspendisse potenti. Integer vitae justo eget magna fermentum iaculis eu non diam. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus.\n",
+          "normativo": "",
+          "owners": [
+            {
+              "nome": "D. Nogueira",
+              "setor": "Segurança da Informação",
+              "destaque": false
+            }
+          ],
+          "modelagem": false
+        },
+        {
+          "id": "d1-t1786400976424",
+          "titulo": "Lorem (cópia)",
+          "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Suspendisse potenti. Integer vitae justo eget magna fermentum iaculis eu non diam. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus.\n",
+          "normativo": "a ddsad",
+          "owners": [
+            {
+              "nome": "D. Nogueira",
+              "setor": "Segurança da Informação",
+              "destaque": false
+            }
+          ],
+          "modelagem": false
         },
         {
           "id": "d1-t1786134710478",
-          "titulo": ",k",
-          "descricao": "",
+          "titulo": "Lorem 2",
+          "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n",
           "normativo": "—",
           "owners": [
             {
               "nome": "a definir",
-              "setor": "a definir"
+              "setor": "a definir",
+              "destaque": false
             }
-          ]
+          ],
+          "modelagem": false
+        },
+        {
+          "id": "d1-t1786400966655",
+          "titulo": "Lorem 3 ",
+          "descricao": " Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.\n",
+          "normativo": "—",
+          "owners": [
+            {
+              "nome": "a definir",
+              "setor": "a definir",
+              "destaque": false
+            }
+          ],
+          "modelagem": false
         }
       ]
     },
@@ -103,9 +152,11 @@
           "owners": [
             {
               "nome": "R. Tavares",
-              "setor": "Controladoria"
+              "setor": "Controladoria",
+              "destaque": false
             }
-          ]
+          ],
+          "modelagem": false
         },
         {
           "id": "d2-t2",
@@ -115,9 +166,11 @@
           "owners": [
             {
               "nome": "L. Barreto",
-              "setor": "Planejamento"
+              "setor": "Planejamento",
+              "destaque": false
             }
-          ]
+          ],
+          "modelagem": false
         }
       ]
     },
@@ -135,9 +188,11 @@
           "owners": [
             {
               "nome": "P. Andrade",
-              "setor": "Riscos"
+              "setor": "Riscos",
+              "destaque": false
             }
-          ]
+          ],
+          "modelagem": false
         },
         {
           "id": "d3-t2",
@@ -147,9 +202,11 @@
           "owners": [
             {
               "nome": "M. Fontes",
-              "setor": "TI · Dados"
+              "setor": "TI · Dados",
+              "destaque": false
             }
-          ]
+          ],
+          "modelagem": false
         }
       ]
     },
@@ -167,9 +224,11 @@
           "owners": [
             {
               "nome": "C. Menezes",
-              "setor": "Comunicação"
+              "setor": "Comunicação",
+              "destaque": false
             }
-          ]
+          ],
+          "modelagem": false
         },
         {
           "id": "d4-t2",
@@ -179,9 +238,11 @@
           "owners": [
             {
               "nome": "L. Barreto",
-              "setor": "Planejamento"
+              "setor": "Planejamento",
+              "destaque": false
             }
-          ]
+          ],
+          "modelagem": false
         }
       ]
     },
@@ -199,9 +260,11 @@
           "owners": [
             {
               "nome": "R. Tavares",
-              "setor": "Controladoria"
+              "setor": "Controladoria",
+              "destaque": false
             }
-          ]
+          ],
+          "modelagem": false
         },
         {
           "id": "d5-t2",
@@ -211,9 +274,11 @@
           "owners": [
             {
               "nome": "J. Siqueira",
-              "setor": "TI · Dados"
+              "setor": "TI · Dados",
+              "destaque": false
             }
-          ]
+          ],
+          "modelagem": false
         }
       ]
     },
@@ -231,9 +296,11 @@
           "owners": [
             {
               "nome": "P. Andrade",
-              "setor": "Riscos"
+              "setor": "Riscos",
+              "destaque": false
             }
-          ]
+          ],
+          "modelagem": false
         },
         {
           "id": "d6-t2",
@@ -243,9 +310,11 @@
           "owners": [
             {
               "nome": "L. Barreto",
-              "setor": "Planejamento"
+              "setor": "Planejamento",
+              "destaque": false
             }
-          ]
+          ],
+          "modelagem": false
         }
       ]
     },
@@ -263,9 +332,11 @@
           "owners": [
             {
               "nome": "R. Tavares",
-              "setor": "Controladoria"
+              "setor": "Controladoria",
+              "destaque": false
             }
-          ]
+          ],
+          "modelagem": false
         },
         {
           "id": "d7-t2",
@@ -275,9 +346,11 @@
           "owners": [
             {
               "nome": "A. Ribeiro",
-              "setor": "Atendimento"
+              "setor": "Atendimento",
+              "destaque": false
             }
-          ]
+          ],
+          "modelagem": false
         }
       ]
     },
@@ -295,9 +368,11 @@
           "owners": [
             {
               "nome": "J. Siqueira",
-              "setor": "TI · Dados"
+              "setor": "TI · Dados",
+              "destaque": false
             }
-          ]
+          ],
+          "modelagem": false
         },
         {
           "id": "d8-t2",
@@ -307,9 +382,11 @@
           "owners": [
             {
               "nome": "M. Fontes",
-              "setor": "TI · Dados"
+              "setor": "TI · Dados",
+              "destaque": false
             }
-          ]
+          ],
+          "modelagem": false
         }
       ]
     },
@@ -327,9 +404,11 @@
           "owners": [
             {
               "nome": "D. Nogueira",
-              "setor": "Segurança da Informação"
+              "setor": "Segurança da Informação",
+              "destaque": false
             }
-          ]
+          ],
+          "modelagem": false
         },
         {
           "id": "d9-t2",
@@ -339,9 +418,11 @@
           "owners": [
             {
               "nome": "D. Nogueira",
-              "setor": "Segurança da Informação"
+              "setor": "Segurança da Informação",
+              "destaque": false
             }
-          ]
+          ],
+          "modelagem": false
         }
       ]
     },
@@ -359,9 +440,11 @@
           "owners": [
             {
               "nome": "J. Siqueira",
-              "setor": "TI · Dados"
+              "setor": "TI · Dados",
+              "destaque": false
             }
-          ]
+          ],
+          "modelagem": false
         },
         {
           "id": "d10-t2",
@@ -371,9 +454,11 @@
           "owners": [
             {
               "nome": "P. Andrade",
-              "setor": "Riscos"
+              "setor": "Riscos",
+              "destaque": false
             }
-          ]
+          ],
+          "modelagem": false
         }
       ]
     },
@@ -391,9 +476,11 @@
           "owners": [
             {
               "nome": "L. Barreto",
-              "setor": "Planejamento"
+              "setor": "Planejamento",
+              "destaque": false
             }
-          ]
+          ],
+          "modelagem": false
         },
         {
           "id": "d11-t2",
@@ -403,9 +490,11 @@
           "owners": [
             {
               "nome": "C. Menezes",
-              "setor": "Comunicação"
+              "setor": "Comunicação",
+              "destaque": false
             }
-          ]
+          ],
+          "modelagem": false
         }
       ]
     },
@@ -423,9 +512,11 @@
           "owners": [
             {
               "nome": "R. Tavares",
-              "setor": "Controladoria"
+              "setor": "Controladoria",
+              "destaque": false
             }
-          ]
+          ],
+          "modelagem": false
         },
         {
           "id": "d12-t2",
@@ -435,9 +526,11 @@
           "owners": [
             {
               "nome": "M. Fontes",
-              "setor": "TI · Dados"
+              "setor": "TI · Dados",
+              "destaque": false
             }
-          ]
+          ],
+          "modelagem": false
         }
       ]
     }
