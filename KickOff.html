@@ -170,7 +170,9 @@ textarea.inp{color:var(--fg2);line-height:1.65;resize:vertical}
 .dimhover{position:relative;display:flex;align-items:center;gap:9px;cursor:help}
 .dimtip{position:absolute;left:0;top:calc(100% + 9px);z-index:25;width:max-content;max-width:min(680px,58vw);padding:13px 16px;border-radius:16px;border:1px solid var(--gline2);background:var(--panel2);box-shadow:var(--shadow);font-size:12.5px;line-height:1.6;color:var(--fg2);text-wrap:pretty;opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .22s ease,transform .22s ease,visibility .22s}
 .dimhover:hover .dimtip{opacity:1;visibility:visible;transform:none}
-.sug{position:fixed;z-index:120;overflow:auto;padding:6px;border-radius:16px;border:1px solid var(--line2);background:var(--panel2);box-shadow:var(--shadow);animation:kfPop .16s cubic-bezier(.16,.9,.24,1)}
+.sug{position:fixed;z-index:120;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;padding:6px;border-radius:16px;border:1px solid var(--line2);background:var(--panel2);box-shadow:var(--shadow);animation:kfPop .16s cubic-bezier(.16,.9,.24,1)}
+.sug::-webkit-scrollbar{width:8px}
+.sug::-webkit-scrollbar-thumb{background:var(--line2);border-radius:8px}
 .sug-i{display:flex;align-items:flex-start;gap:10px;width:100%;padding:9px 11px;border:0;border-radius:11px;background:transparent;color:var(--fg);font-size:12.5px;line-height:1.45;text-align:left;cursor:pointer}
 .sug-i .v{flex:1;min-width:0;overflow-wrap:anywhere}
 .sug-i .s{flex:none;max-width:45%;margin-left:auto;padding-left:10px;font-size:11px;color:var(--muted);text-align:right;overflow-wrap:anywhere}
@@ -213,22 +215,48 @@ textarea.inp{color:var(--fg2);line-height:1.65;resize:vertical}
    coisas mais caras aqui. Numa chamada do Meet a tela é lida quadro a quadro,
    então cada uma delas passa a pesar em dobro. O modo leve troca vidro por
    cor sólida, desliga os feixes e congela o que só se mexe por enfeite. */
-:root[data-perf="lite"]{--glass:#141b23;--glass2:#1a232c;--shadow:0 8px 22px rgba(0,0,0,.38)}
-:root[data-theme="light"][data-perf="lite"]{--glass:#eef1f5;--glass2:#e8ecf2;--shadow:0 6px 16px rgba(20,32,45,.13)}
+:root[data-perf="lite"]{
+  --glass:#151d27;--glass2:#1c2632;
+  /* fio de luz na borda de cima + sombra curta: dá relevo sem blur grande */
+  --shadow:inset 0 1px 0 rgba(255,255,255,.055), 0 2px 4px rgba(0,0,0,.22), 0 10px 22px -16px rgba(0,0,0,.75);
+  --veu:linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,0) 140px);
+}
+:root[data-theme="light"][data-perf="lite"]{
+  --glass:#f5f7fa;--glass2:#eff3f8;
+  --shadow:inset 0 1px 0 rgba(255,255,255,.9), 0 1px 3px rgba(20,32,45,.09), 0 10px 20px -16px rgba(20,32,45,.5);
+  --veu:linear-gradient(180deg, rgba(255,255,255,.6), rgba(255,255,255,0) 140px);
+}
+/* o vidro sai; entra cor sólida com um véu de luz por cima */
 :root[data-perf="lite"] *{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
-:root[data-perf="lite"] .halo,
+:root[data-perf="lite"] .glass,
+:root[data-perf="lite"] .modal,
+:root[data-perf="lite"] .menu{background-image:var(--veu)}
+:root[data-perf="lite"] .topbar{background:var(--bg)}
+:root[data-perf="lite"] .ovl{background:color-mix(in oklab, var(--bg) 82%, rgba(0,0,0,.6))}
+:root[data-perf="lite"] .carro-nav{background:var(--panel)}
+:root[data-perf="lite"] .sug{background:var(--panel2)}
+
+/* halos e brilhos viram gradiente radial puro: a suavidade já está no
+   gradiente, o filter:blur em cima era um segundo passe de desenho */
+:root[data-perf="lite"] .halo{display:block!important;filter:none!important;animation:none!important;opacity:.72}
+:root[data-perf="lite"] .fimglow{filter:none!important;animation:none!important;opacity:.9}
+:root[data-perf="lite"] .dimpanel>.blob{
+  filter:none!important;
+  background:radial-gradient(circle, color-mix(in oklab,var(--a) 26%,transparent), transparent 68%)!important;
+}
+/* enfeites que não sobrevivem sem blur, e o anel do encerramento */
 :root[data-perf="lite"] #beamsCanvas,
-:root[data-perf="lite"] .dimpanel>.blob,
-:root[data-perf="lite"] .fimglow,
-:root[data-perf="lite"] .pcard .b{display:none!important}
+:root[data-perf="lite"] .pcard .b,
+:root[data-perf="lite"] [style*="kfRing"]{display:none!important}
+
 :root[data-perf="lite"] .dockhint,
 :root[data-perf="lite"] [style*="infinite"]{animation:none!important}
-:root[data-perf="lite"] .ptwrap:hover,
-:root[data-perf="lite"] .dimrow:hover,
-:root[data-perf="lite"] .cta:hover,
-:root[data-perf="lite"] .ghostbtn:hover{transform:none}
-:root[data-perf="lite"] .dimpanel{background:var(--panel)}
-:root[data-perf="lite"] .tag.owhl{box-shadow:none}
+/* transform em hover é composição pura e continua barato; o que sai é a
+   sombra longa por baixo dele */
+:root[data-perf="lite"] .tag.owhl{box-shadow:inset 0 0 0 1px color-mix(in oklab,var(--own-hl) 30%,transparent)}
+:root[data-perf="lite"] .ptcard{box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
+:root[data-perf="lite"] .ptwrap:hover .ptcard{box-shadow:inset 0 1px 0 rgba(255,255,255,.07), 0 8px 18px -14px rgba(0,0,0,.8)}
+:root[data-theme="light"][data-perf="lite"] .ptcard{box-shadow:inset 0 1px 0 rgba(255,255,255,.9)}
 
 /* fora do modo leve, o que está fora da seção visível para de animar */
 #scroller>section[data-off="1"],
@@ -632,6 +660,7 @@ function aplicarPerf(){
   if(on) document.documentElement.dataset.perf='lite';
   else delete document.documentElement.dataset.perf;
   if(on) pararBeams(); else if(S.mode==='present') ligarBeams();
+  ajustarHalos();
 }
 
 function alternarPerf(){
@@ -736,12 +765,17 @@ function fecharSug(){
   SUG.el=null; SUG.input=null; SUG.items=[]; SUG.i=-1;
 }
 
-function abrirSug(input){
+/* tudo=true mostra o catálogo inteiro (ao focar ou clicar no campo); só a
+   digitação filtra. Antes, focar um campo já preenchido filtrava pelo próprio
+   valor e sobrava um item só — a lista parecia quebrada. */
+function abrirSug(input, tudo){
   const tipo=input.dataset.sug;
   const todos=sugFonte(tipo);
   if(!todos.length){ fecharSug(); return; }
-  const q=(input.value||'').trim().toLowerCase();
-  const lista=(q?todos.filter(x=>x.v.toLowerCase().indexOf(q)>=0):todos).slice(0,60);
+  const q=tudo?'':(input.value||'').trim().toLowerCase();
+  let lista=(q?todos.filter(x=>x.v.toLowerCase().indexOf(q)>=0):todos).slice(0,60);
+  // digitou algo que não casa com nada: mostra o catálogo em vez de nada
+  if(!lista.length) lista=todos.slice(0,60);
   if(!SUG.el){ SUG.el=document.createElement('div'); SUG.el.className='sug'; document.body.appendChild(SUG.el); }
   SUG.input=input; SUG.items=lista; SUG.i=-1;
   SUG.el.innerHTML = lista.length
@@ -758,7 +792,7 @@ function posicionarSug(){
   const larg=Math.max(r.width,260);
   SUG.el.style.left=Math.max(8,Math.min(r.left, window.innerWidth-larg-8))+'px';
   SUG.el.style.width=larg+'px';
-  SUG.el.style.maxHeight=Math.max(120,Math.min(280,(paraCima?acima:abaixo)-18))+'px';
+  SUG.el.style.maxHeight=Math.max(150,Math.min(340,(paraCima?acima:abaixo)-18))+'px';
   if(paraCima){ SUG.el.style.top=''; SUG.el.style.bottom=(window.innerHeight-r.top+6)+'px'; }
   else { SUG.el.style.bottom=''; SUG.el.style.top=(r.bottom+6)+'px'; }
 }
@@ -766,9 +800,8 @@ function posicionarSug(){
 function mexerSug(passo){
   if(!SUG.el || !SUG.items.length) return;
   SUG.i=(SUG.i+passo+SUG.items.length)%SUG.items.length;
-  const bs=SUG.el.querySelectorAll('.sug-i');
-  bs.forEach((b,k)=>b.classList.toggle('on', k===SUG.i));
-  const at=bs[SUG.i];
+  realcarSug();
+  const at=SUG.el.querySelectorAll('.sug-i')[SUG.i];
   if(at){
     const t=at.offsetTop, h=at.offsetHeight;
     if(t<SUG.el.scrollTop) SUG.el.scrollTop=t-6;
@@ -776,31 +809,67 @@ function mexerSug(passo){
   }
 }
 
+function realcarSug(){
+  if(!SUG.el) return;
+  SUG.el.querySelectorAll('.sug-i').forEach((b,k)=>b.classList.toggle('on', k===SUG.i));
+}
+
+/* escolher dispara input/change no campo; sem esta trava o próprio evento
+   reabriria a lista que acabou de fechar */
+let sugIgnorar=false;
+
 function escolherSug(k){
   const it=SUG.items[k], input=SUG.input;
   if(!it || !input) return;
   input.value=it.v;
   fecharSug();
+  sugIgnorar=true;
   input.dispatchEvent(new Event('input',{bubbles:true}));
   input.dispatchEvent(new Event('change',{bubbles:true}));
   if(input.isConnected) input.focus();
+  setTimeout(()=>{ sugIgnorar=false; },0);
+}
+
+function dentroSug(alvo){
+  return !!(alvo && alvo.closest && alvo.closest('.sug'));
 }
 
 document.addEventListener('focusin',(e)=>{
+  if(sugIgnorar) return;
   const alvo=e.target.closest?e.target.closest('[data-sug]'):null;
-  if(alvo) abrirSug(alvo);
-  else if(!(e.target.closest && e.target.closest('.sug'))) fecharSug();
+  if(alvo) abrirSug(alvo,true);
+  else if(!dentroSug(e.target)) fecharSug();
 });
 document.addEventListener('input',(e)=>{
+  if(sugIgnorar) return;
   if(e.target.dataset && e.target.dataset.sug) abrirSug(e.target);
+});
+/* o mouse sobre um item vira a seleção corrente, para o Enter concordar
+   com o que está destacado */
+document.addEventListener('mousemove',(e)=>{
+  if(!SUG.el) return;
+  const it=e.target.closest?e.target.closest('[data-sugi]'):null;
+  if(!it) return;
+  const k=parseInt(it.dataset.sugi,10);
+  if(k!==SUG.i){ SUG.i=k; realcarSug(); }
 });
 document.addEventListener('mousedown',(e)=>{
   const it=e.target.closest?e.target.closest('[data-sugi]'):null;
   if(it){ e.preventDefault(); escolherSug(parseInt(it.dataset.sugi,10)); return; }
-  if(SUG.el && !(e.target.closest('.sug')||e.target.closest('[data-sug]'))) fecharSug();
+  // clique na barra de rolagem ou no vazio da lista: não fecha nem tira o foco
+  if(dentroSug(e.target)){ e.preventDefault(); return; }
+  const campo=e.target.closest?e.target.closest('[data-sug]'):null;
+  if(campo){ setTimeout(()=>abrirSug(campo,true),0); return; }
+  if(SUG.el) fecharSug();
 });
-window.addEventListener('resize',fecharSug);
-document.addEventListener('scroll',fecharSug,true);
+window.addEventListener('resize',()=>{ if(SUG.el) posicionarSug(); });
+/* rolagem dentro da lista é o jeito normal de percorrê-la — só a rolagem
+   de fora reposiciona o menu junto com o campo */
+document.addEventListener('scroll',(e)=>{
+  if(!SUG.el) return;
+  if(e.target===SUG.el || dentroSug(e.target)) return;
+  posicionarSug();
+},true);
 
 /* ------------------------------------------------------------------ */
 /* Render — configuração                                               */
@@ -1318,7 +1387,9 @@ function ligarBeams(){
 
 /* os halos dos cantos saem da abertura e do encerramento */
 function ajustarHalos(){
-  const esconder = S.mode==='present';
+  // no modo completo os halos saem da apresentação porque são animados e
+  // borrados; no leve viram gradiente parado, então dão o fundo da abertura
+  const esconder = S.mode==='present' && !leve();
   document.querySelectorAll('.halo').forEach(h=>{
     h.style.display = esconder ? 'none' : '';
   });
@@ -2297,7 +2368,11 @@ document.addEventListener('mouseout',(ev)=>{
 document.addEventListener('keydown',(e)=>{
   if(SUG.el && SUG.input && document.activeElement===SUG.input){
     if(e.key==='ArrowDown'||e.key==='ArrowUp'){ e.preventDefault(); mexerSug(e.key==='ArrowDown'?1:-1); return; }
+    if(e.key==='PageDown'||e.key==='PageUp'){ e.preventDefault(); mexerSug(e.key==='PageDown'?5:-5); return; }
+    if(e.key==='Home'&&SUG.items.length){ e.preventDefault(); SUG.i=0; realcarSug(); SUG.el.scrollTop=0; return; }
+    if(e.key==='End'&&SUG.items.length){ e.preventDefault(); SUG.i=SUG.items.length-1; realcarSug(); SUG.el.scrollTop=SUG.el.scrollHeight; return; }
     if(e.key==='Enter' && SUG.i>=0){ e.preventDefault(); escolherSug(SUG.i); return; }
+    if(e.key==='Enter' || e.key==='Tab'){ fecharSug(); return; }
     if(e.key==='Escape'){ e.preventDefault(); fecharSug(); return; }
   }
   if(e.key==='Escape'){

@@ -1,6 +1,6 @@
 {
   "versao": 3,
-  "atualizadoEm": "2026-08-11T00:09:26.130Z",
+  "atualizadoEm": "2026-08-12T00:33:41.154Z",
   "meta": {
     "titulo": "Kickoff — Qualidade da Informação nas 12 Dimensões",
     "descricao": "Alinhamento inicial do mapa de tópicos por dimensão: o que já está consolidado, qual normativo endereça cada ponto e com quem precisamos conversar. Os dados abaixo são fictícios e servem de estrutura para o preenchimento real.",
@@ -71,6 +71,82 @@
         {
           "id": "d1-t1786400977309",
           "titulo": "Lorem (cópia)",
+          "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+          "normativo": "MP-0001",
+          "owners": [
+            {
+              "nome": "Gabrielle Soares",
+              "setor": "Engenharia de  Dados",
+              "destaque": false
+            },
+            {
+              "nome": "P. Andrade",
+              "setor": "Riscos",
+              "destaque": true
+            }
+          ],
+          "modelagem": false
+        },
+        {
+          "id": "d1-t1786494813569",
+          "titulo": "Lorem (cópia) (cópia)",
+          "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+          "normativo": "MP-0001",
+          "owners": [
+            {
+              "nome": "Gabrielle Soares",
+              "setor": "Engenharia de  Dados",
+              "destaque": false
+            },
+            {
+              "nome": "P. Andrade",
+              "setor": "Riscos",
+              "destaque": true
+            }
+          ],
+          "modelagem": false
+        },
+        {
+          "id": "d1-t1786494813335",
+          "titulo": "Lorem (cópia) (cópia)",
+          "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+          "normativo": "MP-0001",
+          "owners": [
+            {
+              "nome": "Gabrielle Soares",
+              "setor": "Engenharia de  Dados",
+              "destaque": false
+            },
+            {
+              "nome": "P. Andrade",
+              "setor": "Riscos",
+              "destaque": true
+            }
+          ],
+          "modelagem": false
+        },
+        {
+          "id": "d1-t1786494813041",
+          "titulo": "Lorem (cópia) (cópia)",
+          "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+          "normativo": "MP-0001",
+          "owners": [
+            {
+              "nome": "Gabrielle Soares",
+              "setor": "Engenharia de  Dados",
+              "destaque": false
+            },
+            {
+              "nome": "P. Andrade",
+              "setor": "Riscos",
+              "destaque": true
+            }
+          ],
+          "modelagem": false
+        },
+        {
+          "id": "d1-t1786494812665",
+          "titulo": "Lorem (cópia) (cópia)",
           "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
           "normativo": "MP-0001",
           "owners": [
