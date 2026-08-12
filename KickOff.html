@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Kickoff — Qualidade da Informação nas 12 Dimensões</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0b0e12;--bg2:#0e1319;--panel:#131a22;--panel2:#182129;--line:#243039;--line2:#2f3d49;--fg:#e9eef3;--fg2:#b8c5d0;--muted:#7d8b98;--brand:#3f6fe4;--brandfg:#ffffff;--shadow:0 30px 80px rgba(0,0,0,.55);--glass:rgba(255,255,255,.045);--glass2:rgba(255,255,255,.075);--gline:rgba(255,255,255,.10);--gline2:rgba(255,255,255,.18)}
@@ -46,6 +46,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--brand)}
 .dot{width:7px;height:7px;flex:none;border-radius:50%}
 .iconbtn{width:38px;height:38px;flex:none;display:flex;align-items:center;justify-content:center;padding:0;border-radius:50%;border:1px solid var(--gline);background:var(--glass);color:var(--fg2);cursor:pointer;font-size:14px;transition:color .25s ease,border-color .25s ease}
 .iconbtn:hover{color:var(--fg);border-color:var(--gline2)}
+.iconbtn.on{color:oklch(.78 .15 90);border-color:color-mix(in oklab,oklch(.78 .15 90) 55%,var(--gline));background:color-mix(in oklab,oklch(.78 .15 90) 14%,transparent)}
 .cta{display:flex;align-items:center;gap:9px;height:38px;padding:0 6px 0 17px;border-radius:999px;border:0;background:var(--brand);color:var(--brandfg);font-size:12.5px;font-weight:600;line-height:1;white-space:nowrap;cursor:pointer;box-shadow:0 10px 28px color-mix(in oklab, var(--brand) 34%, transparent);transition:transform .25s cubic-bezier(.2,.9,.25,1)}
 .cta:hover{transform:translateY(-2px)}
 .cta i{width:26px;height:26px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.2);font-size:12px;font-style:normal}
@@ -95,7 +96,7 @@ textarea.inp{color:var(--fg2);line-height:1.65;resize:vertical}
 .lockbtn{flex:none;display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;border:1px solid var(--gline2);background:var(--glass);color:var(--muted);font-size:12px;cursor:pointer;transition:transform .25s ease}
 .lockbtn:hover{transform:translateY(-2px)}
 .lockbtn.on{border-color:var(--a);background:color-mix(in oklab, var(--a) 16%, transparent);color:var(--a)}
-.topicgrid{position:relative;padding:22px 32px 30px;display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:14px;align-items:start}
+.topicgrid{position:relative;padding:22px 32px 30px;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(420px,100%),1fr));gap:14px;align-items:stretch}
 .tcard{border:1px solid var(--gline);border-radius:20px;background:var(--glass);padding:18px 20px;display:flex;flex-direction:column;gap:10px;transition:border-color .3s ease}
 .tcard:hover{border-color:var(--a)}
 .tinp{width:100%;min-width:0;padding:9px 12px;border-radius:12px;border:1px solid var(--gline2);background:var(--panel);color:var(--fg);font-size:14.5px;font-weight:600}
@@ -117,7 +118,9 @@ textarea.inp{color:var(--fg2);line-height:1.65;resize:vertical}
 
 /* ---------- apresentação ---------- */
 .present{position:fixed;inset:0;z-index:30;animation:kfFade .5s ease-out}
-.dockzone{position:fixed;top:0;right:0;width:130px;height:100vh;z-index:60;display:flex;align-items:center;justify-content:flex-end}
+.dockzone{position:fixed;top:0;right:0;width:130px;height:100vh;z-index:60;display:flex;align-items:center;justify-content:flex-end;pointer-events:none}
+.dockzone::before{content:'';position:absolute;right:0;top:0;width:56px;height:100%;pointer-events:auto}
+.dock,.dockhint{pointer-events:auto}
 .dockhint{position:absolute;right:0;top:50%;margin-top:-34px;width:2px;height:68px;border-radius:2px;background:var(--gline2);transition:opacity .5s ease;animation:kfBreathe 4.2s ease-in-out infinite;pointer-events:none}
 .dock{margin-right:18px;display:flex;flex-direction:column;align-items:center;gap:10px;padding:12px 10px;border-radius:999px;border:1px solid var(--gline);background:var(--glass2);backdrop-filter:blur(26px);box-shadow:var(--shadow);opacity:0;transform:translateX(20px);pointer-events:none;transition:opacity .35s ease,transform .5s cubic-bezier(.16,.9,.24,1)}
 .dock.on{opacity:1;transform:translateX(0);pointer-events:auto}
@@ -168,10 +171,11 @@ textarea.inp{color:var(--fg2);line-height:1.65;resize:vertical}
 .dimtip{position:absolute;left:0;top:calc(100% + 9px);z-index:25;width:max-content;max-width:min(680px,58vw);padding:13px 16px;border-radius:16px;border:1px solid var(--gline2);background:var(--panel2);box-shadow:var(--shadow);font-size:12.5px;line-height:1.6;color:var(--fg2);text-wrap:pretty;opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .22s ease,transform .22s ease,visibility .22s}
 .dimhover:hover .dimtip{opacity:1;visibility:visible;transform:none}
 .sug{position:fixed;z-index:120;overflow:auto;padding:6px;border-radius:16px;border:1px solid var(--line2);background:var(--panel2);box-shadow:var(--shadow);animation:kfPop .16s cubic-bezier(.16,.9,.24,1)}
-.sug-i{display:flex;align-items:center;gap:10px;width:100%;padding:9px 11px;border:0;border-radius:11px;background:transparent;color:var(--fg);font-size:12.5px;text-align:left;cursor:pointer}
-.sug-i:hover,.sug-i.on{background:var(--glass2)}
-.sug-i .s{margin-left:auto;padding-left:10px;font-size:11px;color:var(--muted);white-space:nowrap}
+.sug-i{display:flex;align-items:flex-start;gap:10px;width:100%;padding:9px 11px;border:0;border-radius:11px;background:transparent;color:var(--fg);font-size:12.5px;line-height:1.45;text-align:left;cursor:pointer}
+.sug-i .v{flex:1;min-width:0;overflow-wrap:anywhere}
+.sug-i .s{flex:none;max-width:45%;margin-left:auto;padding-left:10px;font-size:11px;color:var(--muted);text-align:right;overflow-wrap:anywhere}
 .sug-empty{padding:10px 11px;font-size:11.5px;line-height:1.5;color:var(--muted)}
+.sug-i:hover,.sug-i.on{background:var(--glass2)}
 .rangerow{display:flex;flex-direction:column;gap:7px}
 .rangerow .rl{display:flex;justify-content:space-between;gap:10px;font-size:11.5px;color:var(--muted)}
 .rangerow input[type=range]{flex:1;min-width:0;width:auto;accent-color:var(--brand)}
@@ -182,7 +186,7 @@ textarea.inp{color:var(--fg2);line-height:1.65;resize:vertical}
 .segbtn:hover{color:var(--fg)}
 .segbtn.on{background:color-mix(in oklab,var(--brand) 78%,transparent);border-color:transparent;color:var(--brandfg);font-weight:600}
 
-.ptwrap{display:flex;flex-direction:column;min-width:0;transition:transform .3s cubic-bezier(.2,.9,.25,1)}
+.ptwrap{display:flex;flex-direction:column;min-width:0;position:relative;z-index:0;isolation:isolate;transition:transform .3s cubic-bezier(.2,.9,.25,1)}
 .ptwrap:hover{transform:translateY(-4px)}
 .pttabs{display:flex;flex-wrap:wrap;gap:6px;padding-left:16px;position:relative;z-index:0}
 .pttab{display:inline-flex;align-items:center;gap:6px;padding:5px 12px 10px;margin-bottom:-5px;border:1px solid color-mix(in oklab,var(--a) 40%,var(--gline));border-bottom:0;border-radius:12px 12px 0 0;font-size:var(--fs-tf);line-height:1;white-space:nowrap;transition:border-color .3s ease,background .3s ease}
@@ -190,8 +194,49 @@ textarea.inp{color:var(--fg2);line-height:1.65;resize:vertical}
 .pttab.mdl{color:var(--mdl);border-color:color-mix(in oklab,var(--mdl) 42%,var(--gline));background:color-mix(in oklab,var(--mdl) 17%,var(--panel))}
 .ptwrap:hover .pttab.norm{border-color:color-mix(in oklab,var(--a) 62%,transparent)}
 .ptwrap:hover .pttab.mdl{border-color:color-mix(in oklab,var(--mdl) 62%,transparent)}
-.ptcard{position:relative;z-index:1;background:var(--panel);backdrop-filter:none}
+.ptcard{position:relative;z-index:1;flex:none;display:flex;flex-direction:column;background:var(--panel);backdrop-filter:none}
 .ptwrap:hover .ptcard{background:var(--panel2);border-color:var(--a)}
+
+.carro-track{scrollbar-width:none}
+.carro-track::-webkit-scrollbar{display:none}
+.carro-track>.ptwrap{scroll-snap-align:start}
+.carro-nav{position:absolute;top:50%;z-index:6;width:42px;height:42px;display:flex;align-items:center;justify-content:center;padding:0 0 3px;border-radius:50%;border:1px solid var(--gline2);background:color-mix(in oklab,var(--panel) 82%,transparent);backdrop-filter:blur(14px);color:var(--fg2);font-size:22px;line-height:1;cursor:pointer;box-shadow:0 10px 26px -14px rgba(0,0,0,.7);opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s,transform .25s cubic-bezier(.2,.9,.25,1),color .2s ease,border-color .2s ease}
+.carro-nav.prev{left:6px;transform:translateY(-50%) translateX(-4px)}
+.carro-nav.next{right:62px;transform:translateY(-50%) translateX(4px)}
+.carro-nav.on{opacity:.82;visibility:visible;transform:translateY(-50%)}
+.carro-nav.on:hover{opacity:1;color:var(--fg);border-color:var(--a)}
+.carro-nav.prev.on:hover{transform:translateY(-50%) translateX(-2px)}
+.carro-nav.next.on:hover{transform:translateY(-50%) translateX(2px)}
+
+/* ---------- modo leve: notebook fraco e compartilhamento de tela ----------
+   backdrop-filter, filter:blur em tela cheia e animação infinita são as três
+   coisas mais caras aqui. Numa chamada do Meet a tela é lida quadro a quadro,
+   então cada uma delas passa a pesar em dobro. O modo leve troca vidro por
+   cor sólida, desliga os feixes e congela o que só se mexe por enfeite. */
+:root[data-perf="lite"]{--glass:#141b23;--glass2:#1a232c;--shadow:0 8px 22px rgba(0,0,0,.38)}
+:root[data-theme="light"][data-perf="lite"]{--glass:#eef1f5;--glass2:#e8ecf2;--shadow:0 6px 16px rgba(20,32,45,.13)}
+:root[data-perf="lite"] *{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+:root[data-perf="lite"] .halo,
+:root[data-perf="lite"] #beamsCanvas,
+:root[data-perf="lite"] .dimpanel>.blob,
+:root[data-perf="lite"] .fimglow,
+:root[data-perf="lite"] .pcard .b{display:none!important}
+:root[data-perf="lite"] .dockhint,
+:root[data-perf="lite"] [style*="infinite"]{animation:none!important}
+:root[data-perf="lite"] .ptwrap:hover,
+:root[data-perf="lite"] .dimrow:hover,
+:root[data-perf="lite"] .cta:hover,
+:root[data-perf="lite"] .ghostbtn:hover{transform:none}
+:root[data-perf="lite"] .dimpanel{background:var(--panel)}
+:root[data-perf="lite"] .tag.owhl{box-shadow:none}
+
+/* fora do modo leve, o que está fora da seção visível para de animar */
+#scroller>section[data-off="1"],
+#scroller>section[data-off="1"] *{animation-play-state:paused!important}
+
+@media (prefers-reduced-motion: reduce){
+  .halo,.dockhint,[style*="infinite"]{animation:none!important}
+}
 
 @media (max-width:1180px){
   .page{padding:26px 18px 80px}
@@ -254,6 +299,33 @@ const TOPICOS = [
 const FIM_TITULO = 'Obrigada pela atenção';
 const FIM_MENSAGEM = 'A partir daqui o trabalho é de cada owner com a sua dimensão. Dúvidas, ajustes e novos tópicos podem ser trazidos a qualquer momento.';
 
+/* tira do catálogo os fragmentos deixados pela gravação tecla a tecla:
+   entrada que ninguém usa e que é apenas o começo de outra entrada */
+function limparParciais(lista, usados){
+  const todas=lista.slice();
+  return todas.filter(function(v){
+    if(!v) return false;
+    if(usados.indexOf(v)>=0) return true;
+    return !todas.some(function(o){ return o!==v && o.indexOf(v)===0; });
+  });
+}
+
+function limparCatalogo(data){
+  const cat=data&&data.catalogo; if(!cat) return;
+  const usadosN=[], usadosO=[];
+  (data.dimensoes||[]).forEach(function(dim){
+    (dim.topicos||[]).forEach(function(t){
+      if(t.normativo && t.normativo!=='—') usadosN.push(t.normativo);
+      (t.owners||[]).forEach(function(o){ if(o&&o.nome) usadosO.push(o.nome); });
+    });
+  });
+  if(Array.isArray(cat.normativos)) cat.normativos=limparParciais(cat.normativos, usadosN);
+  if(Array.isArray(cat.owners)){
+    const nomes=limparParciais(cat.owners.map(function(o){ return (o&&o.nome)||''; }), usadosO);
+    cat.owners=cat.owners.filter(function(o){ return nomes.indexOf((o&&o.nome)||'')>=0; });
+  }
+}
+
 /* owner/setor por tópico viraram uma lista de owners — converte o formato antigo */
 function migrate(data){
   if(!data) return data;
@@ -270,6 +342,7 @@ function migrate(data){
       delete t.owner; delete t.setor;
     });
   });
+  limparCatalogo(data);
   return data;
 }
 
@@ -314,6 +387,7 @@ const S = {
   confirmar:null,
   logo:null, logoVisible:true, logoSize:34,
   favicon:null,
+  perf:'auto',
   pres:Object.assign({}, PRES_PADRAO),
   fileName:'', fileState:'none', lastSync:'', toastMsg:''
 };
@@ -335,14 +409,10 @@ const idxDe = id => S.data.dimensoes.findIndex(d=>d.id===id);
 const accentDe = id => ACCENTS[Math.max(0,idxDe(id))%12];
 const totalTopicos = () => S.data.dimensoes.reduce((a,d)=>a+d.topicos.length,0);
 
-/* Catálogo — owners e normativos guardados em data.catalogo.
-   É um registro gravado, não uma leitura ao vivo dos tópicos: recalcular a
-   cada tecla fazia "MP001" entrar como M, MP, MP0, MP00 e MP001. O registro
-   só é refeito em momentos definidos — ver registrarCatalogo(). */
-function catalogo(){ return garantirCatalogo(); }
-
-/* junta o que está guardado com o que os tópicos usam hoje */
-function catalogoDerivado(){
+/* Catálogo — junta o que já foi digitado nos tópicos com o que ficou
+   guardado em data.catalogo, para sugerir na hora de criar novos tópicos.
+   O que sai de um tópico continua no catálogo. */
+function catalogo(){
   const owners={}, normativos={};
   const guardado=S.data.catalogo||{};
   (guardado.owners||[]).forEach(o=>{ if(o && o.nome) owners[o.nome]=o.setor||''; });
@@ -366,35 +436,9 @@ const A_OWNERS='oklch(.68 .13 285)', A_NORM='oklch(.68 .13 75)';
 const ehCatalogo = id => id===CAT_OWNERS || id===CAT_NORM;
 
 function garantirCatalogo(){
-  if(!S.data.catalogo) S.data.catalogo=catalogoDerivado();
+  if(!S.data.catalogo) S.data.catalogo=catalogo();
   if(!Array.isArray(S.data.catalogo.owners)) S.data.catalogo.owners=[];
   if(!Array.isArray(S.data.catalogo.normativos)) S.data.catalogo.normativos=[];
-  return S.data.catalogo;
-}
-
-/* Limpeza única: versões anteriores gravavam o catálogo a cada tecla, então
-   "MP001" deixou para trás M, MP, MP0 e MP00. Remove as entradas que não são
-   usadas por nenhum tópico e são só o começo de outra entrada. */
-function limparFragmentos(){
-  const cat=garantirCatalogo();
-  const usadosNorm={}, usadosOwn={};
-  S.data.dimensoes.forEach(d=>d.topicos.forEach(t=>{
-    if(t.normativo) usadosNorm[t.normativo]=1;
-    (t.owners||[]).forEach(o=>{ if(o && o.nome) usadosOwn[o.nome]=1; });
-  }));
-  const fragmento=(v,todos,usados)=>
-    !usados[v] && todos.some(x=>x!==v && x.length>v.length && x.indexOf(v)===0);
-
-  const norms=cat.normativos.slice();
-  cat.normativos=norms.filter(c=>!fragmento(c,norms,usadosNorm));
-
-  const nomes=cat.owners.map(o=>o.nome);
-  cat.owners=cat.owners.filter(o=>!fragmento(o.nome,nomes,usadosOwn));
-}
-
-/* refaz o registro — só ao concluir uma edição, nunca durante a digitação */
-function registrarCatalogo(){
-  S.data.catalogo=catalogoDerivado();
   return S.data.catalogo;
 }
 
@@ -457,6 +501,12 @@ function salvarUI(patch){
   try{ localStorage.setItem(LS_UI, JSON.stringify(ui)); }catch(e){}
 }
 
+/* O catálogo só é consolidado quando a edição de um campo termina (commit ou
+   blur). Se fosse a cada tecla, digitar “MP-0100” gravaria M, MP, MP-, MP-0… */
+function consolidarCatalogo(){
+  S.data.catalogo=catalogo();   // owners e normativos usados ficam guardados
+}
+
 function salvarLocal(){
   try{ localStorage.setItem(LS_DATA, JSON.stringify(S.data)); }catch(e){}
 }
@@ -468,7 +518,7 @@ function registrarHistorico(nota){
 
 /* commit = alteração estrutural: grava tudo e redesenha */
 function commit(nota, redesenhar){
-  registrarCatalogo();
+  consolidarCatalogo();
   salvarLocal();
   registrarHistorico(nota);
   clearTimeout(tSave); tSave=setTimeout(()=>gravarArquivo(true),700);
@@ -562,6 +612,37 @@ function logoHtml(h){
 /* ------------------------------------------------------------------ */
 /* Tipografia configurável, ícone da guia e avisos                     */
 /* ------------------------------------------------------------------ */
+/* ---------------- modo leve ---------------- */
+/* 'auto' decide pela máquina; 'lite' e 'full' são escolha manual */
+function maquinaFraca(){
+  try{
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches) return true;
+    // só conta o que o navegador realmente informou — Firefox e Safari não
+    // expõem deviceMemory, e um valor ausente não é sinal de máquina fraca
+    const nucleos=navigator.hardwareConcurrency, mem=navigator.deviceMemory;
+    if(typeof nucleos==='number' && nucleos>0 && nucleos<=4) return true;
+    if(typeof mem==='number' && mem>0 && mem<=4) return true;
+    return false;
+  }catch(e){ return false; }
+}
+function leve(){ return S.perf==='lite' || (S.perf==='auto' && maquinaFraca()); }
+
+function aplicarPerf(){
+  const on=leve();
+  if(on) document.documentElement.dataset.perf='lite';
+  else delete document.documentElement.dataset.perf;
+  if(on) pararBeams(); else if(S.mode==='present') ligarBeams();
+}
+
+function alternarPerf(){
+  S.perf = leve() ? 'full' : 'lite';
+  salvarUI({perf:S.perf});
+  aplicarPerf();
+  const b=document.querySelector('[data-act="perf"]');
+  if(b){ b.classList.toggle('on', leve()); b.title=leve()?'Modo leve ligado':'Modo leve desligado'; }
+  toast(leve()?'Modo leve ligado — vidro e animações desligados.':'Modo leve desligado — efeitos completos.');
+}
+
 function aplicarVars(){
   const r=document.documentElement.style;
   r.setProperty('--fs-tt', S.pres.fsTitulo+'px');
@@ -664,7 +745,7 @@ function abrirSug(input){
   if(!SUG.el){ SUG.el=document.createElement('div'); SUG.el.className='sug'; document.body.appendChild(SUG.el); }
   SUG.input=input; SUG.items=lista; SUG.i=-1;
   SUG.el.innerHTML = lista.length
-    ? lista.map((x,k)=>'<button type="button" class="sug-i" data-sugi="'+k+'">'+esc(x.v)+(x.s?'<span class="s">'+esc(x.s)+'</span>':'')+'</button>').join('')
+    ? lista.map((x,k)=>'<button type="button" class="sug-i" data-sugi="'+k+'"><span class="v">'+esc(x.v)+'</span>'+(x.s?'<span class="s">'+esc(x.s)+'</span>':'')+'</button>').join('')
     : '<div class="sug-empty">Nada com esse texto. O que você digitar entra como novo.</div>';
   posicionarSug();
 }
@@ -674,8 +755,9 @@ function posicionarSug(){
   const r=SUG.input.getBoundingClientRect();
   const abaixo=window.innerHeight-r.bottom, acima=r.top;
   const paraCima = abaixo<200 && acima>abaixo;
-  SUG.el.style.left=Math.max(8,Math.min(r.left, window.innerWidth-Math.max(r.width,200)-8))+'px';
-  SUG.el.style.width=Math.max(r.width,200)+'px';
+  const larg=Math.max(r.width,260);
+  SUG.el.style.left=Math.max(8,Math.min(r.left, window.innerWidth-larg-8))+'px';
+  SUG.el.style.width=larg+'px';
   SUG.el.style.maxHeight=Math.max(120,Math.min(280,(paraCima?acima:abaixo)-18))+'px';
   if(paraCima){ SUG.el.style.top=''; SUG.el.style.bottom=(window.innerHeight-r.top+6)+'px'; }
   else { SUG.el.style.bottom=''; SUG.el.style.top=(r.bottom+6)+'px'; }
@@ -735,6 +817,7 @@ function viewConfig(){
       </div>
       <div style="flex:1"></div>
       <div class="syncpill" id="syncpill" data-act="sync" style="cursor:pointer" title="${esc(s.detail||'')}"><span class="dot" style="background:${s.color}"></span>${esc(s.label)}</div>
+      <button class="iconbtn${leve()?' on':''}" data-act="perf" title="${leve()?'Modo leve ligado — clique para efeitos completos':'Modo leve desligado — clique para aliviar a máquina'}">⚡</button>
       <button class="iconbtn" data-act="tema" title="Tema">${S.theme==='dark'?'☀':'☾'}</button>
       <div style="position:relative">
         <button class="iconbtn" data-act="menu" title="Configurações">⚙</button>
@@ -999,6 +1082,15 @@ function painelAparencia(){
           : 'Nome e definição seguem visíveis, em escala reduzida e com a definição limitada a duas linhas.'}</div>
       </div>
       <div style="display:flex;flex-direction:column;gap:13px">
+        <div class="sec-lbl" style="color:var(--fg2)">Desempenho</div>
+        <div style="display:flex;gap:8px">
+          <button class="segbtn${S.perf==='auto'?' on':''}" data-act="perfModo" data-v="auto">Automático</button>
+          <button class="segbtn${S.perf==='lite'?' on':''}" data-act="perfModo" data-v="lite">Leve</button>
+          <button class="segbtn${S.perf==='full'?' on':''}" data-act="perfModo" data-v="full">Completo</button>
+        </div>
+        <div style="font-size:11.5px;line-height:1.55;color:var(--muted);text-wrap:pretty">O modo leve troca o efeito de vidro por cor sólida e desliga os feixes da abertura e as animações de enfeite. É o que usar para apresentar em máquina fraca ou compartilhando a tela no Meet. No automático ele liga sozinho quando o navegador informa pouca memória ou poucos núcleos.<br><b style="color:var(--fg2)">Agora: ${leve()?'leve':'completo'}${S.perf==='auto'?' (decidido pela máquina)':''}.</b> Durante a apresentação, a tecla <b style="color:var(--fg2)">L</b> ou o ⚡ no menu lateral alternam.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:13px">
         <div class="sec-lbl" style="color:var(--fg2)">Ícone da guia do navegador</div>
         <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
           <div style="width:44px;height:44px;flex:none;border-radius:12px;border:1px solid var(--gline2);background:var(--panel);display:flex;align-items:center;justify-content:center;overflow:hidden">
@@ -1072,8 +1164,8 @@ function painelPresent(dim){
       </div>
       ${hover?'':`<div style="margin-top:7px;font-size:var(--fs-dd);line-height:1.5;color:var(--muted);max-width:1000px;text-wrap:pretty;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${esc(dim.descricao)}</div>`}
     </div>
-    <div data-scrollable="1" style="position:relative;flex:1;min-height:0;overflow:auto;padding:20px 34px 28px">
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px;align-items:start">
+    <div class="carro" style="position:relative;flex:1;min-height:0">
+      <div class="carro-track" data-track="1" style="height:100%;overflow-x:auto;overflow-y:auto;scroll-behavior:smooth;padding:20px 34px 28px;display:grid;grid-auto-flow:column;grid-auto-columns:max(300px, calc((100% - 28px) / 3));grid-template-rows:repeat(${n>3?2:1},min-content);gap:18px 14px;align-items:start;align-content:start">
         ${dim.topicos.map(t=>`<div class="ptwrap">
           <div class="pttabs">
             <span class="pttab norm mono">${esc(t.normativo)}</span>
@@ -1089,8 +1181,39 @@ function painelPresent(dim){
         </div>`).join('')}
         ${n===0?'<div class="emptybox">Nenhum tópico mapeado nesta dimensão.</div>':''}
       </div>
+      <button class="carro-nav prev" data-act="carro" data-dir="-1" aria-label="Tópicos anteriores">‹</button>
+      <button class="carro-nav next" data-act="carro" data-dir="1" aria-label="Próximos tópicos">›</button>
     </div>`;
 }
+
+/* carrossel dos tópicos: setas só aparecem quando há conteúdo além da borda */
+function pintarCarro(){
+  document.querySelectorAll('.carro').forEach(c=>{
+    const tr=c.querySelector('[data-track]'); if(!tr) return;
+    const sobra=tr.scrollWidth-tr.clientWidth-1;
+    const p=c.querySelector('.carro-nav.prev'), nx=c.querySelector('.carro-nav.next');
+    if(p) p.classList.toggle('on', sobra>0 && tr.scrollLeft>4);
+    if(nx) nx.classList.toggle('on', sobra>0 && tr.scrollLeft<sobra-4);
+  });
+}
+
+/* a rolagem dispara dezenas de eventos por segundo; um quadro basta */
+let carroPend=false;
+function carroAgendado(){
+  if(carroPend) return;
+  carroPend=true;
+  requestAnimationFrame(()=>{ carroPend=false; pintarCarro(); });
+}
+
+function ligarCarro(){
+  document.querySelectorAll('.carro [data-track]').forEach(tr=>{
+    if(tr.dataset.bound) return;
+    tr.dataset.bound='1';
+    tr.addEventListener('scroll',carroAgendado,{passive:true});
+  });
+  pintarCarro();
+}
+window.addEventListener('resize',carroAgendado);
 
 /* troca de dimensão na apresentação: atualiza só a lista e o balão */
 function pintarDimensao(){
@@ -1100,7 +1223,7 @@ function pintarDimensao(){
     el.classList.toggle('on', el.dataset.dim===dim.id);
   });
   const p=$('#ppanel');
-  if(p){ p.style.setProperty('--a', ACCENTS[i%12]); p.innerHTML=painelPresent(dim); }
+  if(p){ p.style.setProperty('--a', ACCENTS[i%12]); p.innerHTML=painelPresent(dim); ligarCarro(); }
   const pos=$('#dimpos'); if(pos) pos.textContent=(i+1)+' / 12 · use ← →';
 }
 
@@ -1120,12 +1243,13 @@ function pararBeams(){
 
 function ligarBeams(){
   const cv=document.getElementById('beamsCanvas');
-  if(!cv){ pararBeams(); return; }
+  // só desenha quando a abertura está na tela, e nunca no modo leve
+  if(!cv || leve() || S.section!==0){ pararBeams(); return; }
   if(beamsAnim && beamsAnim.cv===cv) return;
   pararBeams();
-  const ctx=cv.getContext('2d'); if(!ctx) return;
+  const ctx=cv.getContext('2d',{alpha:true}); if(!ctx) return;
   const forca = S.theme==='dark' ? 1 : .5;
-  const st={cv:cv, raf:0, feixes:[], w:0, h:0, onResize:null};
+  const st={cv:cv, raf:0, feixes:[], w:0, h:0, onResize:null, ultimo:0};
 
   function criar(w,h){
     return {x:Math.random()*w*1.5-w*.25, y:Math.random()*h*1.5-h*.25,
@@ -1143,11 +1267,13 @@ function ligarBeams(){
     b.op=.16+Math.random()*.12;
   }
   function tamanho(){
-    const dpr=window.devicePixelRatio||1, r=cv.getBoundingClientRect();
+    // o canvas já leva blur(15px) no CSS, então meia resolução não aparece
+    // e corta o número de pixels pintados por quadro em quatro
+    const r=cv.getBoundingClientRect(), esc=.5;
     st.w=Math.max(1,r.width); st.h=Math.max(1,r.height);
-    cv.width=st.w*dpr; cv.height=st.h*dpr;
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-    st.feixes=Array.from({length:30},()=>criar(st.w,st.h));
+    cv.width=Math.max(1,Math.round(st.w*esc)); cv.height=Math.max(1,Math.round(st.h*esc));
+    ctx.setTransform(esc,0,0,esc,0,0);
+    st.feixes=Array.from({length:14},()=>criar(st.w,st.h));
   }
   function desenhar(b){
     ctx.save();
@@ -1165,19 +1291,25 @@ function ligarBeams(){
     ctx.fillRect(-b.largura/2,0,b.largura,b.comp);
     ctx.restore();
   }
-  function passo(){
+  function passo(t){
+    st.raf=requestAnimationFrame(passo);
+    // 30 quadros por segundo bastam para um movimento tão lento, e é metade
+    // do trabalho. O ctx.filter='blur(35px)' saiu: borrão em canvas é feito
+    // na CPU e refeito a cada quadro — o blur(15px) do CSS é do compositor
+    // e custa uma vez só.
+    if(t-st.ultimo < 33) return;
+    st.ultimo=t;
     ctx.clearRect(0,0,st.w,st.h);
-    ctx.filter='blur(35px)';
     const total=st.feixes.length;
-    st.feixes.forEach((b,i)=>{
+    for(let i=0;i<total;i++){
+      const b=st.feixes[i];
       b.y-=b.vel; b.pulso+=b.vPulso;
       if(b.y+b.comp < -100) reiniciar(b,i,total);
       desenhar(b);
-    });
-    st.raf=requestAnimationFrame(passo);
+    }
   }
 
-  st.onResize=tamanho;
+  st.onResize=()=>{ clearTimeout(st.tr); st.tr=setTimeout(tamanho,180); };
   window.addEventListener('resize', st.onResize);
   tamanho();
   beamsAnim=st;
@@ -1203,6 +1335,7 @@ function viewPresent(){
       <div class="dock${S.dockOpen?' on':''}">
         ${secs.map((x,k)=>`<button class="dockbtn${S.section===k?' on':''}" data-act="ir" data-sec="${k}" title="${x[1]}"><span class="mono">${x[0]}</span></button>`).join('')}
         <span style="width:16px;height:1px;background:var(--gline)"></span>
+        <button class="dockbtn${leve()?' on':''}" data-act="perf" title="${leve()?'Modo leve ligado':'Modo leve desligado'}">⚡</button>
         <button class="dockbtn" data-act="sair" title="Encerrar apresentação">✕</button>
       </div>
     </div>
@@ -1256,7 +1389,7 @@ function viewPresent(){
           <div style="position:absolute;width:min(78vh,860px);height:min(78vh,860px);border-radius:50%;border:1px solid color-mix(in oklab, #1626FF 26%, transparent);animation:kfRing 7s ease-out infinite"></div>
           <div style="position:absolute;width:min(78vh,860px);height:min(78vh,860px);border-radius:50%;border:1px solid color-mix(in oklab, #1626FF 26%, transparent);animation:kfRing 7s ease-out 2.4s infinite"></div>
           <div style="position:absolute;width:min(78vh,860px);height:min(78vh,860px);border-radius:50%;border:1px solid color-mix(in oklab, #1626FF 26%, transparent);animation:kfRing 7s ease-out 4.8s infinite"></div>
-          <div style="position:absolute;width:min(62vh,680px);height:min(62vh,680px);border-radius:50%;background:radial-gradient(circle, color-mix(in oklab, #1626FF 24%, transparent), transparent 70%);filter:blur(46px);animation:kfHalo 16s ease-in-out infinite"></div>
+          <div class="fimglow" style="position:absolute;width:min(62vh,680px);height:min(62vh,680px);border-radius:50%;background:radial-gradient(circle, color-mix(in oklab, #1626FF 24%, transparent), transparent 70%);filter:blur(46px);animation:kfHalo 16s ease-in-out infinite"></div>
         </div>
         <div style="position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;max-width:900px">
           ${S.logo&&S.logoVisible?`<div style="margin-bottom:clamp(18px,3vh,34px);animation:kfRise .9s cubic-bezier(.16,.9,.24,1) both">${logoHtml(S.logoSize)}</div>`:''}
@@ -1374,6 +1507,52 @@ function viewConfirm(){
 /* ------------------------------------------------------------------ */
 /* Render principal                                                    */
 /* ------------------------------------------------------------------ */
+/* morph: atualiza o DOM no lugar em vez de recriar tudo (evita o “pisca”) */
+function sincAtributos(de,para){
+  const at=para.attributes;
+  for(let i=at.length-1;i>=0;i--){
+    const a=at[i];
+    if(de.getAttribute(a.name)!==a.value) de.setAttribute(a.name,a.value);
+  }
+  const bt=de.attributes;
+  for(let i=bt.length-1;i>=0;i--){
+    const a=bt[i];
+    if(!para.hasAttribute(a.name)) de.removeAttribute(a.name);
+  }
+  const tag=de.tagName;
+  if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT'){
+    if(document.activeElement!==de){
+      const novo = tag==='TEXTAREA' ? (para.textContent||'') : (para.value!==undefined?para.value:'');
+      if(de.value!==novo) de.value=novo;
+      if(tag==='INPUT' && de.type==='checkbox') de.checked=para.checked;
+    }
+  }
+}
+
+function chave(n){
+  if(n.nodeType!==1) return null;
+  return n.getAttribute('data-fkey')||n.id||null;
+}
+
+function morph(de,para){
+  const antigos=Array.from(de.childNodes), novos=Array.from(para.childNodes);
+  const max=Math.max(antigos.length,novos.length);
+  for(let i=0;i<max;i++){
+    const a=antigos[i], b=novos[i];
+    if(!b){ if(a) de.removeChild(a); continue; }
+    if(!a){ de.appendChild(b.cloneNode(true)); continue; }
+    if(a.nodeType!==b.nodeType || (a.nodeType===1 && a.tagName!==b.tagName) || chave(a)!==chave(b)){
+      de.replaceChild(b.cloneNode(true), a);
+      continue;
+    }
+    if(a.nodeType===3){ if(a.nodeValue!==b.nodeValue) a.nodeValue=b.nodeValue; continue; }
+    if(a.nodeType!==1) continue;
+    if(a.tagName==='CANVAS'){ sincAtributos(a,b); continue; }
+    sincAtributos(a,b);
+    morph(a,b);
+  }
+}
+
 function render(){
   const foco = document.activeElement;
   const fkey = foco && foco.dataset ? foco.dataset.fkey : null;
@@ -1383,7 +1562,7 @@ function render(){
   const antigo = $('#scroller');
   const topo = antigo ? antigo.scrollTop : 0;
 
-  $('#app').innerHTML =
+  const html =
     '<div class="wrap"><div class="halo halo1"></div><div class="halo halo2"></div>' +
     (S.mode==='present' ? viewPresent() : viewConfig()) +
     viewModal() +
@@ -1391,7 +1570,15 @@ function render(){
     datalists() +
     '</div>';
 
-  if(fkey){
+  const app=$('#app');
+  if(!app.firstElementChild){ app.innerHTML=html; }
+  else {
+    const tmp=document.createElement('div');
+    tmp.innerHTML=html;
+    morph(app,tmp);
+  }
+
+  if(fkey && (!document.activeElement || !document.activeElement.dataset || document.activeElement.dataset.fkey!==fkey)){
     const el = document.querySelector('[data-fkey="'+fkey+'"]');
     if(el){ el.focus(); try{ if(selStart!==null) el.setSelectionRange(selStart,selEnd); }catch(e){} }
   }
@@ -1400,6 +1587,7 @@ function render(){
     if(novo && topo) novo.scrollTop = topo;
     ligarScroller();
     ligarBeams();
+    ligarCarro();
     animarEntrada = false;
   } else pararBeams();
   ajustarHalos();
@@ -1420,9 +1608,13 @@ function pintarSecao(){
     const sec=secoes[i];
     if(i===S.section){ sec.style.animation='none'; void sec.offsetWidth; sec.style.animation=animSecao(); }
     else sec.style.animation='none';
+    // seção fora da tela para de animar: anéis e pulsos do encerramento não
+    // podem consumir quadros enquanto ninguém os vê
+    if(i===S.section) sec.removeAttribute('data-off'); else sec.setAttribute('data-off','1');
   }
   document.querySelectorAll('[data-act="ir"]').forEach((b,i)=>b.classList.toggle('on', i===S.section));
   ajustarHalos();
+  ligarBeams();   // só desenha na abertura
 }
 
 /* ------------------------------------------------------------------ */
@@ -1903,6 +2095,18 @@ document.addEventListener('click',(ev)=>{
       salvarUI({pres:S.pres}); aplicarVars(); render();
       toast('Aparência restaurada ao padrão.');
       break;
+    case 'carro': {
+      const c=alvo.closest('.carro'), tr=c&&c.querySelector('[data-track]');
+      if(tr){
+        const col=tr.querySelector('.ptwrap');
+        const passo = col ? (col.getBoundingClientRect().width+14)*3 : tr.clientWidth;
+        tr.scrollBy({left:parseInt(alvo.dataset.dir,10)*passo, behavior:'smooth'});
+        setTimeout(pintarCarro,420);
+      }
+      break;
+    }
+    case 'perf': alternarPerf(); break;
+    case 'perfModo': S.perf=alvo.dataset.v; salvarUI({perf:S.perf}); aplicarPerf(); render(); break;
     case 'sync': abrirSync(); break;
     case 'dimHeader': S.pres.dimHeader=alvo.dataset.v; salvarUI({pres:S.pres}); render(); break;
     case 'faviconUp': enviarFavicon(); break;
@@ -2043,21 +2247,24 @@ document.addEventListener('input',(ev)=>{
 });
 
 /* selects */
+/* campos de texto livre que alimentam o catálogo */
+const CAMPOS_CAT=['top.normativo','own.nome','own.setor'];
+
 document.addEventListener('change',(ev)=>{
   const el=ev.target;
+  /* o valor digitado só entra no catálogo aqui, com a digitação já concluída */
+  if(el.dataset && el.dataset.field && CAMPOS_CAT.indexOf(el.dataset.field)>=0){
+    consolidarCatalogo();
+    salvarLocal();
+    clearTimeout(tSave); tSave=setTimeout(()=>gravarArquivo(true),400);
+    return;
+  }
   /* catálogo: grava ao sair do campo, porque o nome atual é a chave da edição */
   if(el.dataset && el.dataset.catfield){
     const chave=el.dataset.key, v=el.value;
     if(el.dataset.catfield==='ownerNome') catRenomearOwner(chave, v);
     else if(el.dataset.catfield==='ownerSetor') catSetorOwner(chave, v);
     else if(el.dataset.catfield==='normativo') catRenomearNorm(chave, v);
-    return;
-  }
-  /* normativo e owner do tópico só entram no catálogo quando o campo é
-     concluído — durante a digitação seriam gravados pedaço por pedaço */
-  if(el.dataset && ['top.normativo','own.nome','own.setor'].indexOf(el.dataset.field)>=0){
-    registrarCatalogo();
-    salvarLocal();
     return;
   }
   if(el.dataset && el.dataset.act==='mover'){
@@ -2100,6 +2307,7 @@ document.addEventListener('keydown',(e)=>{
     return;
   }
   if(S.mode!=='present' || S.modal || S.confirmar) return;
+  if(e.key==='l'||e.key==='L'){ e.preventDefault(); alternarPerf(); return; }
   if(e.key==='ArrowDown'||e.key==='PageDown'||e.key===' '){ e.preventDefault(); irSecao(S.section+1); }
   if(e.key==='ArrowUp'||e.key==='PageUp'){ e.preventDefault(); irSecao(S.section-1); }
   if((e.key==='ArrowRight'||e.key==='ArrowLeft') && S.section===1){
@@ -2136,8 +2344,10 @@ async function iniciar(){
   S.logoVisible = ui.logoVisible!==false;
   S.logoSize = ui.logoSize||34;
   S.favicon = ui.favicon||null;
+  S.perf = ui.perf||'auto';
   if(ui.pres && typeof ui.pres==='object') Object.assign(S.pres, ui.pres);
   aplicarVars();
+  aplicarPerf();
   aplicarFavicon();
 
   try{ S.history=JSON.parse(localStorage.getItem(LS_HIST)||'[]'); }catch(e){}
@@ -2161,8 +2371,6 @@ async function iniciar(){
     S.lastSync=ui.lastSync||'restaurado do navegador';
   }
   if(!dimDe(S.selected)) S.selected=S.data.dimensoes[0].id;
-  registrarCatalogo();
-  if(!ui.catLimpo){ limparFragmentos(); salvarLocal(); salvarUI({catLimpo:true}); }
 
   render();
   restaurarHandle();

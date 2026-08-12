@@ -1,6 +1,6 @@
 {
   "versao": 3,
-  "atualizadoEm": "2026-08-10T23:56:49.359Z",
+  "atualizadoEm": "2026-08-11T00:09:26.130Z",
   "meta": {
     "titulo": "Kickoff — Qualidade da Informação nas 12 Dimensões",
     "descricao": "Alinhamento inicial do mapa de tópicos por dimensão: o que já está consolidado, qual normativo endereça cada ponto e com quem precisamos conversar. Os dados abaixo são fictícios e servem de estrutura para o preenchimento real.",
@@ -8,33 +8,17 @@
     "data": "12 de agosto de 2026",
     "fimTitulo": "Obrigada pela atenção",
     "fimMensagem": "A partir daqui o trabalho é de cada owner com a sua dimensão. Dúvidas, ajustes e novos tópicos podem ser trazidos a qualquer momento.",
-    "tagModelagem": "Modelagem"
+    "tagModelagem": "Modelagem teste"
   },
   "catalogo": {
     "owners": [
       {
-        "nome": "A. Ribeiro",
-        "setor": "Atendimento"
+        "nome": "Gabrielle Soares",
+        "setor": "Engenharia de  Dados"
       },
       {
-        "nome": "C. Menezes",
-        "setor": "Comunicação"
-      },
-      {
-        "nome": "D. Nogueira",
-        "setor": "Segurança da Informação"
-      },
-      {
-        "nome": "J. Siqueira",
-        "setor": "TI · Dados"
-      },
-      {
-        "nome": "L. Barreto",
-        "setor": "Planejamento"
-      },
-      {
-        "nome": "M. Fontes",
-        "setor": "TI · Dados"
+        "nome": "Gabrielle Soares 2",
+        "setor": "Governança de dados"
       },
       {
         "nome": "P. Andrade",
@@ -46,17 +30,11 @@
       }
     ],
     "normativos": [
-      "IN 07/2026",
-      "NORM-014/2025",
-      "NORM-021/2025",
-      "NORM-030/2026",
-      "POL-CONT-02",
-      "POL-DAD-03",
-      "POL-DAD-05",
-      "POL-SEG-01",
-      "POL-SEG-04",
-      "a ddsad",
-      "asdasd"
+      "MP-0001",
+      "POL-0188",
+      "Práticas de Mercado",
+      "outro teste",
+      "um teste para colocar um njormativo novo"
     ]
   },
   "dimensoes": [
@@ -69,12 +47,22 @@
         {
           "id": "d1-t1786134694596",
           "titulo": "Lorem",
-          "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.  ",
-          "normativo": "a ddsad",
+          "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
+          "normativo": "Práticas de Mercado",
           "owners": [
             {
-              "nome": "D. Nogueira",
-              "setor": "Segurança da Informação",
+              "nome": "Gabrielle Soares",
+              "setor": "Engenharia de  Dados",
+              "destaque": false
+            },
+            {
+              "nome": "Gabrielle Soares 2",
+              "setor": "Governança de dados",
+              "destaque": true
+            },
+            {
+              "nome": "P. Andrade",
+              "setor": "Riscos",
               "destaque": false
             }
           ],
@@ -83,13 +71,18 @@
         {
           "id": "d1-t1786400977309",
           "titulo": "Lorem (cópia)",
-          "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Suspendisse potenti. Integer vitae justo eget magna fermentum iaculis eu non diam. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus.\n",
-          "normativo": "",
+          "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+          "normativo": "MP-0001",
           "owners": [
             {
-              "nome": "D. Nogueira",
-              "setor": "Segurança da Informação",
+              "nome": "Gabrielle Soares",
+              "setor": "Engenharia de  Dados",
               "destaque": false
+            },
+            {
+              "nome": "P. Andrade",
+              "setor": "Riscos",
+              "destaque": true
             }
           ],
           "modelagem": false
@@ -97,44 +90,50 @@
         {
           "id": "d1-t1786400976424",
           "titulo": "Lorem (cópia)",
-          "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Suspendisse potenti. Integer vitae justo eget magna fermentum iaculis eu non diam. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus.\n",
-          "normativo": "a ddsad",
+          "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
+          "normativo": "POL-0188",
           "owners": [
             {
-              "nome": "D. Nogueira",
-              "setor": "Segurança da Informação",
+              "nome": "Gabrielle Soares 2",
+              "setor": "Governança de dados",
+              "destaque": true
+            },
+            {
+              "nome": "P. Andrade",
+              "setor": "Riscos",
+              "destaque": false
+            },
+            {
+              "nome": "Gabrielle Soares",
+              "setor": "Engenharia de  Dados",
               "destaque": false
             }
           ],
-          "modelagem": false
+          "modelagem": true
         },
         {
           "id": "d1-t1786134710478",
           "titulo": "Lorem 2",
           "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n",
-          "normativo": "—",
+          "normativo": "MP-0001",
           "owners": [
             {
               "nome": "a definir",
-              "setor": "a definir",
-              "destaque": false
+              "setor": "a definir"
             }
-          ],
-          "modelagem": false
+          ]
         },
         {
           "id": "d1-t1786400966655",
           "titulo": "Lorem 3 ",
           "descricao": " Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.\n",
-          "normativo": "—",
+          "normativo": "POL-0188",
           "owners": [
             {
               "nome": "a definir",
-              "setor": "a definir",
-              "destaque": false
+              "setor": "a definir"
             }
-          ],
-          "modelagem": false
+          ]
         }
       ]
     },
@@ -148,29 +147,25 @@
           "id": "d2-t1",
           "titulo": "Régua de conferência dos indicadores",
           "descricao": "Definir amostragem e tolerância aceitável na conferência mensal dos números divulgados.",
-          "normativo": "NORM-021/2025",
+          "normativo": "—",
           "owners": [
             {
               "nome": "R. Tavares",
-              "setor": "Controladoria",
-              "destaque": false
+              "setor": "Controladoria"
             }
-          ],
-          "modelagem": false
+          ]
         },
         {
           "id": "d2-t2",
           "titulo": "Documentação das metodologias de cálculo",
           "descricao": "Registrar fórmula, fonte e premissas de cada indicador em ficha técnica versionada.",
-          "normativo": "IN 07/2026",
+          "normativo": "—",
           "owners": [
             {
-              "nome": "L. Barreto",
-              "setor": "Planejamento",
-              "destaque": false
+              "nome": "Gabrielle Soares 2",
+              "setor": "Governança de dados"
             }
-          ],
-          "modelagem": false
+          ]
         }
       ]
     },
@@ -184,29 +179,25 @@
           "id": "d3-t1",
           "titulo": "Modelo de resposta a demandas não periódicas",
           "descricao": "Template e fluxo para atender pedidos fora do calendário regulatório em até 5 dias úteis.",
-          "normativo": "NORM-014/2025",
+          "normativo": "—",
           "owners": [
             {
               "nome": "P. Andrade",
-              "setor": "Riscos",
-              "destaque": false
+              "setor": "Riscos"
             }
-          ],
-          "modelagem": false
+          ]
         },
         {
           "id": "d3-t2",
           "titulo": "Plano de contingência de reporte em crise",
           "descricao": "Como manter o reporte quando houver indisponibilidade de sistema ou evento adverso.",
-          "normativo": "POL-CONT-02",
+          "normativo": "—",
           "owners": [
             {
-              "nome": "M. Fontes",
-              "setor": "TI · Dados",
-              "destaque": false
+              "nome": "Gabrielle Soares",
+              "setor": "Engenharia de  Dados"
             }
-          ],
-          "modelagem": false
+          ]
         }
       ]
     },
@@ -220,29 +211,20 @@
           "id": "d4-t1",
           "titulo": "Guia de redação dos relatórios",
           "descricao": "Padronizar linguagem, glossário e limite de extensão dos textos entregues ao usuário final.",
-          "normativo": "POL-DAD-03",
-          "owners": [
-            {
-              "nome": "C. Menezes",
-              "setor": "Comunicação",
-              "destaque": false
-            }
-          ],
-          "modelagem": false
+          "normativo": "—",
+          "owners": []
         },
         {
           "id": "d4-t2",
           "titulo": "Revisão dos rótulos de tabelas e gráficos",
           "descricao": "Eliminar siglas internas e nomes de campo de sistema nas peças publicadas.",
-          "normativo": "IN 07/2026",
+          "normativo": "—",
           "owners": [
             {
-              "nome": "L. Barreto",
-              "setor": "Planejamento",
-              "destaque": false
+              "nome": "Gabrielle Soares 2",
+              "setor": "Governança de dados"
             }
-          ],
-          "modelagem": false
+          ]
         }
       ]
     },
@@ -256,29 +238,20 @@
           "id": "d5-t1",
           "titulo": "Série histórica mínima obrigatória",
           "descricao": "Garantir 24 meses comparáveis em todo indicador publicado, com nota de quebra de série.",
-          "normativo": "NORM-021/2025",
+          "normativo": "—",
           "owners": [
             {
               "nome": "R. Tavares",
-              "setor": "Controladoria",
-              "destaque": false
+              "setor": "Controladoria"
             }
-          ],
-          "modelagem": false
+          ]
         },
         {
           "id": "d5-t2",
           "titulo": "Chave única de segmentação",
           "descricao": "Unificar os cortes por região, produto e canal usados por áreas diferentes.",
-          "normativo": "POL-DAD-05",
-          "owners": [
-            {
-              "nome": "J. Siqueira",
-              "setor": "TI · Dados",
-              "destaque": false
-            }
-          ],
-          "modelagem": false
+          "normativo": "—",
+          "owners": []
         }
       ]
     },
@@ -292,29 +265,25 @@
           "id": "d6-t1",
           "titulo": "Inventário de campos obrigatórios por reporte",
           "descricao": "Mapear campo a campo o que é exigido e onde há preenchimento parcial hoje.",
-          "normativo": "NORM-030/2026",
+          "normativo": "—",
           "owners": [
             {
               "nome": "P. Andrade",
-              "setor": "Riscos",
-              "destaque": false
+              "setor": "Riscos"
             }
-          ],
-          "modelagem": false
+          ]
         },
         {
           "id": "d6-t2",
           "titulo": "Tratamento de lacunas e não respostas",
           "descricao": "Regra única para campo ausente: estimar, sinalizar ou bloquear a publicação.",
-          "normativo": "IN 07/2026",
+          "normativo": "—",
           "owners": [
             {
-              "nome": "L. Barreto",
-              "setor": "Planejamento",
-              "destaque": false
+              "nome": "Gabrielle Soares 2",
+              "setor": "Governança de dados"
             }
-          ],
-          "modelagem": false
+          ]
         }
       ]
     },
@@ -328,29 +297,20 @@
           "id": "d7-t1",
           "titulo": "Monitoramento de reprocessamentos",
           "descricao": "Acompanhar variação entre o dado inicial e o dado revisado, com limite de alerta.",
-          "normativo": "NORM-021/2025",
+          "normativo": "—",
           "owners": [
             {
               "nome": "R. Tavares",
-              "setor": "Controladoria",
-              "destaque": false
+              "setor": "Controladoria"
             }
-          ],
-          "modelagem": false
+          ]
         },
         {
           "id": "d7-t2",
           "titulo": "Critério de republicação",
           "descricao": "Quando uma correção exige nova divulgação e comunicação ao usuário.",
-          "normativo": "POL-DAD-03",
-          "owners": [
-            {
-              "nome": "A. Ribeiro",
-              "setor": "Atendimento",
-              "destaque": false
-            }
-          ],
-          "modelagem": false
+          "normativo": "—",
+          "owners": []
         }
       ]
     },
@@ -364,29 +324,20 @@
           "id": "d8-t1",
           "titulo": "Dicionário corporativo de dados",
           "descricao": "Definição única de cliente, produto e data-base entre os sistemas de origem.",
-          "normativo": "POL-DAD-05",
-          "owners": [
-            {
-              "nome": "J. Siqueira",
-              "setor": "TI · Dados",
-              "destaque": false
-            }
-          ],
-          "modelagem": false
+          "normativo": "—",
+          "owners": []
         },
         {
           "id": "d8-t2",
           "titulo": "Conciliação entre fontes",
           "descricao": "Rotina de batimento entre o data warehouse e os sistemas transacionais.",
-          "normativo": "NORM-030/2026",
+          "normativo": "—",
           "owners": [
             {
-              "nome": "M. Fontes",
-              "setor": "TI · Dados",
-              "destaque": false
+              "nome": "Gabrielle Soares",
+              "setor": "Engenharia de  Dados"
             }
-          ],
-          "modelagem": false
+          ]
         }
       ]
     },
@@ -400,29 +351,15 @@
           "id": "d9-t1",
           "titulo": "Controle de acesso e trilha de alteração",
           "descricao": "Quem pode alterar base e relatório, e como toda alteração fica registrada.",
-          "normativo": "POL-SEG-01",
-          "owners": [
-            {
-              "nome": "D. Nogueira",
-              "setor": "Segurança da Informação",
-              "destaque": false
-            }
-          ],
-          "modelagem": false
+          "normativo": "—",
+          "owners": []
         },
         {
           "id": "d9-t2",
           "titulo": "Assinatura e versionamento das entregas",
           "descricao": "Selar o arquivo publicado para detectar modificação posterior não autorizada.",
-          "normativo": "POL-SEG-04",
-          "owners": [
-            {
-              "nome": "D. Nogueira",
-              "setor": "Segurança da Informação",
-              "destaque": false
-            }
-          ],
-          "modelagem": false
+          "normativo": "—",
+          "owners": []
         }
       ]
     },
@@ -436,29 +373,20 @@
           "id": "d10-t1",
           "titulo": "Linhagem ponta a ponta dos indicadores",
           "descricao": "Do sistema de origem até o número publicado, com todas as transformações registradas.",
-          "normativo": "NORM-030/2026",
-          "owners": [
-            {
-              "nome": "J. Siqueira",
-              "setor": "TI · Dados",
-              "destaque": false
-            }
-          ],
-          "modelagem": false
+          "normativo": "—",
+          "owners": []
         },
         {
           "id": "d10-t2",
           "titulo": "Registro de responsáveis por etapa",
           "descricao": "Identificar quem gerou, revisou e aprovou cada entrega de informação.",
-          "normativo": "POL-DAD-05",
+          "normativo": "—",
           "owners": [
             {
               "nome": "P. Andrade",
-              "setor": "Riscos",
-              "destaque": false
+              "setor": "Riscos"
             }
-          ],
-          "modelagem": false
+          ]
         }
       ]
     },
@@ -472,29 +400,20 @@
           "id": "d11-t1",
           "titulo": "Revisão do portfólio de relatórios",
           "descricao": "Descontinuar entregas sem uso comprovado e reforçar as que apoiam decisão.",
-          "normativo": "IN 07/2026",
+          "normativo": "—",
           "owners": [
             {
-              "nome": "L. Barreto",
-              "setor": "Planejamento",
-              "destaque": false
+              "nome": "Gabrielle Soares 2",
+              "setor": "Governança de dados"
             }
-          ],
-          "modelagem": false
+          ]
         },
         {
           "id": "d11-t2",
           "titulo": "Pesquisa de utilidade com usuários",
           "descricao": "Ouvir áreas usuárias sobre o que falta e o que sobra nas informações recebidas.",
-          "normativo": "POL-DAD-03",
-          "owners": [
-            {
-              "nome": "C. Menezes",
-              "setor": "Comunicação",
-              "destaque": false
-            }
-          ],
-          "modelagem": false
+          "normativo": "—",
+          "owners": []
         }
       ]
     },
@@ -508,29 +427,25 @@
           "id": "d12-t1",
           "titulo": "Calendário oficial de divulgação",
           "descricao": "Prazos por entrega, com responsável e janela de fechamento acordada.",
-          "normativo": "NORM-014/2025",
+          "normativo": "—",
           "owners": [
             {
               "nome": "R. Tavares",
-              "setor": "Controladoria",
-              "destaque": false
+              "setor": "Controladoria"
             }
-          ],
-          "modelagem": false
+          ]
         },
         {
           "id": "d12-t2",
           "titulo": "Alerta de risco de atraso",
           "descricao": "Sinalização automática quando uma etapa passa do prazo intermediário.",
-          "normativo": "NORM-030/2026",
+          "normativo": "—",
           "owners": [
             {
-              "nome": "M. Fontes",
-              "setor": "TI · Dados",
-              "destaque": false
+              "nome": "Gabrielle Soares",
+              "setor": "Engenharia de  Dados"
             }
-          ],
-          "modelagem": false
+          ]
         }
       ]
     }
