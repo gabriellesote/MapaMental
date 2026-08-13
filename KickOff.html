@@ -137,6 +137,9 @@ textarea.inp{color:var(--fg2);line-height:1.65;resize:vertical}
 .ptcard.mdl{border-color:color-mix(in oklab,var(--mdl) 40%,var(--gline));border-left-color:var(--mdl);background:color-mix(in oklab,var(--mdl) 9%,var(--panel))}
 .ptwrap:hover .ptcard.mdl{background:color-mix(in oklab,var(--mdl) 14%,var(--panel2));border-color:var(--mdl)}
 .tag{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;border:1px solid var(--gline);font-size:11.5px;color:var(--fg2)}
+.ptcard .tag{max-width:100%;align-items:flex-start;border-radius:14px;padding:5px 12px;line-height:1.35;overflow-wrap:anywhere;word-break:break-word}
+.ptcard .tag>span[data-div]{flex:none;align-self:stretch;min-height:1.35em;width:1px;height:auto;background:var(--gline2)}
+.ptcard .tag em{min-width:0;overflow-wrap:anywhere}
 .tag em{color:var(--muted);font-style:normal}
 .tag.norm{background:color-mix(in oklab, var(--a) 16%, transparent);border-color:color-mix(in oklab, var(--a) 45%, var(--gline));font-size:10.5px;color:var(--a)}
 
@@ -154,7 +157,7 @@ textarea.inp{color:var(--fg2);line-height:1.65;resize:vertical}
 .toast{position:fixed;left:50%;bottom:32px;transform:translateX(-50%);z-index:90;padding:13px 22px;border-radius:999px;border:1px solid var(--gline2);background:var(--glass2);backdrop-filter:blur(20px);color:var(--fg);font-size:13px;box-shadow:var(--shadow);animation:kfIn .22s ease-out}
 
 /* ---------- destaques, tipografia configurável e dropdown próprio ---------- */
-:root{--fs-tt:16px;--fs-td:13px;--fs-tf:10.5px;--sc1:1;--sc3:1;--mdl:oklch(.72 .15 320);--own-hl:oklch(.76 .12 190)}
+:root{--fs-tt:18px;--fs-td:17.5px;--fs-tf:14px;--sc1:1;--sc3:1;--mdl:oklch(.72 .15 320);--own-hl:oklch(.76 .12 190)}
 :root[data-theme="light"]{--mdl:oklch(.5 .18 320);--own-hl:oklch(.48 .11 195)}
 .ptflags{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;margin-bottom:11px}
 .ptcard.mdl:hover{border-color:var(--mdl)}
@@ -188,18 +191,25 @@ textarea.inp{color:var(--fg2);line-height:1.65;resize:vertical}
 .segbtn:hover{color:var(--fg)}
 .segbtn.on{background:color-mix(in oklab,var(--brand) 78%,transparent);border-color:transparent;color:var(--brandfg);font-weight:600}
 
-.ptwrap{display:flex;flex-direction:column;min-width:0;position:relative;z-index:0;isolation:isolate;transition:transform .3s cubic-bezier(.2,.9,.25,1)}
+.ptwrap{display:flex;flex-direction:column;min-width:0;min-height:0;height:100%;position:relative;z-index:0;isolation:isolate;transition:transform .3s cubic-bezier(.2,.9,.25,1)}
 .ptwrap:hover{transform:translateY(-4px)}
-.pttabs{display:flex;flex-wrap:wrap;gap:6px;padding-left:16px;position:relative;z-index:0}
-.pttab{display:inline-flex;align-items:center;gap:6px;padding:5px 12px 10px;margin-bottom:-5px;border:1px solid color-mix(in oklab,var(--a) 40%,var(--gline));border-bottom:0;border-radius:12px 12px 0 0;font-size:var(--fs-tf);line-height:1;white-space:nowrap;transition:border-color .3s ease,background .3s ease}
+.pttabs{display:flex;flex-wrap:wrap;gap:6px;padding:0 10px 0 16px;position:relative;z-index:0;max-width:100%}
+.pttab{display:inline-flex;align-items:center;gap:6px;max-width:100%;min-width:0;padding:5px 12px 10px;margin-bottom:-5px;border:1px solid color-mix(in oklab,var(--a) 40%,var(--gline));border-bottom:0;border-radius:12px 12px 0 0;font-size:var(--fs-tf);line-height:1.25;white-space:normal;overflow-wrap:anywhere;word-break:break-word;text-align:left;transition:border-color .3s ease,background .3s ease}
 .pttab.norm{color:var(--a);background:color-mix(in oklab,var(--a) 17%,var(--panel))}
 .pttab.mdl{color:var(--mdl);border-color:color-mix(in oklab,var(--mdl) 42%,var(--gline));background:color-mix(in oklab,var(--mdl) 17%,var(--panel))}
 .ptwrap:hover .pttab.norm{border-color:color-mix(in oklab,var(--a) 62%,transparent)}
 .ptwrap:hover .pttab.mdl{border-color:color-mix(in oklab,var(--mdl) 62%,transparent)}
-.ptcard{position:relative;z-index:1;flex:none;display:flex;flex-direction:column;background:var(--panel);backdrop-filter:none}
+.ptcard{position:relative;z-index:1;flex:1;min-height:0;display:flex;flex-direction:column;background:var(--panel);backdrop-filter:none}
 .ptwrap:hover .ptcard{background:var(--panel2);border-color:var(--a)}
 
-.carro-track{scrollbar-width:none}
+.carro-track{scrollbar-width:none;grid-auto-columns:calc((100% - 36px) / 3)}
+.carro-track[data-rows="2"]{grid-template-rows:repeat(2,minmax(min-content,1fr))}
+.carro-track[data-rows="1"]{grid-template-rows:minmax(min-content,1fr)}
+@media (max-height:780px){.carro-track[data-rows="2"]{grid-template-rows:minmax(min-content,1fr)}}
+.ptcard{min-height:fit-content}
+.ptcard>.ptdesc{min-height:calc(3 * 1.55em)}
+@media (max-width:1600px){.carro-track{grid-auto-columns:calc((100% - 18px) / 2)}}
+@media (max-width:1080px){.carro-track{grid-auto-columns:100%}}
 .carro-track::-webkit-scrollbar{display:none}
 .carro-track>.ptwrap{scroll-snap-align:start}
 .carro-nav{position:absolute;top:50%;z-index:6;width:42px;height:42px;display:flex;align-items:center;justify-content:center;padding:0 0 3px;border-radius:50%;border:1px solid var(--gline2);background:color-mix(in oklab,var(--panel) 82%,transparent);backdrop-filter:blur(14px);color:var(--fg2);font-size:22px;line-height:1;cursor:pointer;box-shadow:0 10px 26px -14px rgba(0,0,0,.7);opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s,transform .25s cubic-bezier(.2,.9,.25,1),color .2s ease,border-color .2s ease}
@@ -251,6 +261,34 @@ textarea.inp{color:var(--fg2);line-height:1.65;resize:vertical}
 
 :root[data-perf="lite"] .dockhint,
 :root[data-perf="lite"] [style*="infinite"]{animation:none!important}
+
+/* nível 2 do modo leve: o que ainda custa quadro numa chamada de vídeo sai de cena.
+   blur e filter em qualquer elemento, gradiente de fundo do painel da dimensão,
+   transição de cor em massa e a entrada animada das seções. */
+:root[data-perf="lite"] *{filter:none!important;-webkit-filter:none!important;text-shadow:none!important}
+:root[data-perf="lite"] .halo{display:none!important}
+:root[data-perf="lite"] .dimpanel{background:var(--panel)!important}
+:root[data-perf="lite"] .dimpanel>.blob{display:none!important}
+:root[data-perf="lite"] .fimglow{display:none!important}
+:root[data-perf="lite"] .glass,
+:root[data-perf="lite"] .modal,
+:root[data-perf="lite"] .menu,
+:root[data-perf="lite"] .sug{background-image:none!important}
+:root[data-perf="lite"] .glass{background:var(--panel)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)!important}
+:root[data-perf="lite"] .modal,
+:root[data-perf="lite"] .menu,
+:root[data-perf="lite"] .sug{box-shadow:0 8px 20px -14px rgba(0,0,0,.7)!important}
+:root[data-perf="lite"] #scroller>section{animation:none!important}
+:root[data-perf="lite"] .ptwrap,
+:root[data-perf="lite"] .ptcard,
+:root[data-perf="lite"] .dimrow,
+:root[data-perf="lite"] .tcard,
+:root[data-perf="lite"] .cta,
+:root[data-perf="lite"] .ghostbtn,
+:root[data-perf="lite"] .lockbtn{transition:none!important}
+:root[data-perf="lite"] .ptwrap:hover,
+:root[data-perf="lite"] .dimrow:hover{transform:none!important}
+:root[data-theme="light"][data-perf="lite"] .glass{box-shadow:inset 0 1px 0 rgba(255,255,255,.9)!important}
 /* transform em hover é composição pura e continua barato; o que sai é a
    sombra longa por baixo dele */
 :root[data-perf="lite"] .tag.owhl{box-shadow:inset 0 0 0 1px color-mix(in oklab,var(--own-hl) 30%,transparent)}
@@ -403,7 +441,7 @@ const ARQUIVO_PADRAO='kickoff.json';
 /* Estado                                                              */
 /* ------------------------------------------------------------------ */
 const TAG_MDL = 'Modelagem';
-const PRES_PADRAO = {fsTitulo:16, fsDesc:13, fsFlag:10.5, fsDimDesc:12.5, sc1:1, sc3:1, dimHeader:'compact'};
+const PRES_PADRAO = {fsTitulo:18, fsDesc:17.5, fsFlag:14, fsDimDesc:12.5, sc1:1, sc3:1, dimHeader:'compact'};
 
 const S = {
   data: defaultData(),
@@ -1130,8 +1168,8 @@ function painelAparencia(){
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:28px">
       <div style="display:flex;flex-direction:column;gap:15px">
         <div class="sec-lbl" style="color:var(--fg2)">Cards de tópico</div>
-        ${sliderPres('fsTitulo','Título',13,26,.5,'px')}
-        ${sliderPres('fsDesc','Descrição',10,20,.5,'px')}
+        ${sliderPres('fsTitulo','Título',13,28,.5,'px')}
+        ${sliderPres('fsDesc','Descrição',10,24,.5,'px')}
         ${sliderPres('fsFlag','Flags (normativo e owners)',9,16,.5,'px')}
       </div>
       <div style="display:flex;flex-direction:column;gap:15px">
@@ -1157,7 +1195,7 @@ function painelAparencia(){
           <button class="segbtn${S.perf==='lite'?' on':''}" data-act="perfModo" data-v="lite">Leve</button>
           <button class="segbtn${S.perf==='full'?' on':''}" data-act="perfModo" data-v="full">Completo</button>
         </div>
-        <div style="font-size:11.5px;line-height:1.55;color:var(--muted);text-wrap:pretty">O modo leve troca o efeito de vidro por cor sólida e desliga os feixes da abertura e as animações de enfeite. É o que usar para apresentar em máquina fraca ou compartilhando a tela no Meet. No automático ele liga sozinho quando o navegador informa pouca memória ou poucos núcleos.<br><b style="color:var(--fg2)">Agora: ${leve()?'leve':'completo'}${S.perf==='auto'?' (decidido pela máquina)':''}.</b> Durante a apresentação, a tecla <b style="color:var(--fg2)">L</b> ou o ⚡ no menu lateral alternam.</div>
+        <div style="font-size:11.5px;line-height:1.55;color:var(--muted);text-wrap:pretty">O modo leve começa ligado. Ele troca o efeito de vidro por cor sólida, remove blur, halos e sombras longas e desliga os feixes da abertura, as animações de enfeite e a entrada animada das seções. É o que usar para apresentar em máquina fraca ou compartilhando a tela no Meet. No automático ele liga sozinho quando o navegador informa pouca memória ou poucos núcleos.<br><b style="color:var(--fg2)">Agora: ${leve()?'leve':'completo'}${S.perf==='auto'?' (decidido pela máquina)':''}.</b> Durante a apresentação, a tecla <b style="color:var(--fg2)">L</b> ou o ⚡ no menu lateral alternam.</div>
       </div>
       <div style="display:flex;flex-direction:column;gap:13px">
         <div class="sec-lbl" style="color:var(--fg2)">Ícone da guia do navegador</div>
@@ -1215,6 +1253,12 @@ function anim(i){
 }
 
 /* conteúdo interno do balão da dimensão — trocado sozinho, sem recriar o balão */
+/* código de normativo comprido: encolhe suavemente até 11px em vez de estourar a aba */
+function fsNorm(txt){
+  const base=(S.pres&&S.pres.fsFlag)||14, n=String(txt||'').length;
+  if(n<=16) return base;
+  return Math.max(11, Math.round(base*16/n*10)/10);
+}
 function painelPresent(dim){
   const n=dim.topicos.length;
   const hover = S.pres.dimHeader==='hover';
@@ -1234,17 +1278,17 @@ function painelPresent(dim){
       ${hover?'':`<div style="margin-top:7px;font-size:var(--fs-dd);line-height:1.5;color:var(--muted);max-width:1000px;text-wrap:pretty;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${esc(dim.descricao)}</div>`}
     </div>
     <div class="carro" style="position:relative;flex:1;min-height:0">
-      <div class="carro-track" data-track="1" style="height:100%;overflow-x:auto;overflow-y:auto;scroll-behavior:smooth;padding:20px 34px 28px;display:grid;grid-auto-flow:column;grid-auto-columns:max(300px, calc((100% - 28px) / 3));grid-template-rows:repeat(${n>3?2:1},min-content);gap:18px 14px;align-items:start;align-content:start">
+      <div class="carro-track" data-track="1" data-rows="${n>3?2:1}" style="height:100%;overflow-x:auto;overflow-y:auto;scroll-behavior:smooth;padding:20px 34px 28px;display:grid;grid-auto-flow:column;gap:18px 18px;align-items:stretch;align-content:stretch">
         ${dim.topicos.map(t=>`<div class="ptwrap">
           <div class="pttabs">
-            <span class="pttab norm mono">${esc(t.normativo)}</span>
-            ${t.modelagem?`<span class="pttab mdl mono">◈ ${esc(tagMdl())}</span>`:''}
+            <span class="pttab norm mono" style="font-size:${fsNorm(t.normativo)}px" title="${esc(t.normativo)}">${esc(t.normativo)}</span>
+            ${t.modelagem?`<span class="pttab mdl mono" title="${esc(tagMdl())}">◈ ${esc(tagMdl())}</span>`:''}
           </div>
           <div class="ptcard${t.modelagem?' mdl':''}">
             <div style="font-size:var(--fs-tt);font-weight:600;letter-spacing:-.02em;line-height:1.3;margin-bottom:9px;text-wrap:pretty">${esc(t.titulo)}</div>
-            <div style="font-size:var(--fs-td);line-height:1.62;color:var(--fg2);text-wrap:pretty">${esc(t.descricao)}</div>
-            <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:15px">
-              ${(t.owners||[]).map(o=>`<span class="tag${o.destaque?' owhl':''}" style="gap:8px;font-size:var(--fs-tf)">${esc(o.nome||'a definir')}<span style="width:1px;height:11px;background:var(--gline2)"></span><em>${esc(o.setor||'a definir')}</em></span>`).join('')}
+            <div class="ptdesc" style="flex:1;min-height:0;overflow:auto;font-size:var(--fs-td);line-height:1.55;color:var(--fg2);text-wrap:pretty">${esc(t.descricao)}</div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:15px;flex:none">
+              ${(t.owners||[]).map(o=>`<span class="tag${o.destaque?' owhl':''}" style="gap:8px;font-size:var(--fs-tf)"><span style="min-width:0;overflow-wrap:anywhere">${esc(o.nome||'a definir')}</span><span data-div="1"></span><em>${esc(o.setor||'a definir')}</em></span>`).join('')}
             </div>
           </div>
         </div>`).join('')}
@@ -1435,7 +1479,7 @@ function viewPresent(){
         </div>
       </section>
 
-      <section style="height:100vh;display:flex;flex-direction:column;padding:clamp(36px,5vh,64px) clamp(40px,7vw,120px) clamp(32px,5vh,56px);overflow:hidden;user-select:none;animation:${anim(1)}">
+      <section style="height:100vh;display:flex;flex-direction:column;padding:clamp(28px,4vh,52px) clamp(24px,3.4vw,72px) clamp(26px,4vh,48px);overflow:hidden;user-select:none;animation:${anim(1)}">
         <div style="display:flex;align-items:center;gap:16px;margin-bottom:26px;flex:none">
           <span class="mono" style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)">As 12 dimensões</span>
           <span style="flex:1;height:1px;background:var(--gline)"></span>
@@ -1443,11 +1487,11 @@ function viewPresent(){
           <span style="width:1px;height:12px;background:var(--gline2)"></span>
           <span class="mono" id="dimpos" style="font-size:11px;color:var(--muted)">${(i+1)} / 12 · use ← →</span>
         </div>
-        <div style="flex:1;min-height:0;display:grid;grid-template-columns:300px minmax(0,1fr);gap:30px">
+        <div style="flex:1;min-height:0;display:grid;grid-template-columns:clamp(178px,13vw,226px) minmax(0,1fr);gap:clamp(14px,1.4vw,22px)">
           <div data-scrollable="1" style="min-height:0;overflow:auto;padding-right:6px;display:flex;flex-direction:column;gap:3px">
             ${S.data.dimensoes.map((x,k)=>`<div class="dimrow${S.selected===x.id?' on':''}" style="--a:${ACCENTS[k%12]}" data-act="selecionar" data-dim="${x.id}">
               <span class="rail"></span><span class="rom mono">${x.roman}</span>
-              <span class="nm" style="font-size:14.5px">${esc(x.nome)}</span>
+              <span class="nm" style="font-size:13px">${esc(x.nome)}</span>
               <span class="ct mono">${x.topicos.length}</span>
             </div>`).join('')}
           </div>
@@ -2414,13 +2458,21 @@ async function iniciar(){
   let ui={};
   try{ ui=JSON.parse(localStorage.getItem(LS_UI)||'{}'); }catch(e){}
   S.theme = ui.theme||'dark';
+  /* limpa o 'light' gravado por engano numa versão anterior */
+  if(ui.themeV!==2){ S.theme='dark'; salvarUI({theme:'dark', themeV:2}); }
   document.documentElement.dataset.theme=S.theme;
   S.logo = ui.logo||null;
   S.logoVisible = ui.logoVisible!==false;
   S.logoSize = ui.logoSize||34;
   S.favicon = ui.favicon||null;
-  S.perf = ui.perf||'auto';
+  /* o modo leve sempre começa ligado; o botão continua liberando o completo na sessão */
+  S.perf = 'lite';
+  if(ui.perf!=='lite') salvarUI({perf:'lite'});
   if(ui.pres && typeof ui.pres==='object') Object.assign(S.pres, ui.pres);
+  if(ui.presV!==3){
+    S.pres.fsTitulo=PRES_PADRAO.fsTitulo; S.pres.fsDesc=PRES_PADRAO.fsDesc; S.pres.fsFlag=PRES_PADRAO.fsFlag;
+    salvarUI({pres:S.pres, presV:3});
+  }
   aplicarVars();
   aplicarPerf();
   aplicarFavicon();
