@@ -171,7 +171,7 @@ textarea.inp{color:var(--fg2);line-height:1.65;resize:vertical}
 .togchip:hover{color:var(--fg)}
 .togchip.on{color:var(--mdl);border-color:color-mix(in oklab,var(--mdl) 55%,var(--gline));background:color-mix(in oklab,var(--mdl) 15%,transparent);font-weight:600}
 .dimhover{position:relative;display:flex;align-items:center;gap:9px;cursor:help}
-.dimtip{position:absolute;left:0;top:calc(100% + 9px);z-index:25;width:max-content;max-width:min(680px,58vw);padding:13px 16px;border-radius:16px;border:1px solid var(--gline2);background:var(--panel2);box-shadow:var(--shadow);font-size:12.5px;line-height:1.6;color:var(--fg2);text-wrap:pretty;opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .22s ease,transform .22s ease,visibility .22s}
+.dimtip{position:absolute;left:0;top:calc(100% + 9px);z-index:25;width:max-content;max-width:min(680px,58vw);padding:13px 16px;border-radius:16px;border:1px solid var(--gline2);background:var(--panel2);box-shadow:var(--shadow);font-size:18px;line-height:1.6;color:var(--fg2);text-wrap:pretty;opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .22s ease,transform .22s ease,visibility .22s}
 .dimhover:hover .dimtip{opacity:1;visibility:visible;transform:none}
 .sug{position:fixed;z-index:120;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;padding:6px;border-radius:16px;border:1px solid var(--line2);background:var(--panel2);box-shadow:var(--shadow);animation:kfPop .16s cubic-bezier(.16,.9,.24,1)}
 .sug::-webkit-scrollbar{width:8px}
@@ -1267,7 +1267,7 @@ function painelPresent(dim){
         <span class="romchip mono" style="min-width:34px;height:24px;padding:0 9px;font-size:11px">${dim.roman}</span>
         ${hover
           ? `<span class="dimhover">
-              <span style="font-size:clamp(19px,1.55vw,25px);font-weight:700;letter-spacing:-.035em;line-height:1.15">${esc(dim.nome)}</span>
+              <span style="font-size:20px;font-weight:700;letter-spacing:-.035em;line-height:1.15">${esc(dim.nome)}</span>
               <span class="mono" style="padding:2px 8px;border:1px solid var(--gline);border-radius:999px;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">definição</span>
               <span class="dimtip">${esc(dim.descricao)}</span>
             </span>`
